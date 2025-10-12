@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect, useState } from 'react';
-import { LazyMotion, domAnimation, MotionConfig } from 'framer-motion';
+import { MotionConfig } from 'framer-motion';
 
 export function AnimationProvider({ children }: { children: ReactNode }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -18,14 +18,12 @@ export function AnimationProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <LazyMotion features={domAnimation} strict>
-      <MotionConfig
-        // Wyłącz wszystkie animacje na mobile
-        transition={isMobile ? { duration: 0 } : undefined}
-        reducedMotion={isMobile ? "always" : "never"}
-      >
-        {children}
-      </MotionConfig>
-    </LazyMotion>
+    <MotionConfig
+      // Wyłącz wszystkie animacje na mobile
+      transition={isMobile ? { duration: 0 } : undefined}
+      reducedMotion={isMobile ? "always" : "never"}
+    >
+      {children}
+    </MotionConfig>
   );
 }
