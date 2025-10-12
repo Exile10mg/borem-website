@@ -622,7 +622,7 @@ export default function DlaczegoMy() {
             viewport={{ once: true }}
           >
             <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-              <div className="aspect-[21/9] relative">
+              <div className="aspect-[16/9] sm:aspect-[21/9] relative">
                 <Image
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&h=600&fit=crop"
                   alt="Zespół Borem.pl"
@@ -630,13 +630,13 @@ export default function DlaczegoMy() {
                   height={600}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center text-center p-8">
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center text-center p-4 sm:p-8">
                   <div>
-                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 drop-shadow-lg">
                       Razem tworzymy <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">przyszłość</span>
                     </h3>
-                    <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
+                    <p className="text-sm sm:text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow-lg">
                       Nasz zespół to połączenie kreatywności, technologii i biznesowej ekspertyzy
                     </p>
                   </div>
