@@ -306,15 +306,21 @@ const Navbar = memo(function Navbar() {
           </button>
         </div>
 
-          {/* Mobile Menu */}
+        </div>
+
+        {/* Mobile Menu - OUTSIDE nav content */}
         {isMobileMenuOpen && (
           <>
             <div
               className="lg:hidden fixed inset-0 z-[998] bg-black/90 backdrop-blur-xl"
               onClick={() => setIsMobileMenuOpen(false)}
+              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
             />
 
-            <div className="lg:hidden fixed top-0 left-0 right-0 bottom-0 z-[999] overflow-hidden pointer-events-none">
+            <div 
+              className="lg:hidden fixed inset-0 z-[999] overflow-hidden pointer-events-none"
+              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+            >
               {/* Slide-in animation from right */}
               <style jsx>{`
                 @keyframes slideInFromRight {
@@ -536,7 +542,6 @@ const Navbar = memo(function Navbar() {
             </div>
           </>
         )}
-      </div>
 
       {/* Scroll Progress Bar */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5">
