@@ -314,7 +314,7 @@ const Navbar = memo(function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            <div className="lg:hidden fixed inset-0 z-[999] overflow-hidden pointer-events-none">
+            <div className="lg:hidden fixed top-0 left-0 right-0 bottom-0 z-[999] overflow-hidden pointer-events-none">
               {/* Slide-in animation from right */}
               <style jsx>{`
                 @keyframes slideInFromRight {

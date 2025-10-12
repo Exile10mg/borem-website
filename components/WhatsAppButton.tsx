@@ -56,11 +56,6 @@ export default function WhatsAppButton() {
               icon={faWhatsapp}
               className="w-7 h-7 text-white"
             />
-            
-            {/* Notification Badge */}
-            <div className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-black shadow-md animate-pulse">
-              1
-            </div>
           </button>
 
           {/* Tooltip - klikalne dymek */}
