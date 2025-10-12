@@ -64,6 +64,7 @@ export default function CookieConsent() {
     
     // Notify that banner is closed
     window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new Event('closeCookieSettings'));
 
     // Initialize analytics and marketing scripts here
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -88,6 +89,7 @@ export default function CookieConsent() {
     
     // Notify that banner is closed
     window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new Event('closeCookieSettings'));
 
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
@@ -108,6 +110,7 @@ export default function CookieConsent() {
     
     // Notify that banner is closed
     window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new Event('closeCookieSettings'));
 
     // Update consent based on preferences
     if (typeof window !== 'undefined' && (window as any).gtag) {

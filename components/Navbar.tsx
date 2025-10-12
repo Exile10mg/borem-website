@@ -70,26 +70,17 @@ const Navbar = memo(function Navbar() {
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      // Blokuj scroll bez przewijania do góry
       document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
+      // Odblokuj scroll
       document.body.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
+      document.body.style.touchAction = '';
     }
     return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
       document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -324,6 +315,20 @@ const Navbar = memo(function Navbar() {
             />
 
             <div className="lg:hidden fixed inset-0 z-[999] overflow-hidden pointer-events-none">
+              {/* Slide-in animation from right */}
+              <style jsx>{`
+                @keyframes slideInFromRight {
+                  from {
+                    transform: translateX(100%);
+                  }
+                  to {
+                    transform: translateX(0);
+                  }
+                }
+                .slide-in-right {
+                  animation: slideInFromRight 0.3s ease-out forwards;
+                }
+              `}</style>
               <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
                 {/* Static Grid */}
                 <div className="absolute inset-0 opacity-20">
@@ -348,7 +353,7 @@ const Navbar = memo(function Navbar() {
               </div>
 
               {/* Menu Content */}
-              <div className="relative h-full overflow-y-auto flex flex-col touch-pan-y overscroll-contain pointer-events-auto">
+              <div className="relative h-full overflow-y-auto flex flex-col touch-pan-y overscroll-contain pointer-events-auto slide-in-right">
                 {/* Top Bar */}
                 <div className="flex items-center justify-between px-6 py-6 border-b border-white/10">
                   <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">

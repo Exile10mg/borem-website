@@ -8,31 +8,31 @@ export default function ScrollToTopButton() {
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
 
   useEffect(() => {
-    // Check if cookie banner should be visible
-    const checkCookieBanner = () => {
+    // Listen for storage changes
+    const handleStorageChange = () => {
       const consent = localStorage.getItem('cookieConsent');
       setCookieBannerVisible(!consent);
     };
 
-    checkCookieBanner();
-
-    // Listen for storage changes
-    const handleStorageChange = () => {
-      checkCookieBanner();
-    };
-
     window.addEventListener('storage', handleStorageChange);
     
-    // Listen for custom event when cookie settings are opened
+    // Listen for custom event when cookie settings are opened/closed
     const handleCookieOpen = () => {
       setCookieBannerVisible(true);
     };
     
+    const handleCookieClose = () => {
+      const consent = localStorage.getItem('cookieConsent');
+      setCookieBannerVisible(!consent);
+    };
+    
     window.addEventListener('openCookieSettings', handleCookieOpen);
+    window.addEventListener('closeCookieSettings', handleCookieClose);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('openCookieSettings', handleCookieOpen);
+      window.removeEventListener('closeCookieSettings', handleCookieClose);
     };
   }, []);
 
