@@ -55,14 +55,12 @@ const Navbar = memo(function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
       
-      // Calculate scroll progress
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
       setScrollProgress(scrolled);
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial call
     handleScroll();
     
     return () => window.removeEventListener('scroll', handleScroll);
@@ -70,11 +68,9 @@ const Navbar = memo(function Navbar() {
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      // Blokuj scroll bez przewijania do góry
       document.body.style.overflow = 'hidden';
       document.body.style.touchAction = 'none';
     } else {
-      // Odblokuj scroll
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
     }
@@ -85,282 +81,278 @@ const Navbar = memo(function Navbar() {
   }, [isMobileMenuOpen]);
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-[60] transition-all duration-200 ${
-        isScrolled ? 'backdrop-blur-2xl shadow-2xl shadow-purple-500/20' : ''
-      }`}
-    >
-      {/* Animated Background when scrolled */}
-      <div className={`absolute inset-0 z-[1] transition-opacity duration-200 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
-        {/* Static Grid */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+    <>
+      <nav
+        className={`fixed top-0 w-full z-[60] transition-all duration-200 ${
+          isScrolled ? 'backdrop-blur-2xl shadow-2xl shadow-purple-500/20' : ''
+        }`}
+      >
+        <div className={`absolute inset-0 z-[1] transition-opacity duration-200 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+          </div>
+
+          <div className="absolute inset-0">
+            <div
+              className="absolute -top-10 left-1/4 w-[250px] h-[250px] rounded-full opacity-50"
+              style={{
+                background: 'radial-gradient(circle, rgba(59,130,246,0.6) 0%, rgba(59,130,246,0) 70%)',
+                filter: 'blur(60px)',
+              }}
+            />
+            <div
+              className="absolute -top-10 right-1/4 w-[220px] h-[220px] rounded-full opacity-50"
+              style={{
+                background: 'radial-gradient(circle, rgba(139,92,246,0.6) 0%, rgba(139,92,246,0) 70%)',
+                filter: 'blur(60px)',
+              }}
+            />
+            <div
+              className="absolute -top-5 left-1/2 w-[200px] h-[200px] rounded-full opacity-40"
+              style={{
+                background: 'radial-gradient(circle, rgba(236,72,153,0.5) 0%, rgba(236,72,153,0) 70%)',
+                filter: 'blur(60px)',
+              }}
+            />
+          </div>
+
+          <div className="absolute inset-0 bg-gradient-to-b from-black/98 via-black/95 to-black/98 z-0"></div>
+          <div className="absolute inset-0 bg-black/40 z-0"></div>
         </div>
 
-        {/* Static Gradient Blobs */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute -top-10 left-1/4 w-[250px] h-[250px] rounded-full opacity-50"
-            style={{
-              background: 'radial-gradient(circle, rgba(59,130,246,0.6) 0%, rgba(59,130,246,0) 70%)',
-              filter: 'blur(60px)',
-            }}
-          />
-          <div
-            className="absolute -top-10 right-1/4 w-[220px] h-[220px] rounded-full opacity-50"
-            style={{
-              background: 'radial-gradient(circle, rgba(139,92,246,0.6) 0%, rgba(139,92,246,0) 70%)',
-              filter: 'blur(60px)',
-            }}
-          />
-          <div
-            className="absolute -top-5 left-1/2 w-[200px] h-[200px] rounded-full opacity-40"
-            style={{
-              background: 'radial-gradient(circle, rgba(236,72,153,0.5) 0%, rgba(236,72,153,0) 70%)',
-              filter: 'blur(60px)',
-            }}
-          />
-        </div>
+        <div className="relative z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 sm:h-20 lg:h-24">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group relative z-[100]">
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/98 via-black/95 to-black/98 z-0"></div>
-        <div className="absolute inset-0 bg-black/40 z-0"></div>
-      </div>
+              <div className="relative z-[110]">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-[18px] opacity-75 group-hover:opacity-100 blur-sm transition-all duration-300"></div>
 
-      <div className="relative z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20 lg:h-24">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-3 group relative z-[100]">
-            <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <div className="relative z-[110]">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-[18px] opacity-75 group-hover:opacity-100 blur-sm transition-all duration-300"></div>
-
-              <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl group-hover:shadow-blue-500/50 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-xl sm:rounded-2xl"></div>
-                <span className="text-white font-black text-xl sm:text-2xl lg:text-3xl relative z-10 drop-shadow-lg">B</span>
-                <div className="absolute top-2 right-2 w-2 h-2 bg-white rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute bottom-2 left-2 w-1.5 h-1.5 bg-white rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl group-hover:shadow-blue-500/50 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-xl sm:rounded-2xl"></div>
+                  <span className="text-white font-black text-xl sm:text-2xl lg:text-3xl relative z-10 drop-shadow-lg">B</span>
+                  <div className="absolute top-2 right-2 w-2 h-2 bg-white rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute bottom-2 left-2 w-1.5 h-1.5 bg-white rounded-full opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <div className="flex items-baseline gap-0.5">
-                <span className="text-base sm:text-xl lg:text-2xl font-black text-white tracking-tight">Borem</span>
-                <span className="text-base sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">.pl</span>
+              <div>
+                <div className="flex items-baseline gap-0.5">
+                  <span className="text-base sm:text-xl lg:text-2xl font-black text-white tracking-tight">Borem</span>
+                  <span className="text-base sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">.pl</span>
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5 -mt-0.5">
+                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
+                  <p className="text-[7px] sm:text-[9px] lg:text-[10px] text-gray-400 font-semibold tracking-[0.1em] sm:tracking-[0.15em] uppercase whitespace-nowrap">
+                    Agencja Marketingowa
+                  </p>
+                  <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
+                </div>
               </div>
-              <div className="flex items-center gap-1 sm:gap-1.5 -mt-0.5">
-                <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
-                <p className="text-[7px] sm:text-[9px] lg:text-[10px] text-gray-400 font-semibold tracking-[0.1em] sm:tracking-[0.15em] uppercase whitespace-nowrap">
-                  Agencja Marketingowa
-                </p>
-                <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
-              </div>
-            </div>
-          </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-1">
-            <Link
-              href="/"
-              className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
-              <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Strona główna</span>
             </Link>
 
-            <div className="h-6 w-px bg-gradient-to-b from-transparent via-blue-500/30 to-transparent"></div>
-
-            {/* Services Mega Menu */}
-            <div
-              className="relative group/mega"
-              onMouseEnter={() => setActiveDropdown('services')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg flex items-center gap-2 group/nav overflow-hidden">
+            <div className="hidden lg:flex items-center gap-1">
+              <Link
+                href="/"
+                className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
+              >
                 <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
-                <span className="relative group-hover/nav:translate-x-0.5 transition-transform">Usługi</span>
-                <svg
-                  className={`relative w-3 h-3 transition-all duration-300 ${
-                    activeDropdown === 'services' ? 'rotate-180' : 'group-hover/nav:translate-y-0.5'
-                  }`}
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+                <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Strona główna</span>
+              </Link>
 
-              {/* Mega Menu Dropdown */}
-              {activeDropdown === 'services' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[720px] z-[70]">
-                  <div className="relative mt-1">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 rounded-xl blur-lg"></div>
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-blue-500/30 to-transparent"></div>
 
-                    <div className="relative bg-black/95 backdrop-blur-2xl rounded-xl shadow-2xl border border-white/10 p-3">
-                      <div className="grid grid-cols-3 gap-2">
-                        {services.map((service) => (
-                          <Link
-                            key={service.category}
-                            href={service.href}
-                            className="group/item flex items-center gap-2.5 p-3 rounded-lg hover:bg-white/5 transition-all"
-                          >
-                            <div className="relative flex-shrink-0">
-                              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-lg blur-sm opacity-0 group-hover/item:opacity-100 transition-opacity"></div>
-                              <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center group-hover/item:scale-105 group-hover/item:from-blue-500/30 group-hover/item:to-purple-500/30 transition-all duration-200 border border-blue-500/20">
-                                <FontAwesomeIcon icon={service.icon} className="w-4 h-4 text-blue-400 group-hover/item:text-blue-300 transition-colors" />
+              <div
+                className="relative group/mega"
+                onMouseEnter={() => setActiveDropdown('services')}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <button className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg flex items-center gap-2 group/nav overflow-hidden">
+                  <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
+                  <span className="relative group-hover/nav:translate-x-0.5 transition-transform">Usługi</span>
+                  <svg
+                    className={`relative w-3 h-3 transition-all duration-300 ${
+                      activeDropdown === 'services' ? 'rotate-180' : 'group-hover/nav:translate-y-0.5'
+                    }`}
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {activeDropdown === 'services' && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[720px] z-[70]">
+                    <div className="relative mt-1">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 rounded-xl blur-lg"></div>
+
+                      <div className="relative bg-black/95 backdrop-blur-2xl rounded-xl shadow-2xl border border-white/10 p-3">
+                        <div className="grid grid-cols-3 gap-2">
+                          {services.map((service) => (
+                            <Link
+                              key={service.category}
+                              href={service.href}
+                              className="group/item flex items-center gap-2.5 p-3 rounded-lg hover:bg-white/5 transition-all"
+                            >
+                              <div className="relative flex-shrink-0">
+                                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-lg blur-sm opacity-0 group-hover/item:opacity-100 transition-opacity"></div>
+                                <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center group-hover/item:scale-105 group-hover/item:from-blue-500/30 group-hover/item:to-purple-500/30 transition-all duration-200 border border-blue-500/20">
+                                  <FontAwesomeIcon icon={service.icon} className="w-4 h-4 text-blue-400 group-hover/item:text-blue-300 transition-colors" />
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-white group-hover/item:text-blue-400 transition-colors text-[13px] leading-tight mb-0.5 truncate">
-                                {service.category}
-                              </h3>
-                              <p className="text-[10px] text-gray-500 group-hover/item:text-gray-400 transition-colors leading-tight truncate">{service.description}</p>
-                            </div>
-                          </Link>
-                        ))}
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-white group-hover/item:text-blue-400 transition-colors text-[13px] leading-tight mb-0.5 truncate">
+                                  {service.category}
+                                </h3>
+                                <p className="text-[10px] text-gray-500 group-hover/item:text-gray-400 transition-colors leading-tight truncate">{service.description}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            <div className="h-6 w-px bg-gradient-to-b from-transparent via-purple-500/30 to-transparent"></div>
-
-            <Link
-              href="/realizacje"
-              className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
-              <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Realizacje</span>
-            </Link>
-
-            <div className="h-6 w-px bg-gradient-to-b from-transparent via-pink-500/30 to-transparent"></div>
-
-            <Link
-              href="/cennik"
-              className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
-              <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Cennik</span>
-            </Link>
-
-            <div className="h-6 w-px bg-gradient-to-b from-transparent via-green-500/30 to-transparent"></div>
-
-            <Link
-              href="/blog"
-              className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
-              <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Blog</span>
-            </Link>
-
-            <div className="h-6 w-px bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
-
-            <Link
-              href="/o-nas"
-              className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
-              <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">O Nas</span>
-            </Link>
-          </div>
-
-          {/* CTA Button */}
-          <div className="hidden lg:flex items-center gap-3 relative z-[100]">
-            <Link
-              href="/kontakt?konsultacja=true"
-              className="relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-xl hover:shadow-blue-500/50 hover:scale-105 transition-all flex items-center gap-2"
-            >
-              <span>Bezpłatna konsultacja</span>
-              <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-colors text-white"
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {isMobileMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        </div>
-
-        {/* Mobile Menu - OUTSIDE nav content */}
-        {isMobileMenuOpen && (
-          <>
-            <div
-              className="lg:hidden fixed inset-0 z-[998] bg-black/90 backdrop-blur-xl"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-            />
-
-            <div 
-              className="lg:hidden fixed inset-0 z-[999] overflow-hidden pointer-events-none"
-              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-            >
-              {/* Slide-in animation from right */}
-              <style jsx>{`
-                @keyframes slideInFromRight {
-                  from {
-                    transform: translateX(100%);
-                  }
-                  to {
-                    transform: translateX(0);
-                  }
-                }
-                .slide-in-right {
-                  animation: slideInFromRight 0.3s ease-out forwards;
-                }
-              `}</style>
-              <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
-                {/* Static Grid */}
-                <div className="absolute inset-0 opacity-20">
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px]"></div>
-                </div>
-
-                {/* Static gradient blobs */}
-                <div
-                  className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full opacity-30"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, rgba(59,130,246,0) 70%)',
-                    filter: 'blur(60px)',
-                  }}
-                />
-                <div
-                  className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full opacity-30"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(139,92,246,0) 70%)',
-                    filter: 'blur(60px)',
-                  }}
-                />
+                )}
               </div>
 
-              {/* Menu Content */}
-              <div className="relative h-full overflow-y-auto flex flex-col touch-pan-y overscroll-contain pointer-events-auto slide-in-right">
-                {/* Top Bar */}
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-purple-500/30 to-transparent"></div>
+
+              <Link
+                href="/realizacje"
+                className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
+                <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Realizacje</span>
+              </Link>
+
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-pink-500/30 to-transparent"></div>
+
+              <Link
+                href="/cennik"
+                className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
+                <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Cennik</span>
+              </Link>
+
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-green-500/30 to-transparent"></div>
+
+              <Link
+                href="/blog"
+                className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
+                <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">Blog</span>
+              </Link>
+
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+
+              <Link
+                href="/o-nas"
+                className="relative px-5 py-2.5 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg group/nav overflow-hidden"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover/nav:opacity-100 transition-opacity"></span>
+                <span className="relative group-hover/nav:translate-x-0.5 inline-block transition-transform">O Nas</span>
+              </Link>
+            </div>
+
+            <div className="hidden lg:flex items-center gap-3 relative z-[100]">
+              <Link
+                href="/kontakt?konsultacja=true"
+                className="relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-xl hover:shadow-blue-500/50 hover:scale-105 transition-all flex items-center gap-2"
+              >
+                <span>Bezpłatna konsultacja</span>
+                <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-colors text-white relative z-[100]"
+              aria-label="Toggle menu"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMobileMenuOpen ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5">
+          <div
+            className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-150 ease-out"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+      </nav>
+
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-[999]">
+          <style jsx global>{`
+            @keyframes slideInFromRight {
+              from {
+                transform: translateX(100%);
+              }
+              to {
+                transform: translateX(0);
+              }
+            }
+            @keyframes slideDown {
+              from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+              }
+              to {
+                opacity: 1;
+                max-height: 500px;
+                transform: translateY(0);
+              }
+            }
+            .slide-in-right {
+              animation: slideInFromRight 0.3s ease-out forwards;
+            }
+            .animate-slideDown {
+              animation: slideDown 0.3s ease-out forwards;
+            }
+          `}</style>
+          <div className="relative w-full h-full bg-gradient-to-br from-black via-gray-900 to-black shadow-2xl overflow-hidden slide-in-right">
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+              </div>
+
+              <div
+                className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full opacity-30"
+                style={{
+                  background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, rgba(59,130,246,0) 70%)',
+                  filter: 'blur(60px)',
+                }}
+              />
+              <div
+                className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full opacity-30"
+                style={{
+                  background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(139,92,246,0) 70%)',
+                  filter: 'blur(60px)',
+                }}
+              />
+
+              <div className="relative h-full flex flex-col">
                 <div className="flex items-center justify-between px-6 py-6 border-b border-white/10">
                   <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
                     <div className="relative w-12 h-12 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-2xl">
@@ -376,7 +368,7 @@ const Navbar = memo(function Navbar() {
                   </Link>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors touch-manipulation"
+                    className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
                     aria-label="Zamknij menu"
                   >
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,12 +377,11 @@ const Navbar = memo(function Navbar() {
                   </button>
                 </div>
 
-                {/* Navigation */}
                 <div className="flex-1 px-6 py-6 space-y-2 overflow-y-auto">
                   <Link
                     href="/"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-purple-600/20 transition-all active:scale-95 touch-manipulation"
+                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-purple-600/20 transition-all active:scale-95"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/10 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-blue-500/20 transition-all">
                       <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,11 +391,10 @@ const Navbar = memo(function Navbar() {
                     <span className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Strona główna</span>
                   </Link>
 
-                  {/* Services Expandable */}
                   <div>
                     <button
                       onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                      className="group w-full flex items-center justify-between px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-pink-600/20 transition-all active:scale-95 touch-manipulation"
+                      className="group w-full flex items-center justify-between px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-pink-600/20 transition-all active:scale-95"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/10 flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-purple-500/20 transition-all">
@@ -422,7 +412,7 @@ const Navbar = memo(function Navbar() {
                     </button>
 
                     {mobileServicesOpen && (
-                      <div className="mt-2 ml-14 space-y-2">
+                      <div className="mt-2 ml-14 space-y-2 animate-slideDown">
                         {services.map((service) => (
                           <Link
                             key={service.category}
@@ -431,7 +421,7 @@ const Navbar = memo(function Navbar() {
                               setIsMobileMenuOpen(false);
                               setMobileServicesOpen(false);
                             }}
-                            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-all touch-manipulation group/service"
+                            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-all group/service"
                           >
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center flex-shrink-0">
                               <FontAwesomeIcon icon={service.icon} className="w-4 h-4 text-blue-400" />
@@ -457,7 +447,7 @@ const Navbar = memo(function Navbar() {
                   <Link
                     href="/realizacje"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-pink-500/30 hover:to-pink-500/20 transition-all active:scale-95 touch-manipulation"
+                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-pink-500/30 hover:to-pink-500/20 transition-all active:scale-95"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500/20 to-pink-500/10 flex items-center justify-center group-hover:from-pink-500/30 group-hover:to-pink-500/20 transition-all">
                       <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -470,7 +460,7 @@ const Navbar = memo(function Navbar() {
                   <Link
                     href="/cennik"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-green-500/30 hover:to-green-500/20 transition-all active:scale-95 touch-manipulation"
+                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-green-500/30 hover:to-green-500/20 transition-all active:scale-95"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/10 flex items-center justify-center group-hover:from-green-500/30 group-hover:to-green-500/20 transition-all">
                       <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -483,7 +473,7 @@ const Navbar = memo(function Navbar() {
                   <Link
                     href="/o-nas"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-orange-500/30 hover:to-orange-500/20 transition-all active:scale-95 touch-manipulation"
+                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-orange-500/30 hover:to-orange-500/20 transition-all active:scale-95"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 flex items-center justify-center group-hover:from-orange-500/30 group-hover:to-orange-500/20 transition-all">
                       <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -496,7 +486,7 @@ const Navbar = memo(function Navbar() {
                   <Link
                     href="/blog"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-cyan-500/30 hover:to-cyan-500/20 transition-all active:scale-95 touch-manipulation"
+                    className="group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-cyan-500/30 hover:to-cyan-500/20 transition-all active:scale-95"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/10 flex items-center justify-center group-hover:from-cyan-500/30 group-hover:to-cyan-500/20 transition-all">
                       <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -507,12 +497,11 @@ const Navbar = memo(function Navbar() {
                   </Link>
                 </div>
 
-                {/* Bottom CTAs */}
                 <div className="px-6 py-6 space-y-3 border-t border-white/10 bg-gradient-to-t from-black/50 to-transparent backdrop-blur-xl">
                   <Link
                     href="/kontakt?konsultacja=true"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group relative block px-8 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-2xl text-center font-bold text-base shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-95 transition-all touch-manipulation overflow-hidden"
+                    className="group relative block px-8 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-2xl text-center font-bold text-base shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-95 transition-all overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="relative flex items-center justify-center gap-2">
@@ -526,7 +515,7 @@ const Navbar = memo(function Navbar() {
                   <Link
                     href="/realizacje"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group relative block px-8 py-4 bg-white/5 backdrop-blur-xl text-white rounded-2xl text-center font-bold text-base border-2 border-white/20 hover:border-purple-500/50 hover:bg-white/10 active:scale-95 transition-all touch-manipulation overflow-hidden"
+                    className="group relative block px-8 py-4 bg-white/5 backdrop-blur-xl text-white rounded-2xl text-center font-bold text-base border-2 border-white/20 hover:border-purple-500/50 hover:bg-white/10 active:scale-95 transition-all overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="relative flex items-center justify-center gap-2">
@@ -540,17 +529,9 @@ const Navbar = memo(function Navbar() {
                 </div>
               </div>
             </div>
-          </>
-        )}
-
-      {/* Scroll Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5">
-        <div
-          className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-150 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-    </nav>
+          </div>
+      )}
+    </>
   );
 });
 

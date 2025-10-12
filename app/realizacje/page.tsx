@@ -257,7 +257,7 @@ export default function RealizacjePage() {
       <Navbar />
 
       {/* Hero Section - STATIC */}
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-32 pb-20">
+      <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-32 pb-16 sm:pb-20">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-[120px]" />
@@ -346,15 +346,16 @@ export default function RealizacjePage() {
                     {/* URL Badge */}
                     {project.url && (
                       <div className="absolute top-4 right-4">
-                        <a
-                          href={project.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.open(project.url, '_blank', 'noopener,noreferrer');
+                          }}
                           className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all"
                         >
                           <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4 text-white" />
-                        </a>
+                        </button>
                       </div>
                     )}
                   </div>

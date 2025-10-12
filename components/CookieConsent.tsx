@@ -59,20 +59,20 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(allAccepted));
-    setShowBanner(false);
-    setShowSettings(false);
     
-    // Notify that banner is closed
-    window.dispatchEvent(new Event('storage'));
-    window.dispatchEvent(new Event('closeCookieSettings'));
-
-    // Initialize analytics and marketing scripts here
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
         analytics_storage: 'granted',
         ad_storage: 'granted',
       });
     }
+    
+    // Give React time to process before hiding
+    setTimeout(() => {
+      setShowBanner(false);
+      setShowSettings(false);
+      window.dispatchEvent(new Event('storage'));
+    }, 100);
   };
 
   const acceptNecessary = () => {
@@ -84,12 +84,6 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(necessaryOnly));
-    setShowBanner(false);
-    setShowSettings(false);
-    
-    // Notify that banner is closed
-    window.dispatchEvent(new Event('storage'));
-    window.dispatchEvent(new Event('closeCookieSettings'));
 
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
@@ -97,6 +91,13 @@ export default function CookieConsent() {
         ad_storage: 'denied',
       });
     }
+    
+    // Give React time to process before hiding
+    setTimeout(() => {
+      setShowBanner(false);
+      setShowSettings(false);
+      window.dispatchEvent(new Event('storage'));
+    }, 100);
   };
 
   const savePreferences = () => {
@@ -105,39 +106,32 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(savedPreferences));
-    setShowBanner(false);
-    setShowSettings(false);
-    
-    // Notify that banner is closed
-    window.dispatchEvent(new Event('storage'));
-    window.dispatchEvent(new Event('closeCookieSettings'));
 
-    // Update consent based on preferences
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
         analytics_storage: preferences.analytics ? 'granted' : 'denied',
         ad_storage: preferences.marketing ? 'granted' : 'denied',
       });
     }
+    
+    // Give React time to process before hiding
+    setTimeout(() => {
+      setShowBanner(false);
+      setShowSettings(false);
+      window.dispatchEvent(new Event('storage'));
+    }, 100);
   };
-
-  if (!showBanner) return null;
 
   return (
     <>
-      {/* Backdrop - STATIC */}
-      <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] transition-opacity duration-300 ${
-          showBanner ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
+      {/* Backdrop - pokazuje się zawsze gdy banner jest otwarty */}
+      {showBanner && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] transition-opacity duration-300" />
+      )}
 
-      {/* Cookie Banner - STATIC */}
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-[200] mx-auto max-w-7xl p-4 sm:p-6 transition-all duration-500 ${
-          showBanner ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-        }`}
-      >
+      {/* Cookie Banner */}
+      {showBanner && (
+        <div className="fixed bottom-0 left-0 right-0 z-[200] mx-auto max-w-7xl p-4 sm:p-6 transition-all duration-500">
         <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
           {/* Background gradient effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-pink-500/10" />
@@ -218,7 +212,7 @@ export default function CookieConsent() {
                   <button
                     onClick={() => {
                       setShowSettings(false);
-                      // Jeśli user już ma zapisane ustawienia, zamknij cały banner
+                      // Jeśli użytkownik już ma zapisane zgody, zamknij cały banner
                       const consent = localStorage.getItem('cookieConsent');
                       if (consent) {
                         setShowBanner(false);
@@ -332,7 +326,8 @@ export default function CookieConsent() {
             )}
           </div>
         </div>
-      </div>
+        </div>
+      )}
     </>
   );
 }

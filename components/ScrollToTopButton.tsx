@@ -2,40 +2,8 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faCookie } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
 
 export default function ScrollToTopButton() {
-  const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
-
-  useEffect(() => {
-    // Listen for storage changes
-    const handleStorageChange = () => {
-      const consent = localStorage.getItem('cookieConsent');
-      setCookieBannerVisible(!consent);
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Listen for custom event when cookie settings are opened/closed
-    const handleCookieOpen = () => {
-      setCookieBannerVisible(true);
-    };
-    
-    const handleCookieClose = () => {
-      const consent = localStorage.getItem('cookieConsent');
-      setCookieBannerVisible(!consent);
-    };
-    
-    window.addEventListener('openCookieSettings', handleCookieOpen);
-    window.addEventListener('closeCookieSettings', handleCookieClose);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('openCookieSettings', handleCookieOpen);
-      window.removeEventListener('closeCookieSettings', handleCookieClose);
-    };
-  }, []);
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -44,14 +12,11 @@ export default function ScrollToTopButton() {
   };
 
   const openCookieSettings = () => {
-    // Wyślij custom event aby otworzyć ustawienia cookies
     window.dispatchEvent(new Event('openCookieSettings'));
   };
 
   return (
-    <div className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col gap-3 transition-all duration-300 ${
-      cookieBannerVisible ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
-    }`}>
+    <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col gap-3">
       {/* Cookie Settings Button */}
       <button
         onClick={openCookieSettings}
