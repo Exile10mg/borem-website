@@ -304,35 +304,7 @@ const Navbar = memo(function Navbar() {
 
       {isMobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-[999]">
-          <style jsx global>{`
-            @keyframes slideInFromRight {
-              from {
-                transform: translateX(100%);
-              }
-              to {
-                transform: translateX(0);
-              }
-            }
-            @keyframes slideDown {
-              from {
-                opacity: 0;
-                max-height: 0;
-                transform: translateY(-10px);
-              }
-              to {
-                opacity: 1;
-                max-height: 500px;
-                transform: translateY(0);
-              }
-            }
-            .slide-in-right {
-              animation: slideInFromRight 0.3s ease-out forwards;
-            }
-            .animate-slideDown {
-              animation: slideDown 0.3s ease-out forwards;
-            }
-          `}</style>
-          <div className="relative w-full h-full bg-gradient-to-br from-black via-gray-900 to-black shadow-2xl overflow-hidden slide-in-right">
+          <div className="relative w-full h-full bg-gradient-to-br from-black via-gray-900 to-black shadow-2xl overflow-hidden">
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px]"></div>
               </div>
@@ -412,7 +384,7 @@ const Navbar = memo(function Navbar() {
                     </button>
 
                     {mobileServicesOpen && (
-                      <div className="mt-2 ml-14 space-y-2 animate-slideDown">
+                      <div className="mt-2 ml-14 space-y-2">
                         {services.map((service) => (
                           <Link
                             key={service.category}
