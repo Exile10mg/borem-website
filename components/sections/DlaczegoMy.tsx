@@ -707,22 +707,67 @@ export default function DlaczegoMy() {
           </div>
 
           <div className="relative">
-            {/* Timeline line */}
+            {/* Timeline line - desktop only */}
             <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 opacity-30" />
+            {/* Timeline line - mobile */}
+            <div className="lg:hidden absolute left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 opacity-30" />
 
-            <div className="space-y-16">
+            <div className="space-y-8 lg:space-y-16">
               {timeline.map((item, index) => (
                 <motion.div
                   key={item.year}
-                  className={`relative flex flex-col lg:flex-row items-center gap-8 ${
+                  className={`relative flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 ${
                     index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'
                   }`}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+                  initial={{ opacity: 0, x: 0 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <div className={`flex-1 ${index % 2 === 0 ? 'lg:text-right' : 'lg:text-left'}`}>
+                  {/* Mobile layout */}
+                  <div className="lg:hidden flex items-start gap-4 w-full">
+                    {/* Dot */}
+                    <div className="relative z-10 flex-shrink-0 mt-2">
+                      <motion.div
+                        className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 shadow-lg shadow-purple-500/50"
+                        whileHover={{ scale: 1.5 }}
+                      />
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="flex-1">
+                      <motion.div
+                        className="group"
+                        whileHover={!prefersReducedMotion ? { scale: 1.02 } : undefined}
+                      >
+                        <div className="relative">
+                          <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 rounded-2xl" />
+                          <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-500">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                                <FontAwesomeIcon icon={item.icon} className="w-5 h-5 text-white" />
+                              </div>
+                              <div className="text-3xl font-black bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+                                {item.year}
+                              </div>
+                            </div>
+                            <h4 className="text-xl font-bold text-white mb-2">
+                              {item.event}
+                            </h4>
+                            <p className="text-sm text-gray-300 mb-3 leading-relaxed">
+                              {item.description}
+                            </p>
+                            <div className="inline-block px-3 py-1.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-lg">
+                              <span className="text-xs font-bold text-blue-400">{item.metric}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  {/* Desktop layout */}
+                  <div className={`hidden lg:block flex-1 ${index % 2 === 0 ? 'lg:text-right' : 'lg:text-left'}`}>
                     <motion.div
                       className="inline-block group"
                       whileHover={!prefersReducedMotion ? { scale: 1.05 } : undefined}
@@ -752,7 +797,7 @@ export default function DlaczegoMy() {
                     </motion.div>
                   </div>
 
-                  {/* Center dot */}
+                  {/* Center dot - desktop only */}
                   <div className="hidden lg:block relative z-10">
                     <motion.div
                       className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 shadow-lg shadow-purple-500/50"
@@ -760,7 +805,7 @@ export default function DlaczegoMy() {
                     />
                   </div>
 
-                  <div className="flex-1" />
+                  <div className="hidden lg:block flex-1" />
                 </motion.div>
               ))}
             </div>
