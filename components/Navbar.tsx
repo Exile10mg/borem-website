@@ -315,15 +315,15 @@ const Navbar = memo(function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+          {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <>
             <div
-              className="lg:hidden fixed inset-0 z-[80] bg-black/80 backdrop-blur-lg"
+              className="lg:hidden fixed inset-0 z-[998] bg-black/90 backdrop-blur-xl"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            <div className="lg:hidden fixed inset-0 z-[100] overflow-hidden">
+            <div className="lg:hidden fixed inset-0 z-[999] overflow-hidden pointer-events-none">
               <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
                 {/* Static Grid */}
                 <div className="absolute inset-0 opacity-20">
@@ -348,7 +348,7 @@ const Navbar = memo(function Navbar() {
               </div>
 
               {/* Menu Content */}
-              <div className="relative h-full overflow-y-auto flex flex-col touch-pan-y overscroll-contain">
+              <div className="relative h-full overflow-y-auto flex flex-col touch-pan-y overscroll-contain pointer-events-auto">
                 {/* Top Bar */}
                 <div className="flex items-center justify-between px-6 py-6 border-b border-white/10">
                   <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">

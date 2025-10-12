@@ -49,7 +49,7 @@ export default function ScrollToTopButton() {
   };
 
   return (
-    <div className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[90] flex flex-col gap-3 transition-all duration-300 ${
+    <div className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col gap-3 transition-all duration-300 ${
       cookieBannerVisible ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
     }`}>
       {/* Cookie Settings Button */}
