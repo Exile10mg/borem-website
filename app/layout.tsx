@@ -5,6 +5,7 @@ import "./fontawesome";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import CookieConsent from '@/components/CookieConsent';
+import { AnimationProvider } from '@/components/AnimationProvider';
 
 config.autoAddCss = false;
 
@@ -94,7 +95,9 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        {children}
+        <AnimationProvider>
+          {children}
+        </AnimationProvider>
         <CookieConsent />
       </body>
     </html>
