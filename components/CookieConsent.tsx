@@ -25,6 +25,29 @@ export default function CookieConsent() {
       }, 1000);
       return () => clearTimeout(timer);
     }
+
+    // Listen for custom event to open settings
+    const handleOpenSettings = () => {
+      const savedConsent = localStorage.getItem('cookieConsent');
+      if (savedConsent) {
+        try {
+          const parsed = JSON.parse(savedConsent);
+          setPreferences({
+            necessary: true,
+            functional: parsed.functional || false,
+            analytics: parsed.analytics || false,
+            marketing: parsed.marketing || false,
+          });
+        } catch (e) {
+          // ignore
+        }
+      }
+      setShowBanner(true);
+      setShowSettings(true);
+    };
+
+    window.addEventListener('openCookieSettings', handleOpenSettings);
+    return () => window.removeEventListener('openCookieSettings', handleOpenSettings);
   }, []);
 
   const acceptAll = () => {
@@ -37,6 +60,10 @@ export default function CookieConsent() {
     };
     localStorage.setItem('cookieConsent', JSON.stringify(allAccepted));
     setShowBanner(false);
+    setShowSettings(false);
+    
+    // Notify that banner is closed
+    window.dispatchEvent(new Event('storage'));
 
     // Initialize analytics and marketing scripts here
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -57,6 +84,10 @@ export default function CookieConsent() {
     };
     localStorage.setItem('cookieConsent', JSON.stringify(necessaryOnly));
     setShowBanner(false);
+    setShowSettings(false);
+    
+    // Notify that banner is closed
+    window.dispatchEvent(new Event('storage'));
 
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
@@ -74,6 +105,9 @@ export default function CookieConsent() {
     localStorage.setItem('cookieConsent', JSON.stringify(savedPreferences));
     setShowBanner(false);
     setShowSettings(false);
+    
+    // Notify that banner is closed
+    window.dispatchEvent(new Event('storage'));
 
     // Update consent based on preferences
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -179,7 +213,14 @@ export default function CookieConsent() {
                     </p>
                   </div>
                   <button
-                    onClick={() => setShowSettings(false)}
+                    onClick={() => {
+                      setShowSettings(false);
+                      // Jeśli user już ma zapisane ustawienia, zamknij cały banner
+                      const consent = localStorage.getItem('cookieConsent');
+                      if (consent) {
+                        setShowBanner(false);
+                      }
+                    }}
                     className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
                     aria-label="Zamknij ustawienia"
                   >

@@ -235,18 +235,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Scroll to top button */}
-      <button
-        onClick={scrollToTop}
-        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center shadow-2xl hover:shadow-purple-500/50 hover:scale-110 hover:-translate-y-1 transition-all group"
-        aria-label="Przewiń do góry"
-      >
-        <FontAwesomeIcon
-          icon={faArrowUp}
-          className="w-5 h-5 text-white"
-        />
-      </button>
     </footer>
   );
 }

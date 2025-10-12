@@ -4,7 +4,6 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppButton from '@/components/WhatsAppButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faPalette, faMobileScreen, faLock, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { faReact, faNode, faWordpress } from '@fortawesome/free-brands-svg-icons';
@@ -23,7 +22,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />
-      <WhatsAppButton />
 
       {/* STATIC HERO - NO FRAMER MOTION */}
       <section

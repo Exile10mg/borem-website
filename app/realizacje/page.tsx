@@ -16,7 +16,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppButton from '@/components/WhatsAppButton';
 
 // Typy projektów
 type ProjectCategory = 'Wszystkie' | 'Strony WWW' | 'Aplikacje' | 'Automatyzacje';
@@ -256,7 +255,6 @@ export default function RealizacjePage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
-      <WhatsAppButton />
 
       {/* Hero Section - STATIC */}
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-32 pb-20">
@@ -333,6 +331,7 @@ export default function RealizacjePage() {
                       src={project.image}
                       alt={project.title}
                       fill
+                      priority={project.id === 1}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

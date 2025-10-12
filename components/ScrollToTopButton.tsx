@@ -1,28 +1,38 @@
 'use client';
 
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faCookie } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 
 export default function ScrollToTopButton() {
-  const prefersReducedMotion = useReducedMotion();
-  const [isVisible, setIsVisible] = useState(false);
+  const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      // Show button when page is scrolled down 300px
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+    // Check if cookie banner should be visible
+    const checkCookieBanner = () => {
+      const consent = localStorage.getItem('cookieConsent');
+      setCookieBannerVisible(!consent);
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    checkCookieBanner();
+
+    // Listen for storage changes
+    const handleStorageChange = () => {
+      checkCookieBanner();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Listen for custom event when cookie settings are opened
+    const handleCookieOpen = () => {
+      setCookieBannerVisible(true);
+    };
+    
+    window.addEventListener('openCookieSettings', handleCookieOpen);
 
     return () => {
-      window.removeEventListener('scroll', toggleVisibility);
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('openCookieSettings', handleCookieOpen);
     };
   }, []);
 
@@ -33,31 +43,54 @@ export default function ScrollToTopButton() {
     });
   };
 
+  const openCookieSettings = () => {
+    // Wyślij custom event aby otworzyć ustawienia cookies
+    window.dispatchEvent(new Event('openCookieSettings'));
+  };
+
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.button
-          onClick={scrollToTop}
-          className="fixed bottom-24 left-6 md:bottom-28 md:left-8 z-[90] group"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{
-            duration: 0.2,
-            ease: 'easeOut',
-          }}
-          whileHover={!prefersReducedMotion ? { scale: 1.05 } : undefined}
-          whileTap={{ scale: 0.95 }}
-          aria-label="Przewiń do góry"
-        >
-          <div className="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full shadow-lg hover:shadow-blue-500/40 transition-shadow duration-200">
-            <FontAwesomeIcon
-              icon={faArrowUp}
-              className="w-5 h-5 text-white"
-            />
+    <div className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[90] flex flex-col gap-3 transition-all duration-300 ${
+      cookieBannerVisible ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
+    }`}>
+      {/* Cookie Settings Button */}
+      <button
+        onClick={openCookieSettings}
+        className="group relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full shadow-lg hover:shadow-purple-500/40 transition-all duration-200 hover:scale-105 active:scale-95"
+        aria-label="Ustawienia cookies"
+      >
+        <FontAwesomeIcon
+          icon={faCookie}
+          className="w-5 h-5 text-white"
+        />
+        
+        {/* Tooltip */}
+        <div className="absolute right-14 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200">
+          <div className="bg-gray-900 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg border border-white/10">
+            Ustawienia cookies
+            <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900" />
           </div>
-        </motion.button>
-      )}
-    </AnimatePresence>
+        </div>
+      </button>
+
+      {/* Scroll to Top Button */}
+      <button
+        onClick={scrollToTop}
+        className="group relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full shadow-lg hover:shadow-blue-500/40 transition-all duration-200 hover:scale-105 active:scale-95"
+        aria-label="Przewiń do góry"
+      >
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          className="w-5 h-5 text-white"
+        />
+        
+        {/* Tooltip */}
+        <div className="absolute right-14 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200">
+          <div className="bg-gray-900 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg border border-white/10">
+            Przewiń do góry
+            <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900" />
+          </div>
+        </div>
+      </button>
+    </div>
   );
 }

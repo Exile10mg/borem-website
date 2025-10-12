@@ -4,7 +4,7 @@
 
 /* Mobile Performance Optimizations */
 @media (max-width: 768px) {
-  * {
+  *:not(.animate-loading-bar):not(.animate-bounce):not(.animate-pulse) {
     /* Disable animations on mobile for performance */
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -198,5 +198,19 @@
     animation: shimmer 3s infinite;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  /* Loading Bar Animation */
+  @keyframes loading-bar {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-loading-bar {
+    animation: loading-bar 1.5s ease-in-out infinite;
   }
 }
