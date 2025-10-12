@@ -1,6 +1,5 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
@@ -64,7 +63,6 @@ const benefits = [
 ];
 
 export default function KontaktPage() {
-  const prefersReducedMotion = useReducedMotion();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -175,7 +173,7 @@ export default function KontaktPage() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Section with Breadcrumbs */}
+      {/* Hero Section - STATIC */}
       <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-32 pb-16 sm:pb-20">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
@@ -184,12 +182,7 @@ export default function KontaktPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Breadcrumbs */}
-          <motion.nav
-            className="mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <nav className="mb-8">
             <ol className="flex items-center gap-2 text-sm">
               <li>
                 <Link
@@ -207,52 +200,32 @@ export default function KontaktPage() {
                 <span className="text-white font-semibold">Kontakt</span>
               </li>
             </ol>
-          </motion.nav>
+          </nav>
 
           {/* Hero Content */}
           <div className="text-center max-w-4xl mx-auto">
-            <motion.div
-              className="inline-block mb-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <div className="inline-block mb-6">
               <span className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 text-blue-400 text-sm font-bold backdrop-blur-xl shadow-lg shadow-blue-500/10">
-                <FontAwesomeIcon icon={faRocket} className="mr-2 animate-pulse" />
+                <FontAwesomeIcon icon={faRocket} className="mr-2" />
                 Bezpłatna Konsultacja
               </span>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
               <span className="block text-white mb-2">Skontaktuj się</span>
-              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text animate-gradient bg-[length:200%_200%]">
+              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
                 z nami
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
+            <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
               Wypełnij formularz, zadzwoń lub napisz. Odpowiadamy w ciągu{' '}
               <span className="font-bold text-white">24 godzin</span>.
-            </motion.p>
+            </p>
 
             {/* Benefits */}
-            <motion.div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-            >
-              {benefits.map((benefit, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
+              {benefits.map((benefit) => (
                 <div
                   key={benefit.title}
                   className="bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-xl p-4 text-center"
@@ -264,23 +237,17 @@ export default function KontaktPage() {
                   <p className="text-xs text-gray-400">{benefit.description}</p>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* Contact Section - STATIC */}
       <section className="relative py-20 sm:py-24 lg:py-32 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-8"
-            >
+            <div className="space-y-8">
               <div>
                 <h2 className="text-3xl font-black text-white mb-4">Dane kontaktowe</h2>
                 <p className="text-gray-400 leading-relaxed">
@@ -290,10 +257,9 @@ export default function KontaktPage() {
 
               {/* Contact Details */}
               <div className="space-y-4">
-                <motion.a
+                <a
                   href="mailto:kontakt@borem.pl"
-                  className="flex items-center gap-4 p-6 bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl hover:border-blue-500/30 transition-all group"
-                  whileHover={!prefersReducedMotion ? { scale: 1.02, x: 5 } : undefined}
+                  className="flex items-center gap-4 p-6 bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl hover:border-blue-500/30 hover:translate-x-1 transition-all group"
                 >
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <FontAwesomeIcon icon={faEnvelope} className="w-6 h-6 text-white" />
@@ -302,12 +268,11 @@ export default function KontaktPage() {
                     <div className="text-sm text-gray-400 mb-1">Email</div>
                     <div className="text-lg font-bold text-white">kontakt@borem.pl</div>
                   </div>
-                </motion.a>
+                </a>
 
-                <motion.a
+                <a
                   href="tel:+48787041328"
-                  className="flex items-center gap-4 p-6 bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all group"
-                  whileHover={!prefersReducedMotion ? { scale: 1.02, x: 5 } : undefined}
+                  className="flex items-center gap-4 p-6 bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl hover:border-purple-500/30 hover:translate-x-1 transition-all group"
                 >
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <FontAwesomeIcon icon={faPhone} className="w-6 h-6 text-white" />
@@ -316,7 +281,7 @@ export default function KontaktPage() {
                     <div className="text-sm text-gray-400 mb-1">Telefon</div>
                     <div className="text-lg font-bold text-white">+48 787 041 328</div>
                   </div>
-                </motion.a>
+                </a>
 
                 <div className="flex items-center gap-4 p-6 bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
@@ -347,26 +312,16 @@ export default function KontaktPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
+            <div>
               <form
                 onSubmit={handleSubmit}
                 className="bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-8 space-y-6"
               >
                 {isSuccess ? (
-                  <motion.div
-                    className="text-center py-12"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
+                  <div className="text-center py-12">
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center mx-auto mb-6">
                       <FontAwesomeIcon icon={faCheckCircle} className="w-10 h-10 text-white" />
                     </div>
@@ -376,7 +331,7 @@ export default function KontaktPage() {
                       <br />
                       Sprawdź swoją skrzynkę email!
                     </p>
-                  </motion.div>
+                  </div>
                 ) : (
                   <>
                     <div className="grid sm:grid-cols-2 gap-6">
@@ -455,22 +410,7 @@ export default function KontaktPage() {
 
                     <div className="grid sm:grid-cols-2 gap-6">
                       {/* Service */}
-                      <motion.div
-                        animate={
-                          highlightService && !prefersReducedMotion
-                            ? {
-                                scale: [1, 1.02, 1],
-                                boxShadow: [
-                                  '0 0 0 0 rgba(34, 197, 94, 0)',
-                                  '0 0 0 4px rgba(34, 197, 94, 0.3)',
-                                  '0 0 0 0 rgba(34, 197, 94, 0)',
-                                ],
-                              }
-                            : {}
-                        }
-                        transition={{ duration: 0.6, repeat: 2 }}
-                        className="rounded-xl"
-                      >
+                      <div className={`rounded-xl ${highlightService ? 'ring-2 ring-green-500/50' : ''}`}>
                         <label htmlFor="service" className="block text-sm font-bold text-white mb-2">
                           <FontAwesomeIcon icon={faRocket} className="mr-2 text-green-400" />
                           Interesująca usługa *
@@ -499,7 +439,7 @@ export default function KontaktPage() {
                             </option>
                           ))}
                         </select>
-                      </motion.div>
+                      </div>
 
                       {/* Budget */}
                       <div>
@@ -542,22 +482,16 @@ export default function KontaktPage() {
                     </div>
 
                     {/* Submit Button */}
-                    <motion.button
+                    <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
-                      whileHover={!prefersReducedMotion && !isSubmitting ? { scale: 1.02 } : undefined}
-                      whileTap={!isSubmitting ? { scale: 0.98 } : undefined}
+                      className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <span className="relative flex items-center justify-center gap-3">
                         {isSubmitting ? (
                           <>
-                            <motion.div
-                              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                              animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                            />
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             Wysyłanie...
                           </>
                         ) : (
@@ -567,7 +501,7 @@ export default function KontaktPage() {
                           </>
                         )}
                       </span>
-                    </motion.button>
+                    </button>
 
                     <p className="text-xs text-gray-500 text-center">
                       Wypełniając formularz akceptujesz naszą{' '}
@@ -578,7 +512,7 @@ export default function KontaktPage() {
                   </>
                 )}
               </form>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>

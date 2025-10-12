@@ -1,28 +1,20 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRocket,
   faChartLine,
   faMagnifyingGlass,
-  faBullhorn,
-  faEnvelope,
-  faHashtag,
   faAd,
+  faHashtag,
   faPenToSquare,
-  faUsers,
-  faArrowTrendUp,
+  faEnvelope,
   faCheckCircle,
   faArrowRight,
-  faGlobe,
   faSearch,
-  faLink,
-  faStar,
   faFileLines,
   faMobileScreenButton
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 import Image from 'next/image';
 
 const services = [
@@ -126,57 +118,32 @@ const benefits = [
 ];
 
 export default function MarketingSEO() {
-  const prefersReducedMotion = useReducedMotion();
-  const [activeService, setActiveService] = useState(0);
-
   return (
     <section id="marketing" className="relative py-20 sm:py-24 lg:py-32 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden">
-      {/* Tło z gradientem */}
+      {/* Static background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-black to-black" />
 
-      {/* Dekoracyjne elementy */}
-      {!prefersReducedMotion && (
-        <>
-          <motion.div
-            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-10 blur-[120px]"
-            style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)' }}
-            animate={{ scale: [1, 1.2, 1], x: [0, 50, 0], y: [0, -30, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] rounded-full opacity-10 blur-[120px]"
-            style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.4) 0%, transparent 70%)' }}
-            animate={{ scale: [1, 1.3, 1], x: [0, -60, 0], y: [0, 40, 0] }}
-            transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          />
-        </>
-      )}
+      {/* Static gradient blobs */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-10 blur-[120px]"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)' }}
+      />
+      <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] rounded-full opacity-10 blur-[120px]"
+        style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.4) 0%, transparent 70%)' }}
+      />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-        {/* Nagłówek */}
-        <motion.div
-          className="text-center mb-16 lg:mb-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.div
-            className="inline-block mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+        {/* Header */}
+        <div className="text-center mb-16 lg:mb-20">
+          <div className="inline-block mb-6">
             <span className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 text-blue-400 text-sm font-bold backdrop-blur-xl shadow-lg shadow-blue-500/10">
-              <FontAwesomeIcon icon={faRocket} className="mr-2 animate-pulse" fixedWidth />
+              <FontAwesomeIcon icon={faRocket} className="mr-2" fixedWidth />
               Marketing & SEO
             </span>
-          </motion.div>
+          </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 lg:mb-8 leading-[1.1] tracking-tight">
             <span className="block text-white mb-2">Przyciągnij więcej klientów</span>
-            <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text animate-gradient bg-[length:200%_200%]">
+            <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
               z marketingu online
             </span>
           </h2>
@@ -189,23 +156,14 @@ export default function MarketingSEO() {
               skutecznie i mierzalnie
             </span>.
           </p>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20 lg:mb-32"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          {stats.map((stat, index) => (
-            <motion.div
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20 lg:mb-32">
+          {stats.map((stat) => (
+            <div
               key={stat.label}
-              className="relative"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="relative hover:scale-105 transition-transform duration-300"
             >
               <div className="relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 text-center hover:border-purple-500/30 transition-all duration-300">
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text mb-2">
@@ -218,17 +176,12 @@ export default function MarketingSEO() {
                   {stat.description}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Services - Staggered Layout */}
-        <motion.div
-          className="mb-20 lg:mb-32"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
+        {/* Services */}
+        <div className="mb-20 lg:mb-32">
           <div className="text-center mb-12">
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               Nasze usługi marketingowe
@@ -239,16 +192,10 @@ export default function MarketingSEO() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-            {services.map((service, index) => (
-              <motion.div
+            {services.map((service) => (
+              <div
                 key={service.title}
-                className="group relative"
-                initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={!prefersReducedMotion ? { scale: 1.02 } : undefined}
-                onHoverStart={() => setActiveService(index)}
+                className="group relative hover:scale-[1.02] transition-transform duration-300"
               >
                 <div className="relative overflow-hidden rounded-2xl border border-white/10 group-hover:border-white/20 bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl transition-all duration-300">
                   {/* Image */}
@@ -293,18 +240,13 @@ export default function MarketingSEO() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* SEO Process */}
-        <motion.div
-          className="mb-20 lg:mb-32"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <div className="mb-20 lg:mb-32">
           <div className="relative bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 rounded-3xl p-8 sm:p-12 border border-white/10">
             <div className="text-center mb-12">
               <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
@@ -317,13 +259,9 @@ export default function MarketingSEO() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {seoProcess.map((process, index) => (
-                <motion.div
+                <div
                   key={process.step}
                   className="relative"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <div className="relative bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-purple-500/30 transition-all duration-300">
                     <div className="flex items-center gap-4 mb-4">
@@ -346,19 +284,14 @@ export default function MarketingSEO() {
                   {index < seoProcess.length - 1 && (
                     <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-blue-500/50 to-purple-500/50" />
                   )}
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Benefits Grid */}
-        <motion.div
-          className="mb-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <div className="mb-20">
           <div className="text-center mb-12">
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               Korzyści dla Twojego biznesu
@@ -369,42 +302,30 @@ export default function MarketingSEO() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {benefits.map((benefit, index) => (
-              <motion.div
+            {benefits.map((benefit) => (
+              <div
                 key={benefit}
-                className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-xl hover:border-purple-500/30 transition-all duration-300"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
+                className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-xl hover:border-purple-500/30 hover:translate-x-1 transition-all duration-300"
               >
                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
                   <FontAwesomeIcon icon={faCheckCircle} className="w-4 h-4 text-white" fixedWidth />
                 </div>
                 <span className="text-sm font-semibold text-white">{benefit}</span>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* CTA */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className="text-center">
           <p className="text-xl sm:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto">
             Chcesz <span className="font-bold text-white">zdominować Google</span> w swojej branży?
             <br className="hidden sm:block" />
             Porozmawiajmy o Twojej strategii marketingowej!
           </p>
-          <motion.a
+          <a
             href="/kontakt?konsultacja=true"
-            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all relative overflow-hidden group"
-            whileHover={!prefersReducedMotion ? { scale: 1.05, y: -2 } : undefined}
-            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-purple-500/50 hover:scale-105 hover:-translate-y-1 transition-all relative overflow-hidden group"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="relative flex items-center gap-3">
@@ -415,8 +336,8 @@ export default function MarketingSEO() {
                 fixedWidth
               />
             </span>
-          </motion.a>
-        </motion.div>
+          </a>
+        </div>
       </div>
     </section>
   );

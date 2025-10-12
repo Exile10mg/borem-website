@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
@@ -15,7 +14,7 @@ export default function ProcesPracyPage() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Section */}
+      {/* Hero Section - STATIC */}
       <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-32 pb-16 sm:pb-20">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
@@ -24,12 +23,7 @@ export default function ProcesPracyPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Breadcrumbs */}
-          <motion.nav
-            className="mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <nav className="mb-8">
             <ol className="flex items-center gap-2 text-sm">
               <li>
                 <Link
@@ -45,15 +39,10 @@ export default function ProcesPracyPage() {
               </li>
               <li className="text-white font-semibold">Proces pracy</li>
             </ol>
-          </motion.nav>
+          </nav>
 
           {/* Title */}
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <div className="text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">
               Proces{' '}
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
@@ -63,7 +52,7 @@ export default function ProcesPracyPage() {
             <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto">
               Transparentny, sprawdzony proces, który prowadzi Twój projekt od pomysłu do sukcesu
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 

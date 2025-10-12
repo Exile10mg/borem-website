@@ -20,37 +20,15 @@ const DlaczegoMy = dynamic(() => import('@/components/sections/DlaczegoMy'));
 const Kontakt = dynamic(() => import('@/components/sections/Kontakt'));
 
 export default function Home() {
-  const [scrollProgress, setScrollProgress] = React.useState(0);
-
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const doc = document.documentElement;
-      const scrollHeight = Math.max(1, doc.scrollHeight - window.innerHeight);
-      const progress = Math.min(100, Math.max(0, (window.scrollY / scrollHeight) * 100));
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll as any);
-  }, []);
-
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
-      {/* Progress bar - Simple CSS */}
-      <div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 z-[10000] origin-left transition-transform duration-100"
-        style={{ transform: `scaleX(${scrollProgress / 100})` }}
-      />
-
       <Navbar />
       <WhatsAppButton />
 
       {/* STATIC HERO - NO FRAMER MOTION */}
       <section
         id="home"
-        className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24 pb-24 sm:pb-32"
+        className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28 xl:pt-32 pb-24 sm:pb-32 lg:pb-32 xl:pb-40"
       >
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
@@ -114,7 +92,7 @@ export default function Home() {
                   </a>
 
                   <a
-                    href="#realizacje"
+                    href="/realizacje"
                     className="px-8 py-4 bg-white/5 text-white rounded-full font-bold text-lg border-2 border-white/20 backdrop-blur-xl hover:bg-white/10 hover:border-purple-500/50 transition-all hover:scale-105 flex items-center justify-center gap-2"
                   >
                     Zobacz realizacje
@@ -126,8 +104,8 @@ export default function Home() {
 
               </div>
 
-              {/* Visual Column - Simple mockup (Desktop only) */}
-              <div className="hidden lg:flex flex-col items-center justify-start gap-4">
+              {/* Visual Column - Simple mockup */}
+              <div className="flex flex-col items-center justify-start gap-4">
                 <div className="relative w-full max-w-md">
                   {/* Glow effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-20 blur-3xl rounded-3xl" />

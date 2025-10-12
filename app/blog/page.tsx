@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
@@ -123,7 +122,7 @@ export default function BlogPage() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Section */}
+      {/* Hero Section - STATIC */}
       <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-32 pb-16 sm:pb-20">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
@@ -132,27 +131,17 @@ export default function BlogPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Breadcrumbs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 text-sm text-gray-400 mb-8"
-          >
+          <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
             <Link href="/" className="hover:text-blue-400 transition-colors flex items-center gap-2">
               <FontAwesomeIcon icon={faHome} className="w-4 h-4" />
               Strona główna
             </Link>
             <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3" />
             <span className="text-white">Blog</span>
-          </motion.div>
+          </div>
 
           {/* Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center max-w-4xl mx-auto"
-          >
+          <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">
               Nasz <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">Blog</span>
             </h1>
@@ -171,55 +160,44 @@ export default function BlogPage() {
                 className="w-full pl-14 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-500 focus:outline-none focus:border-purple-500/50 transition-all"
               />
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Categories Filter */}
+      {/* Categories Filter - STATIC */}
       <section className="relative py-8 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category, index) => (
-              <motion.button
+            {categories.map((category) => (
+              <button
                 key={category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
                 onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+                className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all hover:scale-105 ${
                   activeCategory === category
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30'
                     : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10'
                 }`}
               >
                 {category}
-              </motion.button>
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Blog Posts Grid */}
+      {/* Blog Posts Grid - STATIC */}
       <section className="relative py-20 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredPosts.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
-            >
+            <div className="text-center py-20">
               <p className="text-2xl text-gray-400">Nie znaleziono artykułów spełniających kryteria</p>
-            </motion.div>
+            </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post, index) => (
-                <motion.article
+              {filteredPosts.map((post) => (
+                <article
                   key={post.id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all"
+                  className="group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:-translate-y-2 transition-all"
                 >
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
@@ -300,22 +278,17 @@ export default function BlogPage() {
                       </Link>
                     </div>
                   </div>
-                </motion.article>
+                </article>
               ))}
             </div>
           )}
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - STATIC */}
       <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+          <div>
             <h2 className="text-3xl sm:text-4xl font-black mb-6">
               Potrzebujesz <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">pomocy</span>?
             </h2>
@@ -328,7 +301,7 @@ export default function BlogPage() {
             >
               Bezpłatna konsultacja
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 

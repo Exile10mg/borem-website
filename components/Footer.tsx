@@ -1,6 +1,5 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEnvelope,
@@ -62,70 +61,39 @@ const stats = [
 ];
 
 export default function Footer() {
-  const prefersReducedMotion = useReducedMotion();
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <footer className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden">
-      {/* Background effects */}
-      {!prefersReducedMotion && (
-        <>
-          <motion.div
-            className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full opacity-10 blur-[120px]"
-            style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)' }}
-            animate={{ scale: [1, 1.2, 1], x: [0, -30, 0] }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute bottom-0 right-1/4 w-[450px] h-[450px] rounded-full opacity-10 blur-[120px]"
-            style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)' }}
-            animate={{ scale: [1, 1.3, 1], x: [0, 40, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          />
-        </>
-      )}
+      {/* Static background effects */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full opacity-10 blur-[120px]"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)' }}
+      />
+      <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] rounded-full opacity-10 blur-[120px]"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)' }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats bar */}
-        <motion.div
-          className="py-12 lg:py-16 border-b border-white/10"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className="py-12 lg:py-16 border-b border-white/10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
                 <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text mb-2">
                   {stat.value}
                 </div>
                 <div className="text-sm text-gray-400 font-medium">{stat.label}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Main footer content */}
         <div className="py-12 lg:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Company info */}
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+          <div className="lg:col-span-2">
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
@@ -168,15 +136,10 @@ export default function Footer() {
                 <span className="text-sm">ul. Różana 28/66, 20-538 Lublin</span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Services */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-          >
+          <div>
             <h4 className="text-lg font-bold text-white mb-6">Usługi</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
@@ -194,15 +157,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
           {/* Company */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <div>
             <h4 className="text-lg font-bold text-white mb-6">Firma</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -216,15 +174,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
           {/* Legal */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
+          <div>
             <h4 className="text-lg font-bold text-white mb-6">Informacje prawne</h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
@@ -244,30 +197,22 @@ export default function Footer() {
               <h5 className="text-sm font-bold text-white mb-4">Śledź nas</h5>
               <div className="flex gap-3">
                 {socialLinks.map((social) => (
-                  <motion.a
+                  <a
                     key={social.label}
                     href={social.href}
                     aria-label={social.label}
-                    className={`w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 ${social.color} transition-colors`}
-                    whileHover={!prefersReducedMotion ? { scale: 1.1, y: -2 } : undefined}
-                    whileTap={{ scale: 0.95 }}
+                    className={`w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 ${social.color} hover:scale-110 hover:-translate-y-1 transition-all`}
                   >
                     <FontAwesomeIcon icon={social.icon} className="w-4 h-4" />
-                  </motion.a>
+                  </a>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Bottom bar */}
-        <motion.div
-          className="py-8 border-t border-white/10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
+        <div className="py-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-400 text-center md:text-left">
               © {new Date().getFullYear()} Borem.pl. Wszelkie prawa zastrzeżone.
@@ -288,25 +233,20 @@ export default function Footer() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll to top button */}
-      <motion.button
+      <button
         onClick={scrollToTop}
-        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center shadow-2xl hover:shadow-purple-500/50 transition-all group"
-        initial={{ opacity: 0, scale: 0 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        whileHover={!prefersReducedMotion ? { scale: 1.1, y: -2 } : undefined}
-        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center shadow-2xl hover:shadow-purple-500/50 hover:scale-110 hover:-translate-y-1 transition-all group"
         aria-label="Przewiń do góry"
       >
         <FontAwesomeIcon
           icon={faArrowUp}
-          className="w-5 h-5 text-white group-hover:animate-bounce"
+          className="w-5 h-5 text-white"
         />
-      </motion.button>
+      </button>
     </footer>
   );
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
@@ -8,10 +7,9 @@ import {
   faGlobe,
   faMobileAlt,
   faCog,
-  faChartLine,
-  faExternalLinkAlt,
   faArrowRight,
   faCheck,
+  faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -19,7 +17,6 @@ import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
-import { projects as importedProjects } from '@/data/projects';
 
 // Typy projektów
 type ProjectCategory = 'Wszystkie' | 'Strony WWW' | 'Aplikacje' | 'Automatyzacje';
@@ -44,7 +41,6 @@ interface Project {
   };
 }
 
-// Używamy importowanych projektów i dodajemy kategorię
 const projects: Project[] = [
   // Strony WWW
   {
@@ -262,7 +258,7 @@ export default function RealizacjePage() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Section */}
+      {/* Hero Section - STATIC */}
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-32 pb-20">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
@@ -271,52 +267,39 @@ export default function RealizacjePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Breadcrumbs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 text-sm text-gray-400 mb-8"
-          >
+          <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
             <Link href="/" className="hover:text-blue-400 transition-colors flex items-center gap-2">
               <FontAwesomeIcon icon={faHome} className="w-4 h-4" />
               Strona główna
             </Link>
             <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3" />
             <span className="text-white">Realizacje</span>
-          </motion.div>
+          </div>
 
           {/* Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center max-w-4xl mx-auto"
-          >
+          <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">
               Nasze <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">Realizacje</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-400 mb-8">
               Poznaj projekty, które pomogły naszym klientom osiągnąć sukces
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Categories Filter */}
+      {/* Categories Filter - STATIC */}
       <section className="relative py-8 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category, index) => (
-              <motion.button
+            {categories.map((category) => (
+              <button
                 key={category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
                 onClick={() => setActiveCategory(category)}
                 className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${
                   activeCategory === category
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30'
-                    : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10'
+                    : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:scale-105 border border-white/10'
                 }`}
               >
                 {category === 'Strony WWW' && <FontAwesomeIcon icon={faGlobe} className="w-4 h-4" />}
@@ -328,111 +311,105 @@ export default function RealizacjePage() {
                     {projects.filter(p => p.category === category).length}
                   </span>
                 )}
-              </motion.button>
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Projects Grid */}
+      {/* Projects Grid - STATIC */}
       <section className="relative py-20 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+            {filteredProjects.map((project) => (
+              <div key={project.id}>
                 <Link 
                   href={`/realizacje/${project.slug}`}
-                  className="block group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all h-full"
+                  className="block group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:-translate-y-2 transition-all h-full"
                 >
-                {/* Image */}
-                <div className="relative h-56 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                  
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
-                      {project.category}
-                    </span>
-                  </div>
-
-                  {/* URL Badge */}
-                  {project.url && (
-                    <div className="absolute top-4 right-4">
-                      <a
-                        href={project.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all"
-                      >
-                        <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4 text-white" />
-                      </a>
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 bg-white/5 rounded-lg text-xs text-gray-400"
-                      >
-                        {tag}
+                  {/* Image */}
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+                        {project.category}
                       </span>
-                    ))}
+                    </div>
+
+                    {/* URL Badge */}
+                    {project.url && (
+                      <div className="absolute top-4 right-4">
+                        <a
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all"
+                        >
+                          <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4 text-white" />
+                        </a>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Metrics */}
-                  {project.metrics && project.metrics.length > 0 && (
-                    <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
-                      {project.metrics.map((metric, idx) => (
-                        <div key={idx} className="text-center">
-                          <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
-                            {metric.value}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">{metric.label}</div>
-                        </div>
+                  {/* Content */}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                      {project.title}
+                    </h3>
+
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-1 bg-white/5 rounded-lg text-xs text-gray-400"
+                        >
+                          {tag}
+                        </span>
                       ))}
                     </div>
-                  )}
 
-                  {/* View Details */}
-                  <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                    <span className="text-sm text-gray-400">Zobacz szczegóły</span>
-                    <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4 text-blue-400 group-hover:translate-x-2 transition-transform" />
+                    {/* Metrics */}
+                    {project.metrics && project.metrics.length > 0 && (
+                      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
+                        {project.metrics.map((metric, idx) => (
+                          <div key={idx} className="text-center">
+                            <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+                              {metric.value}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">{metric.label}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* View Details */}
+                    <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                      <span className="text-sm text-gray-400">Zobacz szczegóły</span>
+                      <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4 text-blue-400 group-hover:translate-x-2 transition-transform" />
+                    </div>
                   </div>
-                </div>
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats Section - STATIC */}
       <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 text-center">
@@ -441,34 +418,25 @@ export default function RealizacjePage() {
               { label: 'Zadowoleni klienci', value: '100%' },
               { label: 'Lata doświadczenia', value: '5+' },
               { label: 'Średni ROI', value: '500%' },
-            ].map((stat, index) => (
-              <motion.div
+            ].map((stat) => (
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl"
+                className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl hover:scale-105 hover:-translate-y-1 transition-all"
               >
                 <div className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text mb-2">
                   {stat.value}
                 </div>
                 <div className="text-gray-400 text-sm">{stat.label}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - STATIC */}
       <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+          <div>
             <h2 className="text-3xl sm:text-4xl font-black mb-6">
               Gotowy na <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">podobne efekty</span>?
             </h2>
@@ -481,20 +449,17 @@ export default function RealizacjePage() {
             >
               Bezpłatna konsultacja
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Modal with Case Study */}
+      {/* Modal with Case Study - STATIC */}
       {selectedProject && selectedProject.caseStudy && (
         <div
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
           onClick={() => setSelectedProject(null)}
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+          <div
             onClick={(e) => e.stopPropagation()}
             className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-3xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           >
@@ -542,7 +507,7 @@ export default function RealizacjePage() {
                     href={selectedProject.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105 transition-all"
                   >
                     Odwiedź stronę
                     <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4" />
@@ -550,7 +515,7 @@ export default function RealizacjePage() {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
 

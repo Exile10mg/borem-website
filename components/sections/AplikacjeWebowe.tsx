@@ -1,6 +1,5 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCode,
@@ -9,18 +8,12 @@ import {
   faLock,
   faGaugeHigh,
   faMobile,
-  faServer,
   faDatabase,
-  faCloud,
   faCogs,
-  faCheckCircle,
   faArrowRight,
   faLayerGroup,
-  faPlugCircleCheck,
-  faBolt,
-  faShieldHalved
+  faPlugCircleCheck
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 import Image from 'next/image';
 
 const features = [
@@ -130,43 +123,32 @@ const processSteps = [
 ];
 
 export default function AplikacjeWebowe() {
-  const prefersReducedMotion = useReducedMotion();
-  const [activeUseCase, setActiveUseCase] = useState(0);
-
   return (
     <section id="aplikacje" className="relative py-20 sm:py-24 lg:py-32 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden">
-      {/* Tło z gradientem */}
+      {/* Static background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-black to-black" />
 
-      {/* Dekoracyjne elementy */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl -z-0" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-purple-500/10 to-pink-500/10 rounded-full blur-3xl -z-0" />
+      {/* Static gradient blobs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-20 blur-[100px] z-0"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)' }}
+      />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] opacity-20 blur-[100px] z-0"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.6) 0%, transparent 70%)' }}
+      />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-        {/* Nagłówek */}
-        <motion.div
-          className="text-center mb-16 lg:mb-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.div
-            className="inline-block mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+        {/* Header */}
+        <div className="text-center mb-16 lg:mb-20">
+          <div className="inline-block mb-6">
             <span className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 text-blue-400 text-sm font-bold backdrop-blur-xl shadow-lg shadow-blue-500/10">
-              <FontAwesomeIcon icon={faCode} className="mr-2 animate-pulse" fixedWidth />
+              <FontAwesomeIcon icon={faCode} className="mr-2" fixedWidth />
               Aplikacje Webowe
             </span>
-          </motion.div>
+          </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 lg:mb-8 leading-[1.1] tracking-tight">
             <span className="block text-white mb-2">Dedykowane rozwiązania</span>
-            <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text animate-gradient bg-[length:200%_200%]">
+            <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
               dla Twojego biznesu
             </span>
           </h2>
@@ -180,20 +162,14 @@ export default function AplikacjeWebowe() {
               zrealizujemy każdy projekt
             </span>.
           </p>
-        </motion.div>
+        </div>
 
         {/* Use Cases Grid */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-20 lg:mb-32">
-          {useCases.map((useCase, index) => (
-            <motion.div
+          {useCases.map((useCase) => (
+            <div
               key={useCase.title}
-              className="group relative cursor-pointer"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={!prefersReducedMotion ? { y: -8 } : undefined}
-              onHoverStart={() => setActiveUseCase(index)}
+              className="group relative cursor-pointer hover:-translate-y-2 transition-transform duration-300"
             >
               <div className="relative overflow-hidden rounded-2xl shadow-xl">
                 <div className="aspect-[3/2] relative">
@@ -229,17 +205,12 @@ export default function AplikacjeWebowe() {
                 {/* Hover effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/20 group-hover:to-purple-500/20 transition-all duration-500" />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Features Grid */}
-        <motion.div
-          className="mb-20 lg:mb-32"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <div className="mb-20 lg:mb-32">
           <div className="text-center mb-12">
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               Dlaczego nasze aplikacje?
@@ -250,19 +221,16 @@ export default function AplikacjeWebowe() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
+            {features.map((feature) => (
+              <div
                 key={feature.title}
-                className="group relative"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={!prefersReducedMotion ? { y: -4 } : undefined}
+                className="group relative hover:-translate-y-1 transition-transform duration-300"
               >
-                <div className={`relative h-full bg-gradient-to-br ${feature.bgGradient} backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 transition-all duration-500 hover:border-white/20`}>
+                <div className={`absolute -inset-1 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300 rounded-2xl`} />
+                
+                <div className={`relative h-full bg-gradient-to-br ${feature.bgGradient} backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/20`}>
                   <div className="flex items-start gap-4 mb-4">
-                    <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-lg`}>
+                    <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       <FontAwesomeIcon
                         icon={feature.icon}
                         className="w-6 h-6 text-white"
@@ -279,18 +247,13 @@ export default function AplikacjeWebowe() {
                     {feature.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Technologies */}
-        <motion.div
-          className="mb-20 lg:mb-32"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <div className="mb-20 lg:mb-32">
           <div className="text-center mb-12">
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               Nowoczesny stack technologiczny
@@ -305,15 +268,10 @@ export default function AplikacjeWebowe() {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10" />
 
             <div className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6">
-              {technologies.map((tech, index) => (
-                <motion.div
+              {technologies.map((tech) => (
+                <div
                   key={tech.name}
-                  className="group relative"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  whileHover={!prefersReducedMotion ? { scale: 1.05, y: -4 } : undefined}
+                  className="group relative hover:scale-105 hover:-translate-y-1 transition-all duration-300"
                 >
                   <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 text-center hover:bg-white/10 transition-all duration-300 hover:border-white/20">
                     <div
@@ -329,19 +287,14 @@ export default function AplikacjeWebowe() {
                       {tech.category}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Process */}
-        <motion.div
-          className="mb-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <div className="mb-20">
           <div className="text-center mb-12">
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               Proces tworzenia aplikacji
@@ -352,14 +305,10 @@ export default function AplikacjeWebowe() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {processSteps.map((step, index) => (
-              <motion.div
+            {processSteps.map((step) => (
+              <div
                 key={step.number}
-                className="relative"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="relative hover:-translate-y-1 transition-transform duration-300"
               >
                 <div className="relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300">
                   <div className="flex items-center gap-4 mb-4">
@@ -381,28 +330,20 @@ export default function AplikacjeWebowe() {
                     {step.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* CTA */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className="text-center">
           <p className="text-xl sm:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto">
             Masz pomysł na aplikację?{' '}
             <span className="font-bold text-white">Porozmawiajmy o możliwościach</span>!
           </p>
-          <motion.a
+          <a
             href="#kontakt"
-            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all relative overflow-hidden group"
-            whileHover={!prefersReducedMotion ? { scale: 1.05, y: -2 } : undefined}
-            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-purple-500/50 hover:scale-105 hover:-translate-y-1 transition-all relative overflow-hidden group"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="relative flex items-center gap-3">
@@ -413,8 +354,8 @@ export default function AplikacjeWebowe() {
                 fixedWidth
               />
             </span>
-          </motion.a>
-        </motion.div>
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
@@ -580,7 +579,6 @@ const faqItems = [
 ];
 
 export default function CennikPage() {
-  const prefersReducedMotion = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState<keyof typeof allServices>('strony-www');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -589,7 +587,7 @@ export default function CennikPage() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Section */}
+      {/* Hero Section - STATIC */}
       <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-32 pb-16 sm:pb-20">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
@@ -598,12 +596,7 @@ export default function CennikPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Breadcrumbs */}
-          <motion.nav
-            className="mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <nav className="mb-8">
             <ol className="flex items-center gap-2 text-sm">
               <li>
                 <Link
@@ -621,51 +614,31 @@ export default function CennikPage() {
                 <span className="text-white font-semibold">Cennik</span>
               </li>
             </ol>
-          </motion.nav>
+          </nav>
 
           {/* Hero Content */}
           <div className="text-center max-w-4xl mx-auto">
-            <motion.div
-              className="inline-block mb-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <div className="inline-block mb-6">
               <span className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 text-blue-400 text-sm font-bold backdrop-blur-xl shadow-lg shadow-blue-500/10">
-                <FontAwesomeIcon icon={faChartLine} className="mr-2 animate-pulse" />
+                <FontAwesomeIcon icon={faChartLine} className="mr-2" />
                 Przejrzyste Ceny - Bez Ukrytych Kosztów
               </span>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
               <span className="block text-white mb-2">Najlepsze ceny,</span>
-              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text animate-gradient bg-[length:200%_200%]">
+              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
                 najwyższa jakość
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
+            <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-8">
               Konkurencyjne ceny dla startupów i małych firm.{' '}
               <span className="font-bold text-white">Profesjonalizm</span> w przystępnej cenie!
-            </motion.p>
+            </p>
 
             {/* Benefits badges */}
-            <motion.div
-              className="flex flex-wrap justify-center gap-4 mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-            >
+            <div className="flex flex-wrap justify-center gap-4 mb-4">
               <div className="px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-sm font-bold">
                 ✓ Gwarancja satysfakcji
               </div>
@@ -675,43 +648,35 @@ export default function CennikPage() {
               <div className="px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-sm font-bold">
                 ✓ Bezpłatna konsultacja
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Category Tabs */}
+      {/* Category Tabs - STATIC */}
       <section className="relative py-8 bg-gradient-to-b from-black via-gray-900/50 to-gray-900 sticky top-20 z-40 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="flex flex-wrap justify-center gap-3"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="flex flex-wrap justify-center gap-3">
             {categories.map((category) => (
-              <motion.button
+              <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id as keyof typeof allServices)}
-                className={`px-4 sm:px-6 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+                className={`px-4 sm:px-6 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all hover:scale-105 ${
                   activeCategory === category.id
                     ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl shadow-purple-500/50'
                     : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
                 }`}
-                whileHover={!prefersReducedMotion ? { scale: 1.05 } : undefined}
-                whileTap={{ scale: 0.95 }}
               >
                 <FontAwesomeIcon icon={category.icon} className="mr-2" />
                 <span className="hidden sm:inline">{category.name}</span>
                 <span className="sm:hidden">{category.name.split(' ')[0]}</span>
-              </motion.button>
+              </button>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Pricing Cards */}
+      {/* Pricing Cards - STATIC */}
       <section className="relative pt-24 pb-20 sm:py-24 lg:py-32 bg-gradient-to-b from-gray-900 via-black to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`grid gap-8 ${
@@ -720,14 +685,7 @@ export default function CennikPage() {
               : 'md:grid-cols-2 lg:grid-cols-3'
           }`}>
             {allServices[activeCategory].map((pkg, index) => (
-              <motion.div
-                key={pkg.name}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`relative ${pkg.popular ? 'lg:scale-105 z-10' : ''}`}
-              >
+              <div key={pkg.name} className={`relative ${pkg.popular ? 'lg:scale-105 z-10' : ''}`}>
                 {/* Popular badge */}
                 {pkg.popular && (
                   <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
@@ -741,7 +699,7 @@ export default function CennikPage() {
                 <div
                   className={`relative h-full bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border ${
                     pkg.popular ? 'border-purple-500/50 shadow-2xl shadow-purple-500/20' : 'border-white/10'
-                  } rounded-3xl p-6 sm:p-8 hover:border-purple-500/50 transition-all group`}
+                  } rounded-3xl p-6 sm:p-8 hover:border-purple-500/50 hover:-translate-y-2 transition-all group`}
                 >
                   {/* Icon */}
                   <div className="mb-6">
@@ -798,9 +756,9 @@ export default function CennikPage() {
                   {/* CTA Button */}
                   <Link
                     href="/kontakt?konsultacja=true"
-                    className={`block w-full px-6 py-4 rounded-xl font-bold text-center transition-all ${
+                    className={`block w-full px-6 py-4 rounded-xl font-bold text-center transition-all hover:scale-105 ${
                       pkg.popular
-                        ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl hover:shadow-purple-500/50 hover:scale-105'
+                        ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl hover:shadow-purple-500/50'
                         : 'bg-white/5 text-white hover:bg-white/10 border border-white/20 hover:border-purple-500/50'
                     }`}
                   >
@@ -808,19 +766,12 @@ export default function CennikPage() {
                     <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
-          {/* Comparison Table - for all categories */}
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-24"
-          >
+          {/* Comparison Table - STATIC */}
+          <div key={activeCategory} className="mt-24">
             <div className="text-center mb-12">
               <h3 className="text-3xl sm:text-4xl font-black mb-4">
                 Porównaj <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">pakiety</span>
@@ -844,7 +795,6 @@ export default function CennikPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Get all unique features */}
                   {(() => {
                     const allFeatures = new Set<string>();
                     allServices[activeCategory].forEach(pkg => {
@@ -884,9 +834,9 @@ export default function CennikPage() {
                       <td key={pkg.name} className="py-6 px-4 text-center">
                         <Link
                           href="/kontakt?konsultacja=true"
-                          className={`inline-block px-4 lg:px-6 py-3 rounded-xl font-bold text-sm lg:text-base transition-all ${
+                          className={`inline-block px-4 lg:px-6 py-3 rounded-xl font-bold text-sm lg:text-base transition-all hover:scale-105 ${
                             pkg.popular
-                              ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl hover:shadow-purple-500/50 hover:scale-105'
+                              ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl hover:shadow-purple-500/50'
                               : 'bg-white/5 text-white hover:bg-white/10 border border-white/20 hover:border-purple-500/50'
                           }`}
                         >
@@ -898,20 +848,14 @@ export default function CennikPage() {
                 </tfoot>
               </table>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* FAQ Section - STATIC */}
       <section className="relative py-20 sm:py-24 lg:py-32 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="text-center mb-16">
             <div className="inline-block mb-6">
               <span className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 text-blue-400 text-sm font-bold backdrop-blur-xl">
                 <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
@@ -921,16 +865,12 @@ export default function CennikPage() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
               Masz pytania? Mamy odpowiedzi!
             </h2>
-          </motion.div>
+          </div>
 
           <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all"
               >
                 <button
@@ -938,41 +878,29 @@ export default function CennikPage() {
                   className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-white/5 transition-colors"
                 >
                   <span className="text-lg font-bold text-white pr-4">{item.question}</span>
-                  <motion.div
-                    animate={{ rotate: openFaq === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex-shrink-0"
-                  >
-                    <FontAwesomeIcon icon={faChevronRight} className="w-5 h-5 text-gray-400 rotate-90" />
-                  </motion.div>
+                  <div className={`flex-shrink-0 transition-transform ${openFaq === index ? 'rotate-90' : ''}`}>
+                    <FontAwesomeIcon icon={faChevronRight} className="w-5 h-5 text-gray-400" />
+                  </div>
                 </button>
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: openFaq === index ? 'auto' : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${openFaq === index ? 'max-h-96' : 'max-h-0'}`}
                 >
                   <div className="px-6 pb-5 text-gray-300 leading-relaxed">{item.answer}</div>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - STATIC */}
       <section className="relative py-20 sm:py-24 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-purple-900/10 to-black" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px]" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+          <div>
             <FontAwesomeIcon
               icon={faRocket}
               className="w-16 h-16 text-blue-400 mb-6 mx-auto"
@@ -1002,7 +930,7 @@ export default function CennikPage() {
                 Zadzwoń: +48 787 041 328
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
