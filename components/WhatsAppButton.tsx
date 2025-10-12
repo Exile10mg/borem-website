@@ -45,7 +45,7 @@ export default function WhatsAppButton() {
   return (
     <>
       {/* Mobile Version - Only Icon with Badge */}
-      <div className="md:hidden fixed left-4 bottom-4 z-[50]" ref={tooltipRef}>
+      <div className="md:hidden fixed left-4 bottom-4 z-40" ref={tooltipRef}>
         <div className="relative">
           <button
             onClick={handleButtonClick}
@@ -81,7 +81,7 @@ export default function WhatsAppButton() {
       </div>
 
       {/* Desktop Version - Full Button with Text */}
-      <div className="hidden md:block fixed left-6 bottom-6 lg:left-8 lg:bottom-8 z-[50]">
+      <div className="hidden md:block fixed left-6 bottom-6 lg:left-8 lg:bottom-8 z-40">
         <button
           onClick={handleButtonClick}
           className="group relative flex items-center gap-3 bg-gradient-to-r from-[#25D366] to-[#22C55E] text-white rounded-2xl shadow-lg hover:shadow-[0_4px_20px_rgba(37,211,102,0.3)] transition-all duration-200 pl-3 pr-5 py-3 hover:scale-105 active:scale-95"
