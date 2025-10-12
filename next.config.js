@@ -5,6 +5,11 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
 
+  // Mobile optimization
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 31536000,
@@ -20,10 +25,23 @@ const nextConfig = {
         hostname: 'videos.pexels.com',
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
   },
 
   experimental: {
-    optimizePackageImports: ['framer-motion', '@fortawesome/react-fontawesome', '@fortawesome/free-solid-svg-icons'],
+    optimizePackageImports: ['framer-motion', '@fortawesome/react-fontawesome', '@fortawesome/free-solid-svg-icons', '@fortawesome/fontawesome-svg-core'],
+    scrollRestoration: true,
+  },
+
+  // Webpack optimizations for mobile
+  webpack: (config, { dev, isServer }) => {
+    if (!dev && !isServer) {
+      // Tree shaking aggressive
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
+    }
+    return config;
   },
 
   headers: async () => [

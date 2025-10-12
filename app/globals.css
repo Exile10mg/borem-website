@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  * {
+    /* Disable animations on mobile for performance */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Optimize scrolling */
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+  }
+  
+  /* Reduce repaints */
+  img, video {
+    will-change: auto;
+  }
+}
+
+/* Desktop - keep animations */
+@media (min-width: 769px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 @layer base {
   body {
     @apply bg-black text-white;
