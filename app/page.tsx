@@ -101,13 +101,27 @@ export default function Home() {
   const [currentLineIndex, setCurrentLineIndex] = React.useState(0);
   const [currentCharIndex, setCurrentCharIndex] = React.useState(0);
   const [buildProgress, setBuildProgress] = React.useState(0);
+  
+  // Detect mobile for disabling animations
+  const [isMobile, setIsMobile] = React.useState(false);
 
   // Particles (generowane tylko na kliencie, aby uniknąć błędów hydratacji)
   const [particles, setParticles] = React.useState<Particle[]>([]);
 
   React.useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 30 : 60;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  React.useEffect(() => {
+    const isMobileWidth = window.innerWidth < 768;
+    const count = isMobileWidth ? 30 : 60;
     const newParticles = [...Array(count)].map((_, i) => {
       const startLeft = Math.random() * 100;
       const startTop = Math.random() * 100;
@@ -150,15 +164,15 @@ export default function Home() {
   }, []);
 
   React.useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || isMobile) return;
     const slideTimer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(slideTimer);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isMobile]);
 
   React.useEffect(() => {
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || isMobile) {
       setCounters({ projects: 150, satisfaction: 98 });
       return;
     }
@@ -180,9 +194,9 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [prefersReducedMotion]);
 
-  // Typing + build progress (z respektowaniem prefers-reduced-motion)
+  // Typing + build progress (z respektowaniem prefers-reduced-motion i mobile)
   React.useEffect(() => {
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || isMobile) {
       setTypedCode(codeLines.map((l) => l.code));
       setBuildProgress(100);
       setCurrentLineIndex(codeLines.length);
@@ -219,7 +233,7 @@ export default function Home() {
       return () => clearTimeout(lineTimer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLineIndex, currentCharIndex, prefersReducedMotion, typedCode]);
+  }, [currentLineIndex, currentCharIndex, prefersReducedMotion, isMobile, typedCode]);
 
 
   return (
