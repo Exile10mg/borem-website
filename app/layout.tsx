@@ -8,6 +8,7 @@ import CookieConsent from '@/components/CookieConsent';
 import PageLoader from '@/components/PageLoader';
 import ScrollToTopButton from '@/components/ScrollToTopButton';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 config.autoAddCss = false;
 
@@ -97,6 +98,7 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <GoogleAnalytics />
         <PageLoader />
         {children}
         <WhatsAppButton />
