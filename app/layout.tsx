@@ -10,6 +10,7 @@ import ScrollToTopButton from '@/components/ScrollToTopButton';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import StructuredData from '@/components/StructuredData';
+import MicrosoftClarity from '@/components/MicrosoftClarity';
 
 config.autoAddCss = false;
 
@@ -155,6 +156,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />
+        <MicrosoftClarity />
         <StructuredData />
         <PageLoader />
         {children}
