@@ -15,7 +15,7 @@ export default function NotFound() {
       <Navbar />
       
       {/* 404 Content */}
-      <section className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-16 relative overflow-hidden">
+      <section className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-32 sm:pt-40 lg:pt-48 pb-16 relative overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-red-900/10 via-purple-900/10 to-black" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-[120px]" />
