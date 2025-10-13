@@ -45,19 +45,22 @@ export default function Home() {
               
               {/* Text Column */}
               <div className="text-center lg:text-left space-y-6">
-                {/* Title */}
+                {/* Title - SEO Optimized H1 */}
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight">
-                  <span className="block text-white mb-2">Twoja wizja</span>
+                  <span className="block text-white mb-2">Profesjonalna Agencja Marketingowa</span>
                   <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
-                    nasza realizacja
+                    Tworzenie Stron WWW & E-commerce
                   </span>
                 </h1>
 
-                {/* Description */}
+                {/* Description - SEO Enhanced */}
                 <div className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  <p className="mb-3">Projektujemy i budujemy cyfrowe doświadczenia, które napędzają rozwój biznesu.</p>
+                  <p className="mb-3">
+                    <strong className="text-white">Tworzymy strony internetowe</strong>, sklepy e-commerce i aplikacje webowe. 
+                    Specjalizujemy się w <strong className="text-white">AI, automatyzacji, marketingu i SEO</strong>.
+                  </p>
                   <p className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text font-bold text-base sm:text-lg">
-                    Od stron WWW po aplikacje AI.
+                    Kompleksowe rozwiązania dla Twojego biznesu online.
                   </p>
                 </div>
 
