@@ -46,7 +46,7 @@ export default function Home() {
               {/* Text Column */}
               <div className="text-center lg:text-left space-y-6">
                 {/* Title - SEO Optimized H1 */}
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black leading-tight">
                   <span className="block text-white mb-2">Profesjonalna Agencja Marketingowa</span>
                   <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
                     Tworzenie Stron WWW & E-commerce
