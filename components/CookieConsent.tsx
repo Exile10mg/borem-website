@@ -25,8 +25,10 @@ export default function CookieConsent() {
       }, 1000);
       return () => clearTimeout(timer);
     }
+  }, []);
 
-    // Listen for custom event to open settings
+  // Separate useEffect for event listener - always active
+  useEffect(() => {
     const handleOpenSettings = () => {
       const savedConsent = localStorage.getItem('cookieConsent');
       if (savedConsent) {
