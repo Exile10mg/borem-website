@@ -9,6 +9,7 @@ import PageLoader from '@/components/PageLoader';
 import ScrollToTopButton from '@/components/ScrollToTopButton';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import StructuredData from '@/components/StructuredData';
 
 config.autoAddCss = false;
 
@@ -21,11 +22,66 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://borem.pl'),
   title: {
-    default: "Borem.pl - Profesjonalne strony WWW i aplikacje webowe",
-    template: "%s | Borem.pl"
+    default: "Borem.pl - Tworzenie Stron WWW, Sklepy E-commerce | Agencja Marketingowa",
+    template: "%s | Borem.pl - Agencja Marketingowa"
   },
-  description: "Tworzymy nowoczesne strony WWW, sklepy e-commerce, aplikacje webowe. Specjalizujemy się w AI, automatyzacji, marketingu i SEO.",
-  keywords: ["strony www", "e-commerce", "aplikacje webowe", "AI", "automatyzacja", "SEO", "marketing", "agencja interaktywna", "tworzenie stron", "sklepy online"],
+  description: "★ Profesjonalna agencja marketingowa ★ Tworzymy strony WWW, sklepy e-commerce, aplikacje webowe ✓ AI i automatyzacja ✓ Marketing i SEO ✓ 150+ projektów ✓ Bezpłatna konsultacja",
+  keywords: [
+    // Główne usługi
+    "tworzenie stron internetowych",
+    "strony www",
+    "projektowanie stron www",
+    "strony internetowe dla firm",
+    "tanie strony internetowe",
+    "responsywne strony www",
+    
+    // E-commerce
+    "sklep internetowy",
+    "e-commerce",
+    "sklepy online",
+    "tworzenie sklepów internetowych",
+    "platforma e-commerce",
+    
+    // Aplikacje
+    "aplikacje webowe",
+    "systemy webowe",
+    "aplikacje internetowe",
+    "panele administracyjne",
+    "crm",
+    "erp",
+    
+    // AI i automatyzacja
+    "sztuczna inteligencja",
+    "ai dla biznesu",
+    "automatyzacja procesów",
+    "chatboty",
+    "integracje api",
+    
+    // Marketing
+    "agencja marketingowa",
+    "marketing internetowy",
+    "pozycjonowanie stron",
+    "seo",
+    "google ads",
+    "kampanie reklamowe",
+    "content marketing",
+    
+    // Technologie
+    "react",
+    "next.js",
+    "wordpress",
+    "webflow",
+    
+    // Lokalizacja
+    "agencja interaktywna polska",
+    "tworzenie stron www polska",
+    
+    // Dodatkowe
+    "strona wizytówka",
+    "landing page",
+    "redesign strony",
+    "optymalizacja strony"
+  ],
   authors: [{ name: "Borem.pl" }],
   creator: "Borem.pl",
   publisher: "Borem.pl",
@@ -33,9 +89,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pl_PL',
     url: 'https://borem.pl',
-    title: 'Borem.pl - Profesjonalne strony WWW i aplikacje webowe',
-    description: 'Tworzymy nowoczesne strony WWW, sklepy e-commerce, aplikacje webowe. Specjalizujemy się w AI, automatyzacji, marketingu i SEO.',
-    siteName: 'Borem.pl',
+    title: 'Borem.pl - Tworzenie Stron WWW, Sklepy E-commerce | Agencja Marketingowa',
+    description: '★ Profesjonalna agencja marketingowa ★ Tworzymy strony WWW, sklepy e-commerce, aplikacje webowe ✓ AI i automatyzacja ✓ Marketing i SEO ✓ 150+ projektów',
+    siteName: 'Borem.pl - Agencja Marketingowa',
     images: [
       {
         url: '/og-image.jpg',
@@ -47,8 +103,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Borem.pl - Profesjonalne strony WWW i aplikacje webowe',
-    description: 'Tworzymy nowoczesne strony WWW, sklepy e-commerce, aplikacje webowe. Specjalizujemy się w AI, automatyzacji, marketingu i SEO.',
+    title: 'Borem.pl - Tworzenie Stron WWW, Sklepy E-commerce | Agencja Marketingowa',
+    description: '★ Profesjonalna agencja marketingowa ★ Tworzymy strony WWW, sklepy e-commerce, aplikacje webowe ✓ 150+ projektów ✓ Bezpłatna konsultacja',
     images: ['/og-image.jpg'],
   },
   robots: {
@@ -99,6 +155,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />
+        <StructuredData />
         <PageLoader />
         {children}
         <WhatsAppButton />
