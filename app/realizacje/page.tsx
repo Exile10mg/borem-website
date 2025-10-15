@@ -166,27 +166,29 @@ export default function RealizacjePage() {
                       priority={project.id === 1}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                    {/* Very light overlay - just to slightly darken */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                     
                     {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
+                    <div className="absolute top-4 left-4 z-10">
                       <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
                         {project.category}
                       </span>
                     </div>
 
-                    {/* URL Badge */}
+                    {/* Visit Website Button - Always Visible */}
                     {project.url && (
-                      <div className="absolute top-4 right-4">
+                      <div className="absolute bottom-4 left-4 right-4 z-10">
                         <button
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             window.open(project.url, '_blank', 'noopener,noreferrer');
                           }}
-                          className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all"
+                          className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-purple-500/50 hover:scale-105 transition-all"
                         >
-                          <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4 text-white" />
+                          <FontAwesomeIcon icon={faExternalLinkAlt} className="w-4 h-4" />
+                          Odwiedź stronę
                         </button>
                       </div>
                     )}

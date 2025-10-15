@@ -52,7 +52,8 @@ export default function ProjectPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+        {/* Very strong overlay for maximum contrast with navbar */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/70" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-16">
           {/* Breadcrumbs */}
