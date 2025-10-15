@@ -36,7 +36,7 @@ export const projects: Project[] = [
   {
     slug: 'dakro',
     id: 1,
-    title: 'Dakro Bosch Car Service',
+    title: 'Dakro Bosch Service',
     category: 'Strony WWW',
     subtitle: 'Kompleksowa strona dla autoryzowanego serwisu Bosch z systemem rezerwacji online',
     description: 'Nowoczesna strona internetowa dla DAKRO - autoryzowanego serwisu Bosch Car Service w Lublinie. Profesjonalny serwis mechaniki, diagnostyki, elektryki i specjalistycznych usług dla pojazdów osobowych i dostawczych.',
@@ -85,7 +85,7 @@ export const projects: Project[] = [
   {
     slug: 'dakro-ev',
     id: 2,
-    title: 'Dakro EV (E-Mobility)',
+    title: 'Dakro EV',
     category: 'Strony WWW',
     subtitle: 'Specjalistyczny serwis i dystrybutor samochodów elektrycznych',
     description: 'Nowoczesna strona dla autoryzowanego serwisu samochodów elektrycznych i hybrydowych w Lublinie. Kompleksowa diagnostyka, regeneracja baterii trakcyjnych, sprzedaż EV i doradztwo w standardzie Bosch Service.',
@@ -134,7 +134,7 @@ export const projects: Project[] = [
   {
     slug: 'serwis-bmw-dakro',
     id: 3,
-    title: 'DAKRO - Niezależny Serwis BMW',
+    title: 'Dakro BMW Service',
     category: 'Strony WWW',
     subtitle: 'Certyfikowany partner Auto Fus Group z autoryzacją Bosch Service',
     description: 'Profesjonalna strona dla specjalistycznego serwisu BMW w Lublinie. Certyfikowany partner Auto Fus Group (największy dealer BMW w Polsce) z pełnym zakresem usług: diagnostyka, mechanika, elektryka, przeglądy zgodnie z dyrektywą GVO.',
@@ -183,7 +183,7 @@ export const projects: Project[] = [
   {
     slug: 'dakro-multidealer',
     id: 4,
-    title: 'DAKRO Multi Dealer',
+    title: 'Dakro Multi Dealer',
     category: 'Strony WWW',
     subtitle: 'Autoryzowany dealer marek premium: Nio, BYD, Cenntro, Hudson + samochody używane',
     description: 'Nowoczesna strona dla dealera samochodów spalinowych, elektrycznych i hybrydowych w Lublinie. Sprzedaż nowych i używanych pojazdów marek Nio, BYD, Cenntro, Hudson, SWM, BAIC, JAC, DFM, DFSK z finansowaniem i ubezpieczeniem.',
@@ -232,7 +232,7 @@ export const projects: Project[] = [
   {
     slug: 'ciociocake',
     id: 5,
-    title: 'Ciocio Cake Shop',
+    title: 'CiocioCake',
     category: 'Strony WWW',
     subtitle: 'Sklep e-commerce z wydrukami jadalnymi i artykułami do dekoracji tortów',
     description: 'Nowoczesny sklep WooCommerce z wydrukami jadalnymi (waflowe, skrobiowe, cukrowe) i artykułami do dekoracji tortów. Zaawansowana wyszukiwarka po rodzaju papieru i motywie, kategorie produktów i system płatności online.',
@@ -281,7 +281,7 @@ export const projects: Project[] = [
   {
     slug: 'sl-spare-parts-polska',
     id: 6,
-    title: 'SLSP24.PL - SL Spare Parts',
+    title: 'SLSP24.pl',
     category: 'Strony WWW',
     subtitle: 'Sklep z częściami do silników diesel z systemem kaucji zwrotnej',
     description: 'Nowoczesny sklep WooCommerce z regenerowanymi częściami do silników diesel (pompy CR/VP, wtryskiwacze, pompowtryskiwacze, turbosprężarki, sterowniki). Unikalny system kaucji zwrotnej, zaawansowana wyszukiwarka po numerze części, opinie z Google/eBay/Allegro i ekspresowa dostawa.',
@@ -330,7 +330,7 @@ export const projects: Project[] = [
   {
     slug: 'dakro-com-pl',
     id: 7,
-    title: 'DAKRO.COM.PL - Sklep B2B',
+    title: 'Dakro Remanufactured Parts',
     category: 'Strony WWW',
     subtitle: 'Sklep z częściami regenerowanymi dla warsztatów i dealerów',
     description: 'Profesjonalny sklep WooCommerce z regenerowanymi częściami do silników diesel (pompy CR/VP, wtryskiwacze, pompowtryskiwacze, turbosprężarki, sterowniki, haki) dla klientów B2B. System kaucji zwrotnej, rabaty hurtowe, FAQ i ekspresowa dostawa.',
@@ -379,7 +379,7 @@ export const projects: Project[] = [
   {
     slug: 'sl-spare-parts-niemcy',
     id: 8,
-    title: 'DieselService24.DE',
+    title: 'Dieselservice24.de',
     category: 'Strony WWW',
     subtitle: 'Niemiecki sklep z regenerowanymi częściami diesel - VP-Pumpen, CR-Pumpen, Turbolader',
     description: 'Profesjonalny sklep WooCommerce dla rynku niemieckiego z regenerowanymi częściami do silników diesel (VP-Pumpen, CR-Pumpen, Turbolader, Injektoren, Pumpe-Düse-Einheiten). 4-stopniowa wyszukiwarka po typie/marce/modelu/roku, gwarancja 1 rok, blog edukacyjny i eksperckie wsparcie.',
@@ -428,7 +428,7 @@ export const projects: Project[] = [
   {
     slug: 'sl-spare-parts-czechy',
     id: 9,
-    title: 'DieselService24.CZ',
+    title: 'Dieselservice24.cz',
     category: 'Strony WWW',
     subtitle: 'Czeski sklep z repasowanými díly diesel - čerpadla CR/VP, turbodmychadla',
     description: 'Profesjonalny sklep WooCommerce dla rynku czeskiego z regenerowanymi częściami do silników diesel (čerpadla CR, čerpadla VP, turbodmychadla, vstřikovače, čerpadlo-tryska). 4-stopniowa wyszukiwarka, gwarancja 12 miesięcy, system kaucji i eksperckie wsparcie Mike.',

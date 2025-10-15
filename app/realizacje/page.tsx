@@ -138,61 +138,19 @@ export default function RealizacjePage() {
         </div>
       </section>
 
-      {/* Campaign Results Section - NEW */}
+      {/* Projects Grid - STATIC */}
       <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-black mb-4">
-              Poznaj <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">efekty naszych klientów</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
+              Nasze <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">Projekty</span>
             </h2>
             <p className="text-lg text-gray-400">
-              Mierzalne wyniki z kampanii reklamowych Google Ads, SEO i Meta Ads
+              Poznaj strony i aplikacje, które stworzyliśmy dla naszych klientów
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {campaignResults.map((result, idx) => (
-              <div
-                key={idx}
-                className="group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-purple-500/50 hover:-translate-y-2 transition-all"
-              >
-                {/* Icon */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${result.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <FontAwesomeIcon icon={result.icon} className="w-8 h-8 text-white" />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {result.title}
-                </h3>
-                <p className="text-sm text-gray-400 mb-6">{result.subtitle}</p>
-
-                {/* Metrics */}
-                <div className="space-y-3 mb-6">
-                  {result.metrics.map((metric, metricIdx) => (
-                    <div key={metricIdx} className="flex justify-between items-center">
-                      <span className="text-sm text-gray-400">{metric.label}</span>
-                      <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
-                        {metric.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Description */}
-                <p className="text-sm text-gray-400 leading-relaxed border-t border-white/10 pt-6">
-                  {result.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Grid - STATIC */}
-      <section className="relative py-20 bg-gradient-to-b from-gray-900 via-black to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {filteredProjects.map((project) => (
               <div key={project.id}>
                 <Link 
@@ -200,7 +158,7 @@ export default function RealizacjePage() {
                   className="block group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:-translate-y-2 transition-all h-full"
                 >
                   {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative h-48 sm:h-56 lg:h-64 overflow-hidden">
                     <Image
                       src={project.image}
                       alt={project.title}
@@ -208,7 +166,7 @@ export default function RealizacjePage() {
                       priority={project.id === 1}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                     
                     {/* Category Badge */}
                     <div className="absolute top-4 left-4">
@@ -235,45 +193,50 @@ export default function RealizacjePage() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                  <div className="p-5 sm:p-6">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3 group-hover:text-blue-400 transition-colors">
                       {project.title}
                     </h3>
 
-                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-400 text-sm mb-3 sm:mb-4 line-clamp-2">
                       {project.description}
                     </p>
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tags.map((tag) => (
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+                      {project.tags.slice(0, 4).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-1 bg-white/5 rounded-lg text-xs text-gray-400"
+                          className="px-2 py-1 bg-white/5 rounded-lg text-xs text-gray-400 border border-white/5"
                         >
                           {tag}
                         </span>
                       ))}
+                      {project.tags.length > 4 && (
+                        <span className="px-2 py-1 bg-white/5 rounded-lg text-xs text-gray-400 border border-white/5">
+                          +{project.tags.length - 4}
+                        </span>
+                      )}
                     </div>
 
                     {/* Metrics */}
                     {project.metrics && project.metrics.length > 0 && (
-                      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
-                        {project.metrics.map((metric, idx) => (
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-white/10">
+                        {project.metrics.slice(0, 2).map((metric, idx) => (
                           <div key={idx} className="text-center">
-                            <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+                            <div className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
                               {metric.value}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">{metric.label}</div>
+                            <div className="text-xs text-gray-500 mt-1 line-clamp-1">{metric.label}</div>
                           </div>
                         ))}
                       </div>
                     )}
 
                     {/* View Details */}
-                    <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                      <span className="text-sm text-gray-400">Zobacz szczegóły</span>
-                      <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4 text-blue-400 group-hover:translate-x-2 transition-transform" />
+                    <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/10 flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-gray-400">Zobacz szczegóły</span>
+                      <FontAwesomeIcon icon={faArrowRight} className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 group-hover:translate-x-2 transition-transform" />
                     </div>
                   </div>
                 </Link>
@@ -283,10 +246,61 @@ export default function RealizacjePage() {
         </div>
       </section>
 
-      {/* Stats Section - STATIC */}
-      <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
+      {/* Campaign Results Section - NEW */}
+      <section className="relative py-20 bg-gradient-to-b from-gray-900 via-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
+              Wyniki <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">Kampanii</span>
+            </h2>
+            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+              Mierzalne efekty naszych działań marketingowych - Google Ads, SEO i Meta Ads
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {campaignResults.map((result, idx) => (
+              <div
+                key={idx}
+                className="group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-6 lg:p-8 hover:border-purple-500/50 hover:-translate-y-2 transition-all duration-300"
+              >
+                {/* Icon */}
+                <div className={`w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-r ${result.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <FontAwesomeIcon icon={result.icon} className="w-7 h-7 lg:w-8 lg:h-8 text-white" />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl lg:text-2xl font-bold text-white mb-2">
+                  {result.title}
+                </h3>
+                <p className="text-sm text-gray-400 mb-6">{result.subtitle}</p>
+
+                {/* Metrics */}
+                <div className="space-y-3 mb-6">
+                  {result.metrics.map((metric, metricIdx) => (
+                    <div key={metricIdx} className="flex justify-between items-center gap-4">
+                      <span className="text-xs lg:text-sm text-gray-400">{metric.label}</span>
+                      <span className="text-base lg:text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text whitespace-nowrap">
+                        {metric.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Description */}
+                <p className="text-sm text-gray-400 leading-relaxed border-t border-white/10 pt-6">
+                  {result.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section - STATIC */}
+      <section className="relative py-16 sm:py-20 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-center">
             {[
               { label: 'Zrealizowane projekty', value: '14+' },
               { label: 'Zadowoleni klienci', value: '100%' },
@@ -295,12 +309,12 @@ export default function RealizacjePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl hover:scale-105 hover:-translate-y-1 transition-all"
+                className="p-4 sm:p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl hover:scale-105 hover:-translate-y-1 transition-all"
               >
-                <div className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text mb-2">
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text mb-2">
                   {stat.value}
                 </div>
-                <div className="text-gray-400 text-sm">{stat.label}</div>
+                <div className="text-gray-400 text-xs sm:text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
