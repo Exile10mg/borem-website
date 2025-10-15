@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faChevronRight, faShieldAlt, faLock, faUserShield, faDatabase, faEnvelope, faCookie, faGavel, faClock, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
