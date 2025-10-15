@@ -1,11 +1,4 @@
-export const metadata: Metadata = {
-  title: 'Landing Page 9',
-  description: 'Strona reklamowa Borem.pl - Landing Page 9',
-  robots: {"index":false,"follow":false},
-};
-
-'use client';
-
+import type { Metadata } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEnvelope,
@@ -15,6 +8,12 @@ import {
   faClock,
   faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
+
+export const metadata: Metadata = {
+  title: 'Landing Page 9',
+  description: 'Strona reklamowa Borem.pl - Landing Page 9',
+  robots: { index: false, follow: false },
+};
 
 export default function Reklama9Page() {
   return (
