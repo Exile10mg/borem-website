@@ -15,14 +15,16 @@
     will-change: auto;
   }
 
-  /* Drastically reduce blur on mobile - heavy performance impact */
+  /* Completely remove blur effects on mobile - replace with simple gradients */
   [class*="blur-["] {
-    filter: blur(40px) !important;
+    filter: none !important;
+    display: none !important;
   }
 
-  /* Reduce backdrop blur on mobile */
+  /* Remove backdrop blur, use solid background instead */
   [class*="backdrop-blur"] {
-    backdrop-filter: blur(8px) !important;
+    backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.5) !important;
   }
 }
 
