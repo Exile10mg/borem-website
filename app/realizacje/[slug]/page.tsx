@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -24,6 +25,24 @@ export default function ProjectPage() {
   const params = useParams();
   const slug = params.slug as string;
   const project = projects.find(p => p.slug === slug);
+
+  // Set document title and add noindex
+  useEffect(() => {
+    if (project) {
+      document.title = `${project.title} - Realizacja | Borem.pl`;
+      
+      // Add noindex meta tag
+      const metaRobots = document.createElement('meta');
+      metaRobots.name = 'robots';
+      metaRobots.content = 'noindex, follow';
+      document.head.appendChild(metaRobots);
+
+      // Cleanup on unmount
+      return () => {
+        document.head.removeChild(metaRobots);
+      };
+    }
+  }, [project]);
 
   if (!project) {
     return (
