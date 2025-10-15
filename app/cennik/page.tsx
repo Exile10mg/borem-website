@@ -1,10 +1,3 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Cennik',
-  description: 'Cennik usług Borem.pl ⭐ Strony WWW od 1299 zł, sklepy e-commerce od 4999 zł, aplikacje webowe, AI & automatyzacja ✓ Marketing i SEO ✓ Płatności w ratach ✓ Bezpłatna konsultacja',
-};
-
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

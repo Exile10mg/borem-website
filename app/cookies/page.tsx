@@ -1,10 +1,3 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Polityka Cookies',
-  description: 'Polityka Cookies Borem.pl ⭐ Dowiedz się jak używamy plików cookies ✓ Typy cookies ✓ Zarządzanie cookies ✓ Prywatność',
-};
-
 'use client';
 
 import { motion } from 'framer-motion';

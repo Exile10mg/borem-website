@@ -1,10 +1,3 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Realizacje',
-  description: 'Portfolio Borem.pl ⭐ Zobacz nasze zrealizowane projekty stron WWW, sklepów e-commerce i aplikacji webowych ✓ 14+ projektów ✓ Wyniki kampanii Google Ads, SEO i Meta Ads ✓ Case studies',
-};
-
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

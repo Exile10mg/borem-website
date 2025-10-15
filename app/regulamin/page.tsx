@@ -1,10 +1,3 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Regulamin',
-  description: 'Regulamin Borem.pl ⭐ Zasady świadczenia usług ✓ Warunki współpracy ✓ Prawa i obowiązki ✓ Płatności ✓ Reklamacje',
-};
-
 'use client';
 
 import { motion } from 'framer-motion';
