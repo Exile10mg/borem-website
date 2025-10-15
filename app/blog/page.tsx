@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: 'Blog Borem.pl ⭐ Artykuły o tworzeniu stron WWW, marketingu, SEO i technologiach webowych ✓ Poradniki ✓ Case studies ✓ Najnowsze trendy ✓ Praktyczne wskazówki',
+};
+
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

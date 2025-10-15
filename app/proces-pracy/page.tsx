@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Proces Pracy',
+  description: 'Proces pracy w Borem.pl ⭐ Zobacz jak tworzymy projekty krok po kroku ✓ Konsultacja ✓ Projekt ✓ Realizacja ✓ Testy ✓ Wdrożenie ✓ Wsparcie ✓ Przejrzysty proces',
+};
+
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

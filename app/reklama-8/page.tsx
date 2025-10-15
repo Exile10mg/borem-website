@@ -1,3 +1,11 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Landing Page 8',
+  description: 'Strona reklamowa Borem.pl - Landing Page 8',
+  robots: {"index":false,"follow":false},
+};
+
 export default function Reklama8Page() {
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center relative overflow-hidden">

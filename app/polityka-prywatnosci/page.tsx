@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Polityka Prywatności',
+  description: 'Polityka Prywatności Borem.pl ⭐ Dowiedz się jak chronimy Twoje dane osobowe ✓ RODO ✓ Bezpieczeństwo ✓ Przejrzystość ✓ Zgodność z prawem',
+};
+
 'use client';
 
 import { motion } from 'framer-motion';

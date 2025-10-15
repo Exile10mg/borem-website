@@ -1,3 +1,11 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Landing Page 6',
+  description: 'Strona reklamowa Borem.pl - Landing Page 6',
+  robots: {"index":false,"follow":false},
+};
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faGlobe, faShoppingCart, faMobileScreenButton, faRobot, faChartLine, faPalette } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';

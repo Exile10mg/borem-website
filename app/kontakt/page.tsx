@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Kontakt',
+  description: 'Kontakt z Borem.pl ⭐ Bezpłatna konsultacja ✓ Odpowiadamy w 24h ✓ Tel: +48 787 041 328 ✓ Email: kontakt@borem.pl ✓ Lublin, ul. Różana 28/66 ✓ Wypełnij formularz kontaktowy',
+};
+
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

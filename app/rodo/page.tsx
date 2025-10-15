@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'RODO',
+  description: 'RODO - Borem.pl ⭐ Informacje o przetwarzaniu danych osobowych zgodnie z RODO ✓ Twoje prawa ✓ Bezpieczeństwo danych ✓ Administratorzy',
+};
+
 'use client';
 
 import { motion } from 'framer-motion';

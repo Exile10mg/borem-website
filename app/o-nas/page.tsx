@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'O Nas',
+  description: 'O firmie Borem.pl ⭐ Poznaj naszą historię, zespół i wartości ✓ 5+ lat doświadczenia ✓ 150+ projektów ✓ Pasja do technologii i marketingu ✓ Zespół specjalistów',
+};
+
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

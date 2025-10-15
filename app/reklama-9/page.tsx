@@ -1,3 +1,11 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Landing Page 9',
+  description: 'Strona reklamowa Borem.pl - Landing Page 9',
+  robots: {"index":false,"follow":false},
+};
+
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

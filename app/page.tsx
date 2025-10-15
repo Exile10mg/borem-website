@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Strona Główna',
+  description: 'Profesjonalna agencja marketingowa Borem.pl ⭐ Tworzymy strony WWW, sklepy e-commerce, aplikacje webowe ✓ AI i automatyzacja ✓ Marketing i SEO ✓ 150+ projektów ✓ Bezpłatna konsultacja',
+};
+
 'use client';
 
 import React from 'react';
