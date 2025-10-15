@@ -294,7 +294,13 @@ const Navbar = memo(function Navbar() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5">
+        {/* Permanent bottom glow effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-500/0 via-blue-500/50 to-blue-500/0 blur-sm"></div>
+        <div className="absolute -bottom-2 left-1/4 right-1/4 h-[20px] bg-gradient-to-r from-blue-500/20 via-purple-500/30 to-pink-500/20 blur-xl"></div>
+        
+        {/* Scroll progress bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 z-10">
           <div
             className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-150 ease-out"
             style={{ width: `${scrollProgress}%` }}
