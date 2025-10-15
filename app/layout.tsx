@@ -160,10 +160,26 @@ export default function RootLayout({
         <StructuredData />
         <PageLoader />
         {children}
-        <WhatsAppButton />
-        <ScrollToTopButton />
-        <CookieConsent />
+        <ConditionalComponents />
       </body>
     </html>
+  );
+}
+
+function ConditionalComponents() {
+  'use client';
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  
+  // Don't show on /reklama-10
+  if (pathname === '/reklama-10') {
+    return null;
+  }
+  
+  return (
+    <>
+      <WhatsAppButton />
+      <ScrollToTopButton />
+      <CookieConsent />
+    </>
   );
 }

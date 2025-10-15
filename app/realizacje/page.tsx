@@ -10,237 +10,60 @@ import {
   faArrowRight,
   faCheck,
   faExternalLinkAlt,
+  faChartLine,
+  faBullseye,
+  faRocket,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { projects, type Project } from '@/data/projects';
 
 // Typy projektów
 type ProjectCategory = 'Wszystkie' | 'Strony WWW' | 'Aplikacje' | 'Automatyzacje';
 
-interface Project {
-  id: number;
-  slug: string;
-  title: string;
-  category: ProjectCategory;
-  description: string;
-  image: string;
-  url?: string;
-  tags: string[];
-  metrics?: {
-    label: string;
-    value: string;
-  }[];
-  caseStudy?: {
-    challenge: string;
-    solution: string;
-    results: string[];
-  };
-}
-
-const projects: Project[] = [
-  // Strony WWW
+// Campaign Results Data
+const campaignResults = [
   {
-    id: 1,
-    slug: 'dakro',
-    title: 'DAKRO',
-    category: 'Strony WWW',
-    description: 'Nowoczesna strona dla grupy DAKRO - lidera w branży motoryzacyjnej. Responsywny design, integracje z systemami CRM.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-    url: 'https://dakro.pl',
-    tags: ['WordPress', 'E-commerce', 'SEO'],
+    title: 'Sztuka skutecznej kampanii',
+    subtitle: 'Google Ads dla E-commerce',
     metrics: [
-      { label: 'Wzrost ruchu', value: '+250%' },
-      { label: 'Czas ładowania', value: '<2s' },
-    ],
-  },
-  {
-    id: 2,
-    slug: 'e-dakro',
-    title: 'E-DAKRO',
-    category: 'Strony WWW',
-    description: 'Platforma e-commerce dla DAKRO z zaawansowanym systemem zarządzania produktami i integracją z hurtowniami.',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
-    url: 'https://e-dakro.pl',
-    tags: ['E-commerce', 'WooCommerce', 'Integracje'],
-    metrics: [
+      { label: 'Przychód w miesiąc', value: '44 tys. zł' },
+      { label: 'Budżet reklamowy', value: '4 tys. zł' },
       { label: 'ROI', value: '1000%' },
-      { label: 'Przychód/mc', value: '44k zł' },
     ],
-    caseStudy: {
-      challenge: 'Klient potrzebował sklepu internetowego z automatyczną synchronizacją stanów magazynowych z systemem ERP.',
-      solution: 'Stworzyliśmy sklep WooCommerce z dedykowaną integracją API, automatycznym importem produktów i zaawansowanym systemem rabatowym.',
-      results: [
-        '44 tys. zł przychodu przy budżecie 4 tys. zł',
-        'ROI na poziomie 1000%',
-        'Automatyzacja 90% procesów',
-      ],
-    },
+    description: 'Kampania Google Ads dla sklepu z regenerowanymi częściami. Osiągnęliśmy wyjątkowy zwrot z inwestycji dzięki precyzyjnemu targetowaniu i optymalizacji.',
+    icon: faBullseye,
+    gradient: 'from-green-500 to-emerald-600',
   },
   {
-    id: 3,
-    slug: 'serwis-bmw-lublin',
-    title: 'Serwis BMW Lublin',
-    category: 'Strony WWW',
-    description: 'Profesjonalna strona dla serwisu BMW z systemem rezerwacji online i galerią realizacji.',
-    image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&h=600&fit=crop',
-    url: 'https://serwisbmwlublin.pl',
-    tags: ['WordPress', 'Rezerwacje', 'Local SEO'],
-  },
-  {
-    id: 4,
-    slug: 'dakro-multidealer',
-    title: 'DAKRO Multidealer',
-    category: 'Strony WWW',
-    description: 'Portal dla sieci dealerskiej DAKRO z wyszukiwarką pojazdów i systemem porównywania ofert.',
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&h=600&fit=crop',
-    url: 'https://dakromultidealer.pl',
-    tags: ['Portal', 'Wyszukiwarka', 'Multi-site'],
-  },
-  {
-    id: 5,
-    slug: 'ciociocake',
-    title: 'Ciociocake',
-    category: 'Strony WWW',
-    description: 'Elegancka strona dla cukierni z galerią tortów, systemem zamówień online i blogiem kulinarnym.',
-    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=600&fit=crop',
-    url: 'https://ciociocake.pl',
-    tags: ['WordPress', 'Galeria', 'Zamówienia'],
-  },
-  {
-    id: 6,
-    slug: 'sl-spare-parts-polska',
-    title: 'SL SPARE PARTS - POLSKA',
-    category: 'Strony WWW',
-    description: 'Międzynarodowy sklep z regenerowanymi częściami do silników diesel: pompy CR/VP, wtryskiwacze, turbosprężarki. System kaucji zwrotnej i wyszukiwarka po VIN.',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop',
-    url: 'https://slsp24.pl',
-    tags: ['WooCommerce', 'Multilingual', 'System Kaucji'],
+    title: 'Sztuka widoczności w Google',
+    subtitle: 'Działania SEO',
     metrics: [
-      { label: 'Produkty', value: '5000+' },
-      { label: 'Kraje', value: '3' },
+      { label: 'Wyświetlenia', value: '172 tys.' },
+      { label: 'Kliknięcia', value: '8,81 tys.' },
+      { label: 'CTR', value: '5,1%' },
     ],
+    description: 'Od sierpnia 2024 prowadzimy działania SEO. Osiągnęliśmy ponad 172 tys. wyświetleń i 8,81 tys. kliknięć bez płatnych reklam. Średnia pozycja: 7,8.',
+    icon: faChartLine,
+    gradient: 'from-blue-500 to-cyan-600',
   },
   {
-    id: 7,
-    slug: 'dakro-com-pl',
-    title: 'DAKRO.COM.PL - Sklep B2B',
-    category: 'Strony WWW',
-    description: 'Hurtownia części regenerowanych dla warsztatów i dealerów. Zaawansowany system rabatowy, integracja z magazynem i automatyczne aktualizacje stanów.',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
-    url: 'https://dakro.com.pl',
-    tags: ['B2B', 'WooCommerce', 'API Integration'],
-  },
-  {
-    id: 8,
-    slug: 'sl-spare-parts-niemcy',
-    title: 'SL SPARE PARTS - NIEMCY',
-    category: 'Strony WWW',
-    description: 'Niemiecka wersja sklepu SL Spare Parts z lokalizacją płatności, języka i obsługą niemieckich przewoźników. Pełna integracja z polskim magazynem.',
-    image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop',
-    url: 'https://dieselservice24.de',
-    tags: ['German', 'Localization', 'DHL/DPD'],
-  },
-  {
-    id: 9,
-    slug: 'sl-spare-parts-czechy',
-    title: 'SL SPARE PARTS - CZECHY',
-    category: 'Strony WWW',
-    description: 'Czeska wersja platformy z obsługą CZK, lokalnymi metodami płatności i przewoźnikami. Synchronizacja z głównym systemem magazynowym.',
-    image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop',
-    url: 'https://dieselservice24.cz',
-    tags: ['Czech', 'Multi-currency', 'Sync'],
-  },
-  
-  // Aplikacje Webowe
-  {
-    id: 10,
-    slug: 'system-urlopowy',
-    title: 'System Urlopowy',
-    category: 'Aplikacje',
-    description: 'Dedykowana aplikacja do zarządzania urlopami i absencjami pracowników z automatycznym rozliczaniem i powiadomieniami.',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop',
-    tags: ['React', 'Node.js', 'PostgreSQL'],
+    title: 'Sztuka skalowania przez Meta Ads',
+    subtitle: 'Facebook & Instagram Ads',
     metrics: [
-      { label: 'Oszczędność czasu HR', value: '80%' },
-      { label: 'Użytkownicy', value: '150+' },
+      { label: 'Kliknięcia', value: '1,17 mln' },
+      { label: 'Wyświetlenia', value: '5,89 mln' },
+      { label: 'Koszt kliknięcia', value: '0,37-0,73 zł' },
     ],
-    caseStudy: {
-      challenge: 'Firma potrzebowała zunifikowanego systemu zarządzania urlopami dla 3 oddziałów w różnych krajach.',
-      solution: 'Stworzyliśmy aplikację PWA z konfigurowalnymi politykami urlopowymi, automatycznym rozliczaniem i integracją z kalendarzami.',
-      results: [
-        'Redukcja czasu HR o 80%',
-        'Automatyzacja rozliczeń urlopowych',
-        'Dostęp mobilny dla pracowników',
-      ],
-    },
-  },
-  {
-    id: 11,
-    slug: 'system-raportowania',
-    title: 'System Raportowania Regeneracji',
-    category: 'Aplikacje',
-    description: 'Aplikacja do śledzenia procesu regeneracji części z fotografowaniem, statusami i raportami PDF.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-    tags: ['Vue.js', 'Laravel', 'PDF Generation'],
-    metrics: [
-      { label: 'Przetworzone zlecenia', value: '10k+' },
-      { label: 'Wzrost efektywności', value: '+60%' },
-    ],
-  },
-  {
-    id: 12,
-    slug: 'fleet-management',
-    title: 'Fleet Management System',
-    category: 'Aplikacje',
-    description: 'Zaawansowany system zarządzania flotą pojazdów z GPS tracking, harmonogramem przeglądów i kontrolą kosztów.',
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&h=600&fit=crop',
-    tags: ['React', 'GPS', 'Analytics'],
-    metrics: [
-      { label: 'Monitorowane pojazdy', value: '200+' },
-      { label: 'Redukcja kosztów', value: '-25%' },
-    ],
-  },
-  
-  // Automatyzacje
-  {
-    id: 13,
-    slug: 'auto-wystawianie',
-    title: 'Auto-wystawianie Produktów',
-    category: 'Automatyzacje',
-    description: 'System automatycznego importu i wystawiania tysięcy produktów z hurtowni do sklepu z optymalizacją SEO.',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop',
-    tags: ['Python', 'API', 'Cron Jobs'],
-    metrics: [
-      { label: 'Produkty/dzień', value: '5000+' },
-      { label: 'Oszczędność czasu', value: '95%' },
-    ],
-    caseStudy: {
-      challenge: 'Ręczne dodawanie produktów zajmowało 40 godzin tygodniowo i było podatne na błędy.',
-      solution: 'Stworzyliśmy automatyczny system importujący produkty z API hurtowni, optymalizujący opisy pod SEO i aktualizujący stany magazynowe co godzinę.',
-      results: [
-        '5000+ produktów dziennie automatycznie',
-        'Oszczędność 160 godzin miesięcznie',
-        '95% redukcja błędów w danych',
-      ],
-    },
-  },
-  {
-    id: 14,
-    slug: 'bi-dashboard',
-    title: 'Business Intelligence Dashboard',
-    category: 'Automatyzacje',
-    description: 'Zaawansowany system analiz danych biznesowych z predykcją sprzedaży i automatycznymi raportami.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-    tags: ['Power BI', 'Python', 'Machine Learning'],
-    metrics: [
-      { label: 'Analizowane źródła', value: '15+' },
-      { label: 'Trafność predykcji', value: '87%' },
-    ],
+    description: 'Dla marek DAKRO wygenerowaliśmy 1,17 mln kliknięć i 5,89 mln wyświetleń przy budżecie 26,2 tys. zł. Skalowaliśmy wyniki dzięki testom i optymalizacji.',
+    icon: faRocket,
+    gradient: 'from-purple-500 to-pink-600',
   },
 ];
+
 
 export default function RealizacjePage() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('Wszystkie');
@@ -315,8 +138,59 @@ export default function RealizacjePage() {
         </div>
       </section>
 
+      {/* Campaign Results Section - NEW */}
+      <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-black mb-4">
+              Poznaj <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">efekty naszych klientów</span>
+            </h2>
+            <p className="text-lg text-gray-400">
+              Mierzalne wyniki z kampanii reklamowych Google Ads, SEO i Meta Ads
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {campaignResults.map((result, idx) => (
+              <div
+                key={idx}
+                className="group relative bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-purple-500/50 hover:-translate-y-2 transition-all"
+              >
+                {/* Icon */}
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${result.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <FontAwesomeIcon icon={result.icon} className="w-8 h-8 text-white" />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  {result.title}
+                </h3>
+                <p className="text-sm text-gray-400 mb-6">{result.subtitle}</p>
+
+                {/* Metrics */}
+                <div className="space-y-3 mb-6">
+                  {result.metrics.map((metric, metricIdx) => (
+                    <div key={metricIdx} className="flex justify-between items-center">
+                      <span className="text-sm text-gray-400">{metric.label}</span>
+                      <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+                        {metric.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Description */}
+                <p className="text-sm text-gray-400 leading-relaxed border-t border-white/10 pt-6">
+                  {result.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Projects Grid - STATIC */}
-      <section className="relative py-20 bg-gradient-to-b from-black via-gray-900 to-black">
+      <section className="relative py-20 bg-gradient-to-b from-gray-900 via-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
@@ -492,7 +366,7 @@ export default function RealizacjePage() {
               <div>
                 <h3 className="text-xl font-bold text-green-400 mb-3">Rezultaty</h3>
                 <ul className="space-y-2">
-                  {selectedProject.caseStudy.results.map((result, idx) => (
+                  {selectedProject.caseStudy.results.map((result: string, idx: number) => (
                     <li key={idx} className="flex items-center gap-3 text-gray-300">
                       <FontAwesomeIcon icon={faCheck} className="w-5 h-5 text-green-400" />
                       {result}
