@@ -28,7 +28,7 @@ import {
   faBolt,
   faClock,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -579,6 +579,10 @@ const faqItems = [
 ];
 
 export default function CennikPage() {
+  useEffect(() => {
+    document.title = 'Cennik | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   const [activeCategory, setActiveCategory] = useState<keyof typeof allServices>('strony-www');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 

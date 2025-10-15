@@ -178,6 +178,10 @@ const whyUs = [
 ];
 
 export default function ONasPage() {
+  useEffect(() => {
+    document.title = 'O Nas | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

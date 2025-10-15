@@ -14,7 +14,7 @@ import {
   faBullseye,
   faRocket,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
@@ -66,6 +66,10 @@ const campaignResults = [
 
 
 export default function RealizacjePage() {
+  useEffect(() => {
+    document.title = 'Realizacje | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('Wszystkie');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 

@@ -282,6 +282,10 @@ const sections = [
 ];
 
 export default function RODOPage() {
+  useEffect(() => {
+    document.title = 'RODO | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

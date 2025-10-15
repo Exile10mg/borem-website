@@ -63,6 +63,10 @@ const benefits = [
 ];
 
 export default function KontaktPage() {
+  useEffect(() => {
+    document.title = 'Kontakt | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',

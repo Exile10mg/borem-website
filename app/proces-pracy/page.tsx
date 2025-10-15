@@ -9,6 +9,10 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 import ProcesPracy from '@/components/sections/ProcesPracy';
 
 export default function ProcesPracyPage() {
+  useEffect(() => {
+    document.title = 'Proces Pracy | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

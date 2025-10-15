@@ -11,7 +11,7 @@ import {
   faArrowRight,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -106,6 +106,10 @@ const categoryColors: { [key: string]: string } = {
 };
 
 export default function BlogPage() {
+  useEffect(() => {
+    document.title = 'Blog | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   const [activeCategory, setActiveCategory] = useState('Wszystkie');
   const [searchQuery, setSearchQuery] = useState('');
 

@@ -450,6 +450,10 @@ const sections = [
 ];
 
 export default function RegulaminPage() {
+  useEffect(() => {
+    document.title = 'Regulamin | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

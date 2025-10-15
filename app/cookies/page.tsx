@@ -362,6 +362,10 @@ const sections = [
 ];
 
 export default function CookiesPage() {
+  useEffect(() => {
+    document.title = 'Polityka Cookies | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

@@ -419,6 +419,10 @@ const sections = [
 ];
 
 export default function PolitykaPrywatnosciPage() {
+  useEffect(() => {
+    document.title = 'Polityka Prywatności | Borem.pl - Agencja Marketingowa';
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />
