@@ -14,6 +14,16 @@
   img, video {
     will-change: auto;
   }
+
+  /* Drastically reduce blur on mobile - heavy performance impact */
+  [class*="blur-["] {
+    filter: blur(40px) !important;
+  }
+
+  /* Reduce backdrop blur on mobile */
+  [class*="backdrop-blur"] {
+    backdrop-filter: blur(8px) !important;
+  }
 }
 
 @layer base {
