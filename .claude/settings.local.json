@@ -15,7 +15,8 @@
       "Bash(for file in app/blog/page.tsx app/blog/[id]/page.tsx app/cennik/page.tsx app/cookies/page.tsx app/kontakt/page.tsx app/o-nas/page.tsx app/polityka-prywatnosci/page.tsx app/proces-pracy/page.tsx app/regulamin/page.tsx app/rodo/page.tsx app/realizacje/[slug]/page.tsx)",
       "Bash(do echo \"=== $file ===\")",
       "Bash(done)",
-      "Bash(do echo \"Processing $file...\")"
+      "Bash(do echo \"Processing $file...\")",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
