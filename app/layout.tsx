@@ -16,6 +16,8 @@ const inter = Inter({
   subsets: ["latin"],
   display: 'swap',
   preload: true,
+  adjustFontFallback: true,
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 });
 
 export const metadata: Metadata = {
@@ -161,6 +163,15 @@ export default function RootLayout({
         {/* DNS prefetch for third-party domains */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
+
+        {/* Preload critical font to avoid LCP delay */}
+        <link
+          rel="preload"
+          href="/_next/static/media/8e9860b6e62d6359-s.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />
