@@ -205,7 +205,9 @@ export default function MarketingSEO() {
                       alt={service.title}
                       width={800}
                       height={500}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
 

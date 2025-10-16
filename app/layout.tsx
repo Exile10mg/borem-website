@@ -4,13 +4,11 @@ import "./globals.css";
 import "./fontawesome";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import CookieConsent from '@/components/CookieConsent';
 import PageLoader from '@/components/PageLoader';
-import ScrollToTopButton from '@/components/ScrollToTopButton';
-import WhatsAppButton from '@/components/WhatsAppButton';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import StructuredData from '@/components/StructuredData';
 import MicrosoftClarity from '@/components/MicrosoftClarity';
+import ConditionalComponents from '@/components/ConditionalComponents';
 
 config.autoAddCss = false;
 
@@ -153,6 +151,16 @@ export default function RootLayout({
     <html lang="pl" className="scroll-smooth">
       <head>
         <meta name="format-detection" content="telephone=no" />
+
+        {/* Preconnect to external domains for faster loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+
+        {/* DNS prefetch for third-party domains */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.clarity.ms" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />
@@ -163,25 +171,5 @@ export default function RootLayout({
         <ConditionalComponents />
       </body>
     </html>
-  );
-}
-
-function ConditionalComponents() {
-  'use client';
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-
-  // Don't show on /reklama-10
-  if (pathname === '/reklama-10') {
-    return null;
-  }
-
-  return (
-    <>
-      <div id="floating-buttons">
-        <WhatsAppButton />
-        <ScrollToTopButton />
-      </div>
-      <CookieConsent />
-    </>
   );
 }

@@ -185,8 +185,9 @@ export default function ECommerce() {
                 alt="Nowoczesny sklep internetowy"
                 width={800}
                 height={600}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
                 className="w-full h-full object-cover"
-                priority
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/50 z-10" />
 
@@ -343,9 +344,9 @@ export default function ECommerce() {
                       />
                     </div>
                     <div>
-                      <h5 className="text-base font-bold text-white mb-1">
+                      <h4 className="text-base font-bold text-white mb-1">
                         {feature.title}
-                      </h5>
+                      </h4>
                       <p className="text-sm text-gray-400 leading-snug">
                         {feature.description}
                       </p>
@@ -381,7 +382,9 @@ export default function ECommerce() {
                       alt={platform.name}
                       width={800}
                       height={600}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-purple-500/30" />
                   </div>
