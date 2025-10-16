@@ -202,7 +202,9 @@ export default function StronyWWW() {
                       src={type.image}
                       alt={type.title}
                       fill
-                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      sizes="(max-width: 640px) 95vw, (max-width: 1024px) 45vw, 28vw"
+                      quality={80}
+                      priority={type.highlight}
                       className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
