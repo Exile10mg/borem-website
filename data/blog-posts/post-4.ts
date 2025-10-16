@@ -1,19 +1,23 @@
 export const post4 = {
   id: 4,
-  title: 'SEO w 2024 - kompletny przewodnik dla początkujących',
-  excerpt: 'Wszystko co musisz wiedzieć o pozycjonowaniu stron internetowych w Google. Od podstaw do zaawansowanych technik.',
+  slug: 'seo-2025-kompletny-przewodnik-pozycjonowanie',
+  title: 'SEO w 2025 - kompletny przewodnik dla początkujących',
+  excerpt: 'Kompleksowy przewodnik SEO 2025. Pozycjonowanie w Google, keyword research, on-page SEO, link building i Core Web Vitals. Wszystko od podstaw do zaawansowanych technik.',
+  metaTitle: 'SEO w 2025 - Kompletny przewodnik pozycjonowania | Google',
+  metaDescription: 'Poznaj SEO 2025 od podstaw. Keyword research, on-page, technical SEO, link building i Core Web Vitals. Praktyczny przewodnik pozycjonowania stron w Google!',
+  keywords: ['SEO 2025', 'pozycjonowanie stron', 'Google SEO', 'keyword research', 'on-page SEO', 'link building', 'Core Web Vitals', 'pozycjonowanie Google', 'optymalizacja SEO'],
   category: 'Marketing & SEO',
   categoryColor: 'orange',
   author: 'Katarzyna Zielińska',
   authorBio: 'Specjalistka SEO i content marketingu z 9-letnim doświadczeniem w pozycjonowaniu stron dla małych i średnich firm.',
-  date: '1 Marca 2024',
+  date: '11 Października 2025',
   readTime: '10 min',
   image: 'https://images.unsplash.com/photo-1562577309-4932fdd64cd1?w=1200&h=600&fit=crop',
   tags: ['SEO', 'Google', 'Content Marketing'],
   content: `
 ## Wprowadzenie
 
-SEO to sztuka i nauka o zwiększaniu widoczności Twojej strony w wynikach wyszukiwania Google. W 2024 roku SEO jest ważniejsze niż kiedykolwiek - organiczny ruch z wyszukiwarek to jeden z najbardziej wartościowych źródeł odwiedzin.
+SEO to sztuka i nauka o zwiększaniu widoczności Twojej strony w wynikach wyszukiwania Google. W 2025 roku SEO jest ważniejsze niż kiedykolwiek - organiczny ruch z wyszukiwarek to jeden z najbardziej wartościowych źródeł odwiedzin.
 
 ## 1. Czym jest SEO i dlaczego jest ważne?
 
@@ -79,10 +83,10 @@ Mapa wszystkich URL na stronie dla Google crawlerów.
 
 ### HTTPS
 
-**Must-have w 2024:**
-- Bezpieczeństwo
-- Czynnik rankingowy Google
-- Buduje zaufanie
+**Must-have w 2025:**
+- Bezpieczeństwo to standard
+- Kluczowy czynnik rankingowy Google
+- Buduje zaufanie użytkowników
 
 ### Page Speed
 

@@ -1,23 +1,27 @@
 export const post3 = {
   id: 3,
-  title: 'E-commerce w 2024: trendy i strategie sprzedaży',
-  excerpt: 'Sprawdź, jakie strategie sprzedażowe działają najlepiej w sklepach internetowych i jak zwiększyć przychody.',
+  slug: 'ecommerce-2025-trendy-strategie-sprzedazy',
+  title: 'E-commerce w 2025: trendy i strategie sprzedaży',
+  excerpt: 'Kompleksowy przewodnik po e-commerce 2025. Social commerce, personalizacja AI, optymalizacja konwersji i sprawdzone strategie zwiększające przychody sklepu internetowego.',
+  metaTitle: 'E-commerce 2025: Trendy i Strategie Sprzedaży | Sklep Online',
+  metaDescription: 'Poznaj najnowsze trendy e-commerce 2025. Social commerce, AI personalizacja, optymalizacja koszyka i strategie zwiększające AOV. Praktyczny przewodnik dla sklepów!',
+  keywords: ['e-commerce 2025', 'sklep internetowy', 'strategie sprzedaży online', 'social commerce', 'konwersja sklepu', 'AOV e-commerce', 'trendy e-commerce', 'optymalizacja sklepu', 'sprzedaż online'],
   category: 'E-commerce',
   categoryColor: 'green',
   author: 'Piotr Wiśniewski',
   authorBio: 'E-commerce Manager z 12-letnim doświadczeniem w prowadzeniu i optymalizacji sklepów internetowych generujących milionowe obroty.',
-  date: '5 Marca 2024',
+  date: '13 Października 2025',
   readTime: '6 min',
   image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=600&fit=crop',
   tags: ['E-commerce', 'Marketing', 'Sprzedaż'],
   content: `
 ## Wprowadzenie
 
-Rynek e-commerce w 2024 roku to dynamicznie rozwijająca się branża, która wymaga ciągłej adaptacji i innowacji. Konkurencja rośnie każdego dnia, a klienci stają się coraz bardziej wymagający.
+Rynek e-commerce w 2025 roku to dynamicznie rozwijająca się branża, która wymaga ciągłej adaptacji i innowacji. Konkurencja rośnie każdego dnia, a klienci stają się coraz bardziej wymagający.
 
 W tym artykule przedstawię Ci najważniejsze trendy i sprawdzone strategie sprzedażowe, które pomogą Ci zwiększyć przychody Twojego sklepu internetowego i wyprzedzić konkurencję.
 
-## 1. Kluczowe trendy e-commerce w 2024
+## 1. Kluczowe trendy e-commerce w 2025
 
 ### Personalizacja na nowym poziomie
 
@@ -137,7 +141,7 @@ Klienci często dodają produkty, aby osiągnąć próg darmowej dostawy.
 
 ## Podsumowanie
 
-E-commerce w 2024 to połączenie technologii, psychologii i doskonałego doświadczenia klienta.
+E-commerce w 2025 to połączenie zaawansowanej technologii, psychologii i doskonałego doświadczenia klienta.
 
 ### Kluczowe wnioski:
 

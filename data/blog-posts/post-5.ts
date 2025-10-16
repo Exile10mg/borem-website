@@ -1,19 +1,23 @@
 export const post5 = {
   id: 5,
-  title: 'Responsive Design - dlaczego to ważne dla Twojego biznesu?',
-  excerpt: 'Poznaj znaczenie responsywnych stron internetowych i dowiedz się, jak wpływają one na doświadczenie użytkowników.',
+  slug: 'responsive-design-mobile-first-2025',
+  title: 'Responsive Design - dlaczego to ważne dla Twojego biznesu w 2025?',
+  excerpt: 'Kompletny przewodnik po responsive design w 2025. Mobile-first, RWD best practices, optymalizacja UX na urządzeniach mobilnych i wpływ na konwersję. Praktyczne wskazówki.',
+  metaTitle: 'Responsive Design 2025 - Mobile First i RWD | Przewodnik UX',
+  metaDescription: 'Wszystko o responsive design w 2025. Mobile-first approach, RWD best practices, touch-friendly design i optymalizacja mobilna zwiększająca konwersję o 11%!',
+  keywords: ['responsive design 2025', 'mobile-first design', 'RWD', 'strona responsywna', 'mobile UX', 'projektowanie mobilne', 'responsive web design', 'mobile-friendly', 'optymalizacja mobilna'],
   category: 'Design & Branding',
   categoryColor: 'pink',
   author: 'Michał Lewandowski',
   authorBio: 'UX/UI Designer z 7-letnim doświadczeniem w projektowaniu responsywnych interfejsów dla firm z różnych branż.',
-  date: '25 Lutego 2024',
+  date: '10 Października 2025',
   readTime: '4 min',
   image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?w=1200&h=600&fit=crop',
   tags: ['Design', 'Mobile', 'UX'],
   content: `
 ## Wprowadzenie
 
-W dzisiejszym świecie, gdzie ponad 60% użytkowników przegląda internet na urządzeniach mobilnych, responsywny design nie jest już opcją - to konieczność.
+W 2025 roku, gdzie ponad 65% użytkowników przegląda internet na urządzeniach mobilnych, responsywny design nie jest już opcją - to absolutna konieczność dla każdego biznesu online.
 
 ## 1. Czym jest Responsive Design?
 
@@ -45,11 +49,11 @@ Responsive Web Design (RWD) to podejście do projektowania stron internetowych, 
 
 ### Statystyki mobilnego ruchu
 
-**Liczby mówią same za siebie:**
-- 58% całego ruchu to urządzenia mobilne
-- 92.3% użytkowników korzysta z telefonu
+**Liczby mówią same za siebie w 2025:**
+- 65% całego ruchu to urządzenia mobilne
+- 94% użytkowników korzysta z telefonu
 - 73% użytkowników opuści stronę która nie jest mobile-friendly
-- 88% nie wróci po złym doświadczeniu
+- 88% nie wróci po złym doświadczeniu mobilnym
 
 ### Google Mobile-First Indexing
 

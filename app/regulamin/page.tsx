@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-
-import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faChevronRight, faFileContract, faGavel, faHandshake, faMoneyBillWave, faClock, faExclamationTriangle, faUserShield, faEnvelope, faBalanceScale, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
@@ -470,12 +468,7 @@ export default function RegulaminPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Breadcrumbs */}
-          <motion.nav
-            className="mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <nav className="mb-8">
             <ol className="flex items-center gap-2 text-sm">
               <li>
                 <Link
@@ -491,15 +484,10 @@ export default function RegulaminPage() {
               </li>
               <li className="text-white font-semibold">Regulamin</li>
             </ol>
-          </motion.nav>
+          </nav>
 
           {/* Title */}
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/20 mb-6">
               <FontAwesomeIcon icon={faFileContract} className="w-10 h-10 text-blue-400" />
             </div>
@@ -515,7 +503,7 @@ export default function RegulaminPage() {
             <p className="text-sm text-gray-500 mt-4">
               Ostatnia aktualizacja: {new Date().toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -524,12 +512,8 @@ export default function RegulaminPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-16">
             {sections.map((section, index) => (
-              <motion.div
+              <div
                 key={section.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.05 }}
                 className="relative"
               >
                 {/* Section Header - Centered */}
@@ -588,18 +572,12 @@ export default function RegulaminPage() {
                 {index < sections.length - 1 && (
                   <div className="mt-16 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                 )}
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* Important Notice */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mt-20 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20"
-          >
+          <div className="mt-20 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20">
             <div className="text-center">
               <FontAwesomeIcon icon={faHandshake} className="w-12 h-12 text-blue-400 mb-4" />
               <h3 className="text-2xl font-bold text-white mb-4">Transparentna współpraca</h3>
@@ -618,7 +596,7 @@ export default function RegulaminPage() {
                 </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

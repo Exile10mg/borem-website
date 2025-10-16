@@ -20,12 +20,20 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { useParams } from 'next/navigation';
-import { blogPostsData } from '@/data/blog-posts';
+import { getPostBySlugOrId } from '@/data/blog-posts';
+import { useEffect } from 'react';
 
 export default function BlogPostPage() {
   const params = useParams();
-  const postId = params.id as string;
-  const post = blogPostsData[postId];
+  const slugOrId = params.id as string;
+  const post = getPostBySlugOrId(slugOrId);
+
+  useEffect(() => {
+    if (post && typeof window !== 'undefined') {
+      // Set document title only
+      document.title = (post as any).metaTitle || `${post.title} | Borem.pl`;
+    }
+  }, [post]);
 
   if (!post) {
     return (
@@ -80,23 +88,13 @@ export default function BlogPostPage() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Image */}
-      <div className="relative h-[45vh] sm:h-[60vh] overflow-hidden pt-20">
-        <Image
-          src={post.image}
-          alt={post.title}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-
-        {/* Breadcrumbs */}
-        <div className="absolute top-28 sm:top-32 left-0 right-0 z-10 max-w-5xl mx-auto px-4 sm:px-6">
+      {/* Breadcrumbs - Above Hero Image */}
+      <div className="bg-black pt-24 sm:pt-28 pb-4 sm:pb-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto pb-2"
+            className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto"
           >
             <Link href="/" className="hover:text-blue-400 transition-colors flex items-center gap-1.5 flex-shrink-0">
               <FontAwesomeIcon icon={faHome} className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -111,6 +109,18 @@ export default function BlogPostPage() {
             <span className="text-white truncate text-xs sm:text-sm">{post.title}</span>
           </motion.div>
         </div>
+      </div>
+
+      {/* Hero Image */}
+      <div className="relative h-[40vh] sm:h-[50vh] overflow-hidden">
+        <Image
+          src={post.image}
+          alt={post.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
 
         {/* Title Overlay */}
         <div className="absolute bottom-0 left-0 right-0 z-10 pb-4 sm:pb-12">
