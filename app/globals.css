@@ -211,4 +211,9 @@
   .animate-loading-bar {
     animation: loading-bar 1.5s ease-in-out infinite;
   }
+
+  /* Hide floating buttons when mobile menu is open */
+  body.mobile-menu-open #floating-buttons {
+    display: none !important;
+  }
 }

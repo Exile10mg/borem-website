@@ -70,13 +70,16 @@ const Navbar = memo(function Navbar() {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
       document.body.style.touchAction = 'none';
+      document.body.classList.add('mobile-menu-open');
     } else {
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
+      document.body.classList.remove('mobile-menu-open');
     }
     return () => {
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
+      document.body.classList.remove('mobile-menu-open');
     };
   }, [isMobileMenuOpen]);
 
