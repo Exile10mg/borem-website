@@ -164,7 +164,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
 
-        {/* Preload critical font to avoid LCP delay */}
+        {/* Preload critical resources to reduce LCP render delay */}
         <link
           rel="preload"
           href="/_next/static/media/8e9860b6e62d6359-s.woff2"
@@ -172,6 +172,10 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+
+        {/* Preconnect to analytics early */}
+        <link rel="preconnect" href="https://scripts.clarity.ms" />
+        <link rel="preconnect" href="https://l.clarity.ms" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />

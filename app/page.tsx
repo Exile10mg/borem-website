@@ -32,11 +32,11 @@ export default function Home() {
         id="home"
         className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28 xl:pt-32 pb-24 sm:pb-32 lg:pb-32 xl:pb-40"
       >
-        {/* Background effects */}
+        {/* Background effects - GPU accelerated */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-[120px]" />
-        <div className="absolute top-20 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-20 left-1/3 w-96 h-96 bg-pink-500/20 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
+        <div className="absolute top-20 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
+        <div className="absolute bottom-20 left-1/3 w-96 h-96 bg-pink-500/20 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
         
         {/* Grid overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_70%,transparent_100%)]" />
@@ -112,8 +112,8 @@ export default function Home() {
               {/* Visual Column - Simple mockup */}
               <div className="flex flex-col items-center justify-start gap-4">
                 <div className="relative w-full max-w-md">
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-20 blur-3xl rounded-3xl" />
+                  {/* Glow effect - GPU accelerated */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-20 blur-3xl rounded-3xl will-change-transform" style={{transform: 'translateZ(0)'}} />
                   
                   {/* Main card */}
                   <div className="relative bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-black/90 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden shadow-2xl p-4">
