@@ -417,12 +417,12 @@ export default function KontaktPage() {
                         <label htmlFor="service" className="block text-sm font-bold text-white mb-2">
                           <FontAwesomeIcon icon={faRocket} className="mr-2 text-green-400" />
                           Interesująca usługa *
-                          {highlightService && (
-                            <span className="ml-2 text-xs text-green-400 font-normal">
-                              ✓ Wybrano automatycznie
-                            </span>
-                          )}
                         </label>
+                        {highlightService && (
+                          <div className="text-xs text-green-400 font-normal mb-2 -mt-1">
+                            ✓ Wybrano automatycznie
+                          </div>
+                        )}
                         <select
                           id="service"
                           name="service"
