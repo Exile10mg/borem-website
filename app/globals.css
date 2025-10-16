@@ -1,3 +1,14 @@
+/* Critical CSS - loaded first */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-black text-white;
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

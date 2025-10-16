@@ -172,6 +172,10 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+
+        {/* Prefetch critical CSS for faster rendering */}
+        <link rel="prefetch" href="/_next/static/css/8bc0636b7f95bd1a.css" as="style" />
+        <link rel="prefetch" href="/_next/static/css/e004e685add01f28.css" as="style" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />
