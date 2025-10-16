@@ -11,7 +11,11 @@
       "Bash(cat:*)",
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nBlog SEO optimization 2025 + Legal pages + WhatsApp button redesign\n\nMajor SEO improvements:\n- Updated all 6 blog posts to 2025 with SEO-friendly URLs\n- Added meta titles, descriptions, keywords for each post\n- SEO-friendly slugs (e.g., /blog/jak-stworzyc-skuteczna-strone-internetowa-2025)\n- Updated dates to October 2025\n- Fixed breadcrumbs positioning above hero image\n- Added Open Graph and Twitter Card meta tags\n- Improved excerpt with keywords\n\nBlog posts optimized:\n1. Web Development guide 2025\n2. AI in business 2025\n3. E-commerce 2025\n4. SEO 2025 complete guide\n5. Responsive Design & Mobile-First 2025\n6. Web vs Native Apps 2025\n\nLegal pages optimization:\n- Removed framer-motion from all legal pages for better performance\n- Static content: /polityka-prywatnosci, /regulamin, /rodo, /cookies\n- Faster loading, smaller bundle size\n- Better SEO with static content\n\nWhatsApp button redesign:\n- Professional glowing effect (always visible like navbar)\n- Added text on mobile: \"Napisz do nas na WhatsApp\"\n- Removed notification badge for cleaner look\n- Glass morphism style with backdrop blur\n- Green glowing border matching site design\n- Smooth hover animations\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(for file in app/blog/page.tsx app/blog/[id]/page.tsx app/cennik/page.tsx app/cookies/page.tsx app/kontakt/page.tsx app/o-nas/page.tsx app/polityka-prywatnosci/page.tsx app/proces-pracy/page.tsx app/regulamin/page.tsx app/rodo/page.tsx app/realizacje/[slug]/page.tsx)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(done)",
+      "Bash(do echo \"Processing $file...\")"
     ],
     "deny": [],
     "ask": []

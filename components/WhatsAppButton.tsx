@@ -23,7 +23,7 @@ export default function WhatsAppButton() {
           aria-label="Skontaktuj się przez WhatsApp"
         >
           {/* Glow effect - always visible */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#25D366]/20 to-[#22C55E]/20 blur-sm" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#25D366]/20 to-[#22C55E]/20" />
 
           <FontAwesomeIcon
             icon={faWhatsapp}
@@ -46,7 +46,7 @@ export default function WhatsAppButton() {
           aria-label="Skontaktuj się przez WhatsApp"
         >
           {/* Glowing border effect - always visible */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#25D366]/0 via-[#25D366]/20 to-[#22C55E]/0 blur-xl" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#25D366]/0 via-[#25D366]/20 to-[#22C55E]/0" />
 
           {/* Icon with background */}
           <div className="relative flex items-center justify-center w-11 h-11 bg-gradient-to-br from-[#25D366]/20 to-[#22C55E]/20 border border-[#25D366]/30 rounded-xl group-hover:border-[#25D366]/60 transition-all duration-300">

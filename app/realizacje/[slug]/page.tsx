@@ -18,7 +18,6 @@ import { useParams } from 'next/navigation';
 import { projects } from '@/data/projects';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppButton from '@/components/WhatsAppButton';
 
 export default function ProjectPage() {
   const params = useParams();
@@ -59,7 +58,7 @@ export default function ProjectPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
-      <WhatsAppButton />
+      
 
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-end overflow-hidden pt-20">

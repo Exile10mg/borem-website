@@ -18,7 +18,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppButton from '@/components/WhatsAppButton';
 import { useParams } from 'next/navigation';
 import { getPostBySlugOrId } from '@/data/blog-posts';
 import { useEffect } from 'react';
@@ -86,7 +85,7 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
-      <WhatsAppButton />
+      
 
       {/* Breadcrumbs - Above Hero Image */}
       <div className="bg-black pt-24 sm:pt-28 pb-4 sm:pb-6">

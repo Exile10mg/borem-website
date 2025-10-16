@@ -6,7 +6,6 @@ import { faHome, faChevronRight, faFileContract, faGavel, faHandshake, faMoneyBi
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppButton from '@/components/WhatsAppButton';
 
 const sections = [
   {
@@ -457,7 +456,7 @@ export default function RegulaminPage() {
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />
-      <WhatsAppButton />
+      
 
       {/* Hero Section */}
       <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-32 pb-16 sm:pb-20">
