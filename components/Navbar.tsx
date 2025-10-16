@@ -309,7 +309,7 @@ const Navbar = memo(function Navbar() {
       </nav>
 
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-[9999]">
+        <div className="lg:hidden fixed inset-0 z-[999999999]">
           <div className="relative w-full h-full bg-gradient-to-br from-black via-gray-900 to-black shadow-2xl overflow-hidden">
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px]"></div>
