@@ -1,0 +1,112 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+export const runtime = 'edge';
+export const maxDuration = 30; // 30 seconds timeout
+
+// Simple in-memory rate limiting
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function rateLimit(ip: string): boolean {
+  const now = Date.now();
+  const limit = 5; // 5 transcription requests
+  const window = 60000; // per 1 minute
+
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + window });
+    return true;
+  }
+
+  if (record.count >= limit) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    // Get IP for rate limiting
+    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+
+    // Rate limiting
+    if (!rateLimit(ip)) {
+      return NextResponse.json(
+        { error: 'Za dużo żądań. Spróbuj ponownie za chwilę.' },
+        { status: 429 }
+      );
+    }
+
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
+      console.error('OPENAI_API_KEY is not set');
+      return NextResponse.json(
+        { error: 'API configuration error' },
+        { status: 500 }
+      );
+    }
+
+    // Parse form data
+    const formData = await req.formData();
+    const audioFile = formData.get('audio') as File;
+
+    if (!audioFile) {
+      return NextResponse.json(
+        { error: 'No audio file provided' },
+        { status: 400 }
+      );
+    }
+
+    // Check file size (max 25MB for Whisper API)
+    if (audioFile.size > 25 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: 'Plik audio jest za duży. Maksymalny rozmiar to 25MB.' },
+        { status: 400 }
+      );
+    }
+
+    // Convert to buffer for Edge runtime
+    const arrayBuffer = await audioFile.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Create form data for OpenAI
+    const whisperFormData = new FormData();
+    const blob = new Blob([buffer], { type: 'audio/webm' });
+    whisperFormData.append('file', blob, 'audio.webm');
+    whisperFormData.append('model', 'whisper-1');
+    whisperFormData.append('language', 'pl'); // Polish language
+    whisperFormData.append('response_format', 'json');
+
+    // Call Whisper API
+    const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: whisperFormData,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Whisper API error:', error);
+      return NextResponse.json(
+        { error: 'Failed to transcribe audio' },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+
+    return NextResponse.json({ text: data.text });
+
+  } catch (error) {
+    console.error('Transcription error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

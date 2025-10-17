@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faArrowUp, faUser, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faArrowUp, faUser, faTrash, faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -21,7 +21,16 @@ export default function PriceEstimatorChat() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [showInitialTyping, setShowInitialTyping] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [audioLevel, setAudioLevel] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -121,24 +130,74 @@ export default function PriceEstimatorChat() {
         throw new Error('Failed to get response');
       }
 
-      const data = await response.json();
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: data.message,
-      };
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
 
-      setMessages(prev => [...prev, assistantMessage]);
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      // Create empty assistant message
+      const assistantMessageIndex = messages.length + 1;
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      setIsLoading(false);
+      setIsStreaming(true);
+
+      let accumulatedContent = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          setIsStreaming(false);
+          break;
+        }
+
+        // Decode the chunk
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n').filter(line => line.trim() !== '');
+
+        for (const line of lines) {
+          const message = line.replace(/^data: /, '');
+
+          if (message === '[DONE]') {
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(message);
+            const content = parsed.content;
+
+            if (content) {
+              accumulatedContent += content;
+
+              // Update the last message with accumulated content
+              setMessages(prev => {
+                const newMessages = [...prev];
+                newMessages[assistantMessageIndex] = {
+                  role: 'assistant',
+                  content: accumulatedContent,
+                };
+                return newMessages;
+              });
+            }
+          } catch (e) {
+            // Skip invalid JSON
+          }
+        }
+      }
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages(prev => [
-        ...prev,
+        ...prev.filter((_, i) => i !== prev.length - 1 || prev[prev.length - 1].content !== ''),
         {
           role: 'assistant',
           content: 'Przepraszam, wystąpił błąd. Skontaktuj się z nami bezpośrednio: 787 041 328',
         },
       ]);
-    } finally {
       setIsLoading(false);
+      setIsStreaming(false);
     }
   };
 
@@ -153,6 +212,224 @@ export default function PriceEstimatorChat() {
     setMessages([]);
     setHasInitialized(false);
     localStorage.removeItem('borem-chat');
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      // Setup MediaRecorder
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      // Setup audio visualization
+      const audioContext = new AudioContext();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      source.connect(analyser);
+
+      audioContextRef.current = audioContext;
+      analyserRef.current = analyser;
+
+      // Visualize audio level
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      const updateLevel = () => {
+        if (!isRecording) return;
+        analyser.getByteFrequencyData(dataArray);
+        const average = dataArray.reduce((a, b) => a + b) / bufferLength;
+        setAudioLevel(average / 255);
+        requestAnimationFrame(updateLevel);
+      };
+      updateLevel();
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        stream.getTracks().forEach(track => track.stop());
+
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+        }
+
+        // Send to Whisper API
+        await transcribeAudio(audioBlob);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      setRecordingTime(0);
+
+      // Timer (max 60 seconds)
+      let seconds = 0;
+      recordingTimerRef.current = setInterval(() => {
+        seconds++;
+        setRecordingTime(seconds);
+
+        if (seconds >= 60) {
+          stopRecording();
+        }
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      alert('Nie można uzyskać dostępu do mikrofonu. Sprawdź uprawnienia przeglądarki.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current);
+    }
+
+    setIsRecording(false);
+    setRecordingTime(0);
+    setAudioLevel(0);
+  };
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+
+      const response = await fetch('/api/transcribe', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Transcription failed');
+      }
+
+      const data = await response.json();
+      const transcribedText = data.text;
+
+      if (transcribedText && transcribedText.trim()) {
+        // Set as input and send
+        setInput(transcribedText);
+
+        // Automatically send the message
+        setTimeout(() => {
+          const userMessage: Message = { role: 'user', content: transcribedText };
+          setMessages(prev => [...prev, userMessage]);
+          setInput('');
+          sendMessageWithText([...messages, userMessage]);
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Error transcribing audio:', error);
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: 'Przepraszam, nie udało się przetworzyć nagrania. Spróbuj ponownie lub napisz wiadomość.',
+        },
+      ]);
+      setIsLoading(false);
+    }
+  };
+
+  const sendMessageWithText = async (messagesHistory: Message[]) => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: messagesHistory,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      // Create empty assistant message
+      const assistantMessageIndex = messagesHistory.length;
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      setIsLoading(false);
+      setIsStreaming(true);
+
+      let accumulatedContent = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          setIsStreaming(false);
+          break;
+        }
+
+        // Decode the chunk
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n').filter(line => line.trim() !== '');
+
+        for (const line of lines) {
+          const message = line.replace(/^data: /, '');
+
+          if (message === '[DONE]') {
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(message);
+            const content = parsed.content;
+
+            if (content) {
+              accumulatedContent += content;
+
+              // Update the last message with accumulated content
+              setMessages(prev => {
+                const newMessages = [...prev];
+                newMessages[assistantMessageIndex] = {
+                  role: 'assistant',
+                  content: accumulatedContent,
+                };
+                return newMessages;
+              });
+            }
+          } catch (e) {
+            // Skip invalid JSON
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setMessages(prev => [
+        ...prev.filter((_, i) => i !== prev.length - 1 || prev[prev.length - 1].content !== ''),
+        {
+          role: 'assistant',
+          content: 'Przepraszam, wystąpił błąd. Skontaktuj się z nami bezpośrednio: 787 041 328',
+        },
+      ]);
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
   };
 
   return (
@@ -233,6 +510,10 @@ export default function PriceEstimatorChat() {
                   <div className="flex-1 min-w-0">
                     <div className="text-sm text-gray-200 whitespace-pre-wrap break-words leading-relaxed">
                       {message.content}
+                      {/* Show blinking cursor if this is the last message and streaming */}
+                      {isStreaming && index === messages.length - 1 && message.role === 'assistant' && (
+                        <span className="inline-block w-1.5 h-4 bg-blue-500 ml-0.5 animate-pulse"></span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -263,22 +544,80 @@ export default function PriceEstimatorChat() {
 
           {/* Input - Dark style with animations */}
           <div className="border-t border-gray-700 p-3.5 bg-gray-900">
+            {/* Recording indicator */}
+            {isRecording && (
+              <div className="mb-3 flex items-center justify-between bg-red-600/10 border border-red-500/30 rounded-xl px-4 py-3">
+                <div className="flex items-center gap-3">
+                  {/* Pulsing red dot */}
+                  <div className="relative">
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                    <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                  </div>
+
+                  {/* Audio wave visualization */}
+                  <div className="flex items-center gap-1 h-8">
+                    {[...Array(8)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-1 bg-red-500 rounded-full transition-all duration-100"
+                        style={{
+                          height: `${Math.max(20, audioLevel * 100 * (0.5 + Math.random() * 0.5))}%`,
+                          opacity: 0.5 + audioLevel * 0.5,
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Timer */}
+                  <span className="text-red-400 font-mono text-sm">
+                    {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
+                  </span>
+                </div>
+
+                {/* Stop button */}
+                <button
+                  onClick={stopRecording}
+                  className="bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 flex items-center gap-2"
+                >
+                  <FontAwesomeIcon icon={faStop} className="w-3.5 h-3.5" />
+                  Zatrzymaj
+                </button>
+              </div>
+            )}
+
             <div className="relative group">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={isLoading || showInitialTyping ? "Bot pisze..." : "Napisz wiadomość..."}
-                disabled={isLoading || showInitialTyping}
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 pr-11 text-base border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500 transition-all duration-200"
+                placeholder={isLoading || showInitialTyping ? "Bot pisze..." : isRecording ? "Nagrywanie..." : "Napisz lub nagraj wiadomość..."}
+                disabled={isLoading || showInitialTyping || isRecording}
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 pr-20 text-base border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500 transition-all duration-200"
                 style={{ fontSize: '16px' }}
               />
+
+              {/* Microphone button */}
+              <button
+                onClick={isRecording ? stopRecording : startRecording}
+                disabled={isLoading || showInitialTyping}
+                className={`absolute right-11 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  isRecording
+                    ? 'bg-red-600 text-white hover:bg-red-700 animate-pulse'
+                    : 'bg-gray-700 text-gray-400 hover:bg-gradient-to-r hover:from-red-600 hover:to-pink-600 hover:text-white hover:scale-110'
+                } ${(isLoading || showInitialTyping) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                aria-label={isRecording ? "Zatrzymaj nagrywanie" : "Nagraj wiadomość głosową"}
+                title={isRecording ? "Zatrzymaj nagrywanie" : "Nagraj wiadomość głosową"}
+              >
+                <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} className="w-3.5 h-3.5" />
+              </button>
+
+              {/* Send button */}
               <button
                 onClick={sendMessage}
-                disabled={!input.trim() || isLoading}
+                disabled={!input.trim() || isLoading || isRecording}
                 className={`absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                  input.trim() && !isLoading
+                  input.trim() && !isLoading && !isRecording
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:scale-110 shadow-lg shadow-blue-500/50'
                     : 'bg-gray-700 text-gray-500 cursor-not-allowed'
                 }`}

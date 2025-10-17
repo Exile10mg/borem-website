@@ -180,7 +180,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Call OpenAI API
+    // Call OpenAI API with streaming
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -201,6 +201,7 @@ export async function POST(req: NextRequest) {
         top_p: 0.9,
         frequency_penalty: 0.3,
         presence_penalty: 0.2,
+        stream: true, // Enable streaming
       }),
     });
 
@@ -213,17 +214,65 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const data = await response.json();
-    const assistantMessage = data.choices[0]?.message?.content;
+    // Return the stream directly
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
 
-    if (!assistantMessage) {
-      return NextResponse.json(
-        { error: 'No response from AI' },
-        { status: 500 }
-      );
-    }
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body?.getReader();
+        if (!reader) {
+          controller.close();
+          return;
+        }
 
-    return NextResponse.json({ message: assistantMessage });
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+
+            if (done) {
+              controller.close();
+              break;
+            }
+
+            // Decode the chunk
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split('\n').filter(line => line.trim() !== '');
+
+            for (const line of lines) {
+              const message = line.replace(/^data: /, '');
+
+              if (message === '[DONE]') {
+                controller.close();
+                return;
+              }
+
+              try {
+                const parsed = JSON.parse(message);
+                const content = parsed.choices[0]?.delta?.content;
+
+                if (content) {
+                  // Send each character to the client
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
+                }
+              } catch (e) {
+                // Skip invalid JSON
+              }
+            }
+          }
+        } catch (error) {
+          controller.error(error);
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
 
   } catch (error) {
     console.error('Chat API error:', error);
