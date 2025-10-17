@@ -216,7 +216,20 @@ export default function PriceEstimatorChat() {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Check if browser supports getUserMedia
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Twoja przeglądarka nie obsługuje nagrywania audio. Spróbuj użyć Chrome, Firefox lub Safari.');
+        return;
+      }
+
+      // Request microphone permission
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
+        }
+      });
 
       // Setup MediaRecorder
       const mediaRecorder = new MediaRecorder(stream);
@@ -279,9 +292,43 @@ export default function PriceEstimatorChat() {
         }
       }, 1000);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error accessing microphone:', error);
-      alert('Nie można uzyskać dostępu do mikrofonu. Sprawdź uprawnienia przeglądarki.');
+
+      // Handle specific error cases
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: '🎤 Aby nagrywać wiadomości głosowe, musisz zezwolić na dostęp do mikrofonu.\n\n1. Kliknij ikonę 🔒 lub 🛈 w pasku adresu przeglądarki\n2. Znajdź ustawienia "Mikrofon"\n3. Zmień na "Zezwalaj"\n4. Odśwież stronę i spróbuj ponownie',
+          },
+        ]);
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: '🎤 Nie znaleziono mikrofonu. Upewnij się, że mikrofon jest podłączony i włączony.',
+          },
+        ]);
+      } else if (error.name === 'NotReadableError') {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: '🎤 Mikrofon jest zajęty przez inną aplikację. Zamknij inne programy używające mikrofonu i spróbuj ponownie.',
+          },
+        ]);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: '🎤 Wystąpił błąd podczas dostępu do mikrofonu. Spróbuj ponownie lub napisz wiadomość tekstową.',
+          },
+        ]);
+      }
     }
   };
 
