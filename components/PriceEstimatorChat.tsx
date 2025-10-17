@@ -271,7 +271,8 @@ export default function PriceEstimatorChat() {
                 onKeyPress={handleKeyPress}
                 placeholder={isLoading || showInitialTyping ? "Bot pisze..." : "Napisz wiadomość..."}
                 disabled={isLoading || showInitialTyping}
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 pr-11 text-sm border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500 transition-all duration-200"
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 pr-11 text-base border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500 transition-all duration-200"
+                style={{ fontSize: '16px' }}
               />
               <button
                 onClick={sendMessage}
@@ -301,7 +302,7 @@ export default function PriceEstimatorChat() {
 
       {/* Floating Button - Bottom Left - Visible only when chat is closed */}
       {!isOpen && (
-        <div className="fixed bottom-3 left-3 md:bottom-6 md:left-6 z-50">
+        <div className="fixed bottom-3 left-3 md:bottom-6 md:left-6 z-30">
           <button
             onClick={() => setIsOpen(true)}
             className="group relative flex items-center gap-1.5 md:gap-3 bg-gray-900/80 backdrop-blur-md text-white rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 px-2.5 py-2 md:px-6 md:py-3 border border-gray-800 hover:border-blue-500/50 hover:shadow-blue-500/20"
