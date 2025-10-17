@@ -149,6 +149,7 @@ export default function PriceEstimatorChat() {
       setIsStreaming(true);
 
       let accumulatedContent = '';
+      let buffer = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -160,10 +161,20 @@ export default function PriceEstimatorChat() {
 
         // Decode the chunk
         const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n').filter(line => line.trim() !== '');
+        buffer += chunk;
+
+        // Split by newlines and process complete lines
+        const lines = buffer.split('\n');
+        
+        // Keep the last incomplete line in the buffer
+        buffer = lines.pop() || '';
 
         for (const line of lines) {
-          const message = line.replace(/^data: /, '');
+          const trimmedLine = line.trim();
+          
+          if (!trimmedLine) continue;
+
+          const message = trimmedLine.replace(/^data: /, '');
 
           if (message === '[DONE]') {
             break;
@@ -452,6 +463,7 @@ export default function PriceEstimatorChat() {
       setIsStreaming(true);
 
       let accumulatedContent = '';
+      let buffer = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -463,10 +475,20 @@ export default function PriceEstimatorChat() {
 
         // Decode the chunk
         const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n').filter(line => line.trim() !== '');
+        buffer += chunk;
+
+        // Split by newlines and process complete lines
+        const lines = buffer.split('\n');
+        
+        // Keep the last incomplete line in the buffer
+        buffer = lines.pop() || '';
 
         for (const line of lines) {
-          const message = line.replace(/^data: /, '');
+          const trimmedLine = line.trim();
+          
+          if (!trimmedLine) continue;
+
+          const message = trimmedLine.replace(/^data: /, '');
 
           if (message === '[DONE]') {
             break;
