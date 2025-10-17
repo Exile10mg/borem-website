@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 // Simple in-memory rate limiting (for edge runtime)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
