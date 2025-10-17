@@ -25,6 +25,7 @@ export default function PriceEstimatorChat() {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
+  const [microphoneError, setMicrophoneError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -211,6 +212,7 @@ export default function PriceEstimatorChat() {
   const clearChat = () => {
     setMessages([]);
     setHasInitialized(false);
+    setMicrophoneError(false);
     localStorage.removeItem('borem-chat');
   };
 
@@ -218,11 +220,20 @@ export default function PriceEstimatorChat() {
     try {
       // Check if browser supports getUserMedia
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert('Twoja przeglądarka nie obsługuje nagrywania audio. Spróbuj użyć Chrome, Firefox lub Safari.');
+        if (!microphoneError) {
+          setMicrophoneError(true);
+          setMessages(prev => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: '🎤 Twoja przeglądarka nie obsługuje nagrywania audio. Spróbuj użyć Chrome, Firefox lub Safari.',
+            },
+          ]);
+        }
         return;
       }
 
-      // Request microphone permission
+      // Request microphone permission - this will show browser's native permission dialog if needed
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -230,6 +241,9 @@ export default function PriceEstimatorChat() {
           sampleRate: 44100
         }
       });
+
+      // If we got here, permission was granted - reset error flag
+      setMicrophoneError(false);
 
       // Setup MediaRecorder
       const mediaRecorder = new MediaRecorder(stream);
@@ -295,13 +309,20 @@ export default function PriceEstimatorChat() {
     } catch (error: any) {
       console.error('Error accessing microphone:', error);
 
+      // Only show error message once
+      if (microphoneError) {
+        return;
+      }
+
+      setMicrophoneError(true);
+
       // Handle specific error cases
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Aby nagrywać wiadomości głosowe, musisz zezwolić na dostęp do mikrofonu.\n\n1. Kliknij ikonę 🔒 lub 🛈 w pasku adresu przeglądarki\n2. Znajdź ustawienia "Mikrofon"\n3. Zmień na "Zezwalaj"\n4. Odśwież stronę i spróbuj ponownie',
+            content: '🎤 Aby nagrywać wiadomości głosowe, zezwól na dostęp do mikrofonu w przeglądarce.\n\nKliknij ikonę 🔒 obok adresu strony i włącz mikrofon.',
           },
         ]);
       } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
@@ -309,7 +330,7 @@ export default function PriceEstimatorChat() {
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Nie znaleziono mikrofonu. Upewnij się, że mikrofon jest podłączony i włączony.',
+            content: '🎤 Nie znaleziono mikrofonu. Upewnij się, że mikrofon jest podłączony.',
           },
         ]);
       } else if (error.name === 'NotReadableError') {
@@ -317,7 +338,7 @@ export default function PriceEstimatorChat() {
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Mikrofon jest zajęty przez inną aplikację. Zamknij inne programy używające mikrofonu i spróbuj ponownie.',
+            content: '🎤 Mikrofon jest zajęty. Zamknij inne aplikacje używające mikrofonu.',
           },
         ]);
       } else {
@@ -325,7 +346,7 @@ export default function PriceEstimatorChat() {
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Wystąpił błąd podczas dostępu do mikrofonu. Spróbuj ponownie lub napisz wiadomość tekstową.',
+            content: '🎤 Nie udało się uruchomić mikrofonu. Spróbuj ponownie.',
           },
         ]);
       }
