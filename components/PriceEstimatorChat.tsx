@@ -139,9 +139,12 @@ export default function PriceEstimatorChat() {
         throw new Error('No reader available');
       }
 
-      // Create empty assistant message
-      const assistantMessageIndex = messages.length + 1;
-      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      // Create empty assistant message and get its index
+      let assistantMessageIndex = -1;
+      setMessages(prev => {
+        assistantMessageIndex = prev.length; // Get index before adding
+        return [...prev, { role: 'assistant', content: '' }];
+      });
       setIsLoading(false);
       setIsStreaming(true);
 
@@ -176,10 +179,12 @@ export default function PriceEstimatorChat() {
               // Update the last message with accumulated content
               setMessages(prev => {
                 const newMessages = [...prev];
-                newMessages[assistantMessageIndex] = {
-                  role: 'assistant',
-                  content: accumulatedContent,
-                };
+                if (assistantMessageIndex >= 0 && assistantMessageIndex < newMessages.length) {
+                  newMessages[assistantMessageIndex] = {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  };
+                }
                 return newMessages;
               });
             }
@@ -437,9 +442,12 @@ export default function PriceEstimatorChat() {
         throw new Error('No reader available');
       }
 
-      // Create empty assistant message
-      const assistantMessageIndex = messagesHistory.length;
-      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      // Create empty assistant message and get its index
+      let assistantMessageIndex = -1;
+      setMessages(prev => {
+        assistantMessageIndex = prev.length; // Get index before adding
+        return [...prev, { role: 'assistant', content: '' }];
+      });
       setIsLoading(false);
       setIsStreaming(true);
 
@@ -474,10 +482,12 @@ export default function PriceEstimatorChat() {
               // Update the last message with accumulated content
               setMessages(prev => {
                 const newMessages = [...prev];
-                newMessages[assistantMessageIndex] = {
-                  role: 'assistant',
-                  content: accumulatedContent,
-                };
+                if (assistantMessageIndex >= 0 && assistantMessageIndex < newMessages.length) {
+                  newMessages[assistantMessageIndex] = {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  };
+                }
                 return newMessages;
               });
             }
