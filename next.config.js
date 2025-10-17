@@ -38,12 +38,12 @@ const nextConfig = {
   },
 
   // Modern browsers only - remove legacy polyfills
-  compiler: {
-    // Remove console logs in production
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  },
+  // Note: removeConsole temporarily disabled for Turbopack compatibility
+  // compiler: {
+  //   removeConsole: process.env.NODE_ENV === 'production' ? {
+  //     exclude: ['error', 'warn'],
+  //   } : false,
+  // },
 
   // Webpack optimizations for mobile
   webpack: (config, { dev, isServer }) => {

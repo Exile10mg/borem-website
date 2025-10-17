@@ -37,3 +37,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# reklama pages (marketing landing pages - not for deployment)
+/app/reklama-*/
