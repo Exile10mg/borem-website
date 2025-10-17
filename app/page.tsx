@@ -8,15 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faPalette, faMobileScreen, faLock, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { faReact, faNode, faWordpress } from '@fortawesome/free-brands-svg-icons';
 
-const StronyWWW = dynamic(() => import('@/components/sections/StronyWWW'));
-const ProcesPracy = dynamic(() => import('@/components/sections/ProcesPracy'));
-const ECommerce = dynamic(() => import('@/components/sections/ECommerce'));
-const AplikacjeWebowe = dynamic(() => import('@/components/sections/AplikacjeWebowe'));
-const AIAutomatyzacja = dynamic(() => import('@/components/sections/AIAutomatyzacja'));
-const MarketingSEO = dynamic(() => import('@/components/sections/MarketingSEO'));
-const Opinie = dynamic(() => import('@/components/sections/Opinie'));
-const DlaczegoMy = dynamic(() => import('@/components/sections/DlaczegoMy'));
-const Kontakt = dynamic(() => import('@/components/sections/Kontakt'));
+// Dynamic imports with ssr:false for better mobile performance - reduces initial bundle
+const StronyWWW = dynamic(() => import('@/components/sections/StronyWWW'), { ssr: false });
+const ProcesPracy = dynamic(() => import('@/components/sections/ProcesPracy'), { ssr: false });
+const ECommerce = dynamic(() => import('@/components/sections/ECommerce'), { ssr: false });
+const AplikacjeWebowe = dynamic(() => import('@/components/sections/AplikacjeWebowe'), { ssr: false });
+const AIAutomatyzacja = dynamic(() => import('@/components/sections/AIAutomatyzacja'), { ssr: false });
+const MarketingSEO = dynamic(() => import('@/components/sections/MarketingSEO'), { ssr: false });
+const Opinie = dynamic(() => import('@/components/sections/Opinie'), { ssr: false });
+const DlaczegoMy = dynamic(() => import('@/components/sections/DlaczegoMy'), { ssr: false });
+const Kontakt = dynamic(() => import('@/components/sections/Kontakt'), { ssr: false });
 
 export default function Home() {
   useEffect(() => {
@@ -27,26 +28,27 @@ export default function Home() {
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />
 
-      {/* STATIC HERO - NO FRAMER MOTION */}
+      {/* STATIC HERO - OPTIMIZED FOR MOBILE */}
       <section
         id="home"
         className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28 xl:pt-32 pb-24 sm:pb-32 lg:pb-32 xl:pb-40"
       >
-        {/* Background effects - GPU accelerated */}
+        {/* Background effects - Reduced for mobile performance */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
-        <div className="absolute top-20 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
-        <div className="absolute bottom-20 left-1/3 w-96 h-96 bg-pink-500/20 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
-        
-        {/* Grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_70%,transparent_100%)]" />
-        
+        {/* Simplified blur effects for mobile - hidden on small screens */}
+        <div className="hidden sm:block absolute top-0 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
+        <div className="hidden sm:block absolute top-20 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
+        <div className="hidden sm:block absolute bottom-20 left-1/3 w-96 h-96 bg-pink-500/20 rounded-full blur-[120px] will-change-transform" style={{transform: 'translateZ(0)'}} />
+
+        {/* Grid overlay - simplified on mobile */}
+        <div className="hidden sm:block absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_70%,transparent_100%)]" />
+
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 z-[5]" />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-              
+
               {/* Text Column */}
               <div className="text-center lg:text-left space-y-6">
                 {/* Title - SEO Optimized H1 */}
@@ -60,7 +62,7 @@ export default function Home() {
                 {/* Description - SEO Enhanced */}
                 <div className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   <p className="mb-3">
-                    <strong className="text-white">Tworzymy strony internetowe</strong>, sklepy e-commerce i aplikacje webowe. 
+                    <strong className="text-white">Tworzymy strony internetowe</strong>, sklepy e-commerce i aplikacje webowe.
                     Specjalizujemy się w <strong className="text-white">AI, automatyzacji, marketingu i SEO</strong>.
                   </p>
                   <p className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text font-bold text-base sm:text-lg">
@@ -109,12 +111,12 @@ export default function Home() {
 
               </div>
 
-              {/* Visual Column - Simple mockup */}
+              {/* Visual Column - Optimized for mobile performance */}
               <div className="flex flex-col items-center justify-start gap-4">
                 <div className="relative w-full max-w-md">
-                  {/* Glow effect - GPU accelerated */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-20 blur-3xl rounded-3xl will-change-transform" style={{transform: 'translateZ(0)'}} />
-                  
+                  {/* Glow effect - Hidden on mobile for better performance */}
+                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-20 blur-3xl rounded-3xl will-change-transform" style={{transform: 'translateZ(0)'}} />
+
                   {/* Main card */}
                   <div className="relative bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-black/90 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden shadow-2xl p-4">
                     <div className="space-y-3">
@@ -131,8 +133,8 @@ export default function Home() {
 
                       {/* Features */}
                       <div className="space-y-2">
-                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-500/50 transition-all group">
-                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10">
+                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center flex-shrink-0">
                             <FontAwesomeIcon icon={faPalette} className="text-white text-base" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -141,8 +143,8 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 hover:border-yellow-500/50 transition-all group">
-                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10">
+                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center flex-shrink-0">
                             <FontAwesomeIcon icon={faBolt} className="text-white text-base" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -151,8 +153,8 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 hover:border-cyan-500/50 transition-all group">
-                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10">
+                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0">
                             <FontAwesomeIcon icon={faMobileScreen} className="text-white text-base" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -161,8 +163,8 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 hover:border-green-500/50 transition-all group">
-                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/10">
+                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center flex-shrink-0">
                             <FontAwesomeIcon icon={faLock} className="text-white text-base" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -245,7 +247,7 @@ export default function Home() {
                     <div className="group bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10 hover:bg-white/10 hover:border-green-500/50 transition-all hover:scale-105 cursor-default">
                       <div className="flex flex-col items-center gap-1">
                         <svg viewBox="0 0 24 24" fill="#339933" className="w-6 h-6 group-hover:fill-green-400 transition-colors">
-                          <path d="M12 1.85c-.27 0-.55.07-.78.2l-7.44 4.3c-.48.28-.78.8-.78 1.36v8.58c0 .56.3 1.08.78 1.36l1.95 1.12c.95.46 1.27.47 1.71.47 1.4 0 2.21-.85 2.21-2.33V8.44c0-.12-.1-.22-.22-.22H8.5c-.13 0-.23.1-.23.22v8.47c0 .66-.68 1.31-1.77.76L4.55 16.6c-.07-.04-.11-.1-.11-.17V7.85c0-.07.04-.13.11-.17l7.44-4.29c.06-.04.16-.04.22 0l7.44 4.29c.07.04.11.1.11.17v8.58c0 .07-.04.13-.11.17l-7.44 4.29c-.06.04-.16.04-.22 0L10.6 20.3c-.07-.03-.14-.04-.21-.01-.63.35-.76.4-1.35.6-.15.06-.36.14.07.3l2.57 1.53c.24.14.51.21.78.21s.54-.07.78-.21l7.44-4.29c.48-.28.78-.8.78-1.36V7.49c0-.56-.3-1.08-.78-1.36l-7.44-4.3c-.23-.13-.5-.2-.78-.2zm2.41 7.14c-2.03 0-2.44.93-2.44 1.7 0 .12.1.22.22.22h.89c.11 0 .2-.08.22-.19.15-.95.58-1.43 1.89-1.43.97 0 1.45.32 1.45 1.05 0 .47-.2.83-.91 1.07l-1.83.48c-.95.25-1.44.87-1.44 1.8 0 1.18.99 1.89 2.65 1.89 1.87 0 2.79-.65 2.9-2.05 0-.06-.02-.12-.06-.17-.04-.05-.09-.07-.15-.07h-.9c-.09 0-.18.08-.21.17-.24 1.05-.82 1.38-1.95 1.38-.98 0-1.44-.42-1.44-1.02 0-.46.18-.69 1.16-.97l2.01-.52c.95-.25 1.44-.87 1.44-1.78.01-1.36-1.13-2.17-3.1-2.17z"/>
+                          <path d="M12 1.85c-.27 0-.55.07-.78.2l-7.44 4.3c-.48.28-.78.8-.78 1.36v8.58c0 .56.3 1.08.78 1.36l1.95 1.12c.95.46 1.27.47 1.71.47 1.4 0 2.21-.85 2.21-2.33V8.44c0-.12-.1-.22-.22-.22H8.5c-.13 0-.23.1-.23.22v8.47c0 .66-.68 1.31-1.77.76L4.55 16.6c-.07-.04-.11-.1-.11-.17V7.85c0-.07.04-.13.11-.17l7.44-4.29c.06-.04.16-.04.22 0l7.44 4.29c.07.04.11.1.11.17v8.58c0 .07-.04.13-.11.17l-7.44 4.29c-.06.04-.16.04-.22 0L10.6 20.3c-.07-.03-.14-.04-.21-.01-.63.35-.76.4-1.35.6-.15.06-.36.14.07.3l2.57 1.53c.24.14.51.21.78.21s.54-.07.78-.21l7.44-4.29c.48-.28.78-.8.78-1.36V7.49c0-.56-.3-1.08-.78-1.36l-7.44-4.3c-.23-.13-.5-.2-.78-.2zm2.41 7.14c-2.03 0-2.44.93-2.44 1.7 0 .12.1.22.22.22h.89c.11 0 .2-.08.22-.19.15-.95.58-1.43 1.89-1.43.97 0 1.45.32 1.45 1.05 0 .47-.2.83-.91 1.07l-1.83.48c-.95.25-1.44.87-1.44 1.8 0 1.18.99 1.89 2.65 1.89 1.87 0 2.79-.65 2.9-2.05 0-.06-.02-.12-.06-.17-.04-.05-.09-.07-.15-.07h-.9c-.09 0-.18.08-.21.17-.24 1.05-.82 1.38-1.95 1.38-.98 0-1.44-.42-1.44-1.02 0-.46.18-.69 1.16-.97l2.01-.52c.95-.25 1.44-.87 1.44-1.78.01-1.36-1.13-2.17-3.10-2.17z"/>
                         </svg>
                         <span className="text-[10px] text-gray-300 font-medium group-hover:text-green-400 transition-colors">Node.js</span>
                       </div>
