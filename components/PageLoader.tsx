@@ -57,14 +57,14 @@ export default function PageLoader() {
   return (
     <>
       {/* Overlay to block content */}
-      <div 
-        className="fixed inset-0 z-[9998] bg-black"
+      <div
+        className="fixed inset-0 z-[99998] bg-black"
         style={{ display: shouldShow ? 'block' : 'none' }}
       />
-      
+
       {/* Loader */}
       <div
-        className="fixed inset-0 z-[9999] bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center"
+        className="fixed inset-0 z-[99999] bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center"
         style={{ display: shouldShow ? 'flex' : 'none' }}
       >
         <div className="flex flex-col items-center gap-6">

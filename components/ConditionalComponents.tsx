@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import WhatsAppButton from './WhatsAppButton';
 import ScrollToTopButton from './ScrollToTopButton';
 import CookieConsent from './CookieConsent';
+import PriceEstimatorChat from './PriceEstimatorChat';
 
 export default function ConditionalComponents() {
   const [mounted, setMounted] = useState(false);
@@ -28,8 +28,8 @@ export default function ConditionalComponents() {
   return (
     <>
       <div id="floating-buttons">
-        <WhatsAppButton />
         <ScrollToTopButton />
+        <PriceEstimatorChat />
       </div>
       <CookieConsent />
     </>
