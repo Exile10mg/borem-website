@@ -129,8 +129,28 @@ export default function PriceEstimatorChat() {
   // Generate initial questions on component mount
   useEffect(() => {
     const loadInitialQuestions = async () => {
-      const questions = await generateQuestions([]);
-      setRandomQuestions(questions);
+      try {
+        const questions = await generateQuestions([]);
+        console.log('Generated questions:', questions);
+        if (questions && questions.length > 0) {
+          setRandomQuestions(questions);
+        } else {
+          // Fallback to default questions
+          setRandomQuestions([
+            "Ile kosztuje strona internetowa?",
+            "Jak długo trwa realizacja projektu?",
+            "Czy oferujecie wsparcie techniczne?"
+          ]);
+        }
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        // Fallback to default questions
+        setRandomQuestions([
+          "Ile kosztuje strona internetowa?",
+          "Jak długo trwa realizacja projektu?",
+          "Czy oferujecie wsparcie techniczne?"
+        ]);
+      }
     };
     
     loadInitialQuestions();
