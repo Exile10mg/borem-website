@@ -12,7 +12,7 @@ export default function ConditionalComponents() {
   useEffect(() => {
     setMounted(true);
     const path = window.location.pathname;
-    setIsReklamaPage(path === '/reklama-10' || path === '/reklama-11' || path === '/reklama-12' || path === '/reklama-13');
+    setIsReklamaPage(path === '/reklama-10' || path === '/reklama-11' || path === '/reklama-12' || path === '/reklama-13' || path === '/analiza');
   }, []);
 
   // Don't render anything until mounted on client to avoid hydration mismatch
@@ -20,7 +20,7 @@ export default function ConditionalComponents() {
     return null;
   }
 
-  // Don't show on /reklama-10, /reklama-11, /reklama-12 and /reklama-13
+  // Don't show on /reklama-10, /reklama-11, /reklama-12, /reklama-13 and /analiza
   if (isReklamaPage) {
     return null;
   }

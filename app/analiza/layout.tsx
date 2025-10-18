@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     description: 'Profesjonalny raport SEO w 10 sekund. Powered by AI.',
   },
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
   },
 };
 
