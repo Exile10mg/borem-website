@@ -2,11 +2,12 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faArrowUp, faUser, faTrash, faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faArrowUp, faUser, faTrash, faMicrophone, faStop, faVolumeHigh, faVolumeXmark, faThumbsUp, faThumbsDown, faFaceSmile, faFaceMeh, faFaceFrown, faQuestionCircle, faRefresh } from '@fortawesome/free-solid-svg-icons';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  rating?: 'positive' | 'neutral' | 'negative';
 }
 
 interface ChatStorage {
@@ -26,12 +27,108 @@ export default function PriceEstimatorChat() {
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const [microphoneError, setMicrophoneError] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [randomQuestions, setRandomQuestions] = useState<string[]>([]);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [expandedRating, setExpandedRating] = useState<number | null>(null);
+  const [showQuestionHelper, setShowQuestionHelper] = useState(false);
+  const [helperQuestions, setHelperQuestions] = useState<string[]>([]);
+  const [streamingQuestions, setStreamingQuestions] = useState<{ [key: number]: string }>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastMessageCountRef = useRef<number>(0);
+
+  // Pool of 50 frequently asked questions
+  const questionPool = [
+    "Ile kosztuje strona internetowa?",
+    "Wycena sklepu online?",
+    "Cennik aplikacji mobilnej?",
+    "Jak długo trwa realizacja projektu?",
+    "Czy oferujecie hosting i domenę?",
+    "Ile kosztuje pozycjonowanie SEO?",
+    "Czy robicie sklepy na WooCommerce?",
+    "Jakie technologie używacie?",
+    "Czy są dodatkowe koszty?",
+    "Czy macie portfolio projektów?",
+    "Ile kosztuje responsywna strona?",
+    "Wycena landing page?",
+    "Czy robicie aplikacje na iOS i Android?",
+    "Ile kosztuje redesign strony?",
+    "Czy oferujecie wsparcie techniczne?",
+    "Ile trwa stworzenie sklepu internetowego?",
+    "Czy robicie integracje z systemami?",
+    "Ile kosztuje blog firmowy?",
+    "Czy oferujecie content marketing?",
+    "Ile kosztuje strona wizytówka?",
+    "Czy robicie strony w WordPress?",
+    "Ile kosztuje kampania Google Ads?",
+    "Czy oferujecie copywriting?",
+    "Ile kosztuje audyt SEO?",
+    "Czy robicie animacje i grafiki?",
+    "Ile trwa pozycjonowanie strony?",
+    "Czy oferujecie szkolenia?",
+    "Ile kosztuje portal internetowy?",
+    "Czy robicie strony na Shopify?",
+    "Ile kosztuje system rezerwacji?",
+    "Czy oferujecie maintenance?",
+    "Ile kosztuje integracja z Facebook?",
+    "Czy robicie chatboty?",
+    "Ile kosztuje panel administracyjny?",
+    "Czy oferujecie migrację strony?",
+    "Ile trwa uruchomienie kampanii?",
+    "Czy robicie newslettery?",
+    "Ile kosztuje strona wielojęzyczna?",
+    "Czy oferujecie analitykę?",
+    "Ile kosztuje optymalizacja?",
+    "Czy robicie e-learning?",
+    "Ile kosztuje system CRM?",
+    "Czy oferujecie branding?",
+    "Ile trwa projekt UX/UI?",
+    "Czy robicie PWA?",
+    "Ile kosztuje API?",
+    "Czy oferujecie testy A/B?",
+    "Ile kosztuje marketplace?",
+    "Czy robicie integracje płatności?",
+    "Jakie są formy płatności?",
+  ];
+
+  // Select 3 random questions on component mount
+  useEffect(() => {
+    const getRandomQuestions = () => {
+      const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, 3);
+    };
+    setRandomQuestions(getRandomQuestions());
+  }, []);
+
+  // Animate questions when they become visible (after hasInitialized)
+  useEffect(() => {
+    if (hasInitialized && showSuggestions && randomQuestions.length > 0) {
+      setStreamingQuestions({});
+      
+      // Animate all questions simultaneously
+      const maxLength = Math.max(...randomQuestions.map(q => q.length));
+      for (let charIndex = 0; charIndex <= maxLength; charIndex++) {
+        setTimeout(() => {
+          setStreamingQuestions(prev => {
+            const updated = { ...prev };
+            randomQuestions.forEach((question, qIndex) => {
+              if (charIndex <= question.length) {
+                updated[qIndex] = question.substring(0, charIndex);
+              }
+            });
+            return updated;
+          });
+        }, charIndex * 30);
+      }
+    }
+  }, [hasInitialized, showSuggestions, randomQuestions]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -51,6 +148,9 @@ export default function PriceEstimatorChat() {
           if (now - data.timestamp < twentyFourHours && data.messages.length > 0) {
             setMessages(data.messages);
             setHasInitialized(true);
+            // Hide suggestions if user has already sent messages
+            const hasUserMessages = data.messages.some(m => m.role === 'user');
+            setShowSuggestions(!hasUserMessages);
           } else {
             // Clear expired data
             localStorage.removeItem('borem-chat');
@@ -63,6 +163,16 @@ export default function PriceEstimatorChat() {
     };
 
     loadChat();
+
+    // Load voice settings
+    try {
+      const voiceSettings = localStorage.getItem('borem-voice-enabled');
+      if (voiceSettings !== null) {
+        setVoiceEnabled(JSON.parse(voiceSettings));
+      }
+    } catch (error) {
+      console.error('Error loading voice settings:', error);
+    }
   }, []);
 
   // Save chat to localStorage whenever messages change
@@ -81,32 +191,203 @@ export default function PriceEstimatorChat() {
   }, [messages]);
 
   useEffect(() => {
+    // Scroll whenever messages change (including during streaming)
     scrollToBottom();
   }, [messages]);
 
-  // Initialize chat only once - show typing animation and first message
+  // Initialize speech synthesis voices
   useEffect(() => {
+    if (window.speechSynthesis) {
+      // Force load voices
+      window.speechSynthesis.getVoices();
+
+      // Some browsers need this event
+      window.speechSynthesis.onvoiceschanged = () => {
+        const voices = window.speechSynthesis.getVoices();
+        console.log('Available voices:', voices.length);
+      };
+    }
+  }, []);
+
+  // Close expanded rating when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (expandedRating !== null) {
+        const target = e.target as HTMLElement;
+        if (!target.closest('[data-rating-container]')) {
+          setExpandedRating(null);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [expandedRating]);
+
+
+
+  // Initialize chat only once - show typing animation and stream first message
+  useEffect(() => {
+    let typingTimer: NodeJS.Timeout;
+    let streamInterval: NodeJS.Timeout;
+
     if (isOpen && !hasInitialized) {
       setShowInitialTyping(true);
 
-      // Show typing animation for 2 seconds
-      const typingTimer = setTimeout(() => {
+      // Show typing animation for 1.5 seconds
+      typingTimer = setTimeout(() => {
         setShowInitialTyping(false);
-        setMessages([
-          {
-            role: 'assistant',
-            content: 'Cześć! 👋 Pomogę Ci oszacować koszt projektu. Jaki typ strony Cię interesuje?',
-          },
-        ]);
-        setHasInitialized(true);
-      }, 2000);
 
-      return () => clearTimeout(typingTimer);
+        // Start streaming the initial message
+        const fullMessage = 'Cześć! 👋 Pomogę Ci wycenić projekt. Wybierz pytanie lub napisz własne:';
+
+        // Add empty message
+        setMessages([{ role: 'assistant', content: '' }]);
+        setIsStreaming(true);
+
+        let currentIndex = 0;
+        streamInterval = setInterval(() => {
+          currentIndex++;
+
+          if (currentIndex <= fullMessage.length) {
+            const currentText = fullMessage.substring(0, currentIndex);
+            setMessages([{ role: 'assistant', content: currentText }]);
+          } else {
+            clearInterval(streamInterval);
+            setIsStreaming(false);
+            setHasInitialized(true);
+            // Speak the initial message if voice is enabled
+            speakText(fullMessage);
+          }
+        }, 30); // 30ms per character for smooth streaming effect
+      }, 1500);
     }
+
+    return () => {
+      if (typingTimer) clearTimeout(typingTimer);
+      if (streamInterval) clearInterval(streamInterval);
+    };
   }, [isOpen, hasInitialized]);
+
+  const handleSuggestionClick = async (question: string) => {
+    setShowSuggestions(false);
+
+    // Add user message immediately
+    const userMessage: Message = { role: 'user', content: question };
+    setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      // Create empty assistant message and get its index
+      let assistantMessageIndex = -1;
+      setMessages(prev => {
+        assistantMessageIndex = prev.length; // Get index before adding
+        return [...prev, { role: 'assistant', content: '' }];
+      });
+      setIsLoading(false);
+      setIsStreaming(true);
+
+      let accumulatedContent = '';
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          setIsStreaming(false);
+          // Speak the completed message if voice is enabled
+          if (accumulatedContent) {
+            speakText(accumulatedContent);
+          }
+          break;
+        }
+
+        // Decode the chunk
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        // Split by newlines and process complete lines
+        const lines = buffer.split('\n');
+
+        // Keep the last incomplete line in the buffer
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+
+          if (!trimmedLine) continue;
+
+          const message = trimmedLine.replace(/^data: /, '');
+
+          if (message === '[DONE]') {
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(message);
+            const content = parsed.content;
+
+            if (content) {
+              accumulatedContent += content;
+
+              // Update the last message with accumulated content
+              setMessages(prev => {
+                const newMessages = [...prev];
+                if (assistantMessageIndex >= 0 && assistantMessageIndex < newMessages.length) {
+                  newMessages[assistantMessageIndex] = {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  };
+                }
+                return newMessages;
+              });
+            }
+          } catch (e) {
+            // Skip invalid JSON
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setMessages(prev => [
+        ...prev.filter((_, i) => i !== prev.length - 1 || prev[prev.length - 1].content !== ''),
+        {
+          role: 'assistant',
+          content: 'Przepraszam, wystąpił błąd. Skontaktuj się z nami bezpośrednio: 787 041 328',
+        },
+      ]);
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+  };
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
+
+    // Hide suggestions after first user message
+    setShowSuggestions(false);
 
     // Sanitize input - remove potential XSS
     const sanitizedInput = input.trim().slice(0, 500); // Max 500 characters
@@ -156,6 +437,10 @@ export default function PriceEstimatorChat() {
 
         if (done) {
           setIsStreaming(false);
+          // Speak the completed message if voice is enabled
+          if (accumulatedContent) {
+            speakText(accumulatedContent);
+          }
           break;
         }
 
@@ -229,7 +514,323 @@ export default function PriceEstimatorChat() {
     setMessages([]);
     setHasInitialized(false);
     setMicrophoneError(false);
+    setShowSuggestions(true);
+    setShowQuestionHelper(false);
+    // Stop any ongoing speech
+    stopSpeaking();
+    // Generate new random questions
+    const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+    setRandomQuestions(shuffled.slice(0, 3));
+    setHelperQuestions([]);
     localStorage.removeItem('borem-chat');
+  };
+
+  const toggleVoice = () => {
+    const newState = !voiceEnabled;
+    setVoiceEnabled(newState);
+
+    // Save to localStorage
+    try {
+      localStorage.setItem('borem-voice-enabled', JSON.stringify(newState));
+    } catch (error) {
+      console.error('Error saving voice settings:', error);
+    }
+
+    // Stop speaking if disabling voice
+    if (!newState) {
+      stopSpeaking();
+    }
+  };
+
+  const speakText = async (text: string) => {
+    if (!voiceEnabled) return;
+
+    try {
+      // Stop any ongoing speech
+      stopSpeaking();
+
+      setIsSpeaking(true);
+
+      // Try OpenAI TTS first
+      try {
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text }),
+        });
+
+        console.log('TTS API response:', response.status, response.headers.get('content-type'));
+
+        if (response.ok) {
+          // Create audio element and play
+          const audioBlob = await response.blob();
+
+          // Check if blob is valid
+          if (audioBlob.size === 0) {
+            throw new Error('Empty audio blob received');
+          }
+
+          // Create blob with explicit type
+          const typedBlob = new Blob([audioBlob], { type: 'audio/mpeg' });
+          const audioUrl = URL.createObjectURL(typedBlob);
+
+          const audio = new Audio();
+          audio.src = audioUrl;
+          audioRef.current = audio;
+
+          audio.onended = () => {
+            setIsSpeaking(false);
+            URL.revokeObjectURL(audioUrl);
+          };
+
+          audio.onerror = (e) => {
+            console.error('Audio playback error:', e);
+            setIsSpeaking(false);
+            URL.revokeObjectURL(audioUrl);
+          };
+
+          // Play with user gesture handling
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.error('Play error:', err);
+              setIsSpeaking(false);
+              URL.revokeObjectURL(audioUrl);
+            });
+          }
+          return; // Success, exit
+        }
+      } catch (apiError) {
+        console.log('OpenAI TTS not available, using browser speech:', apiError);
+      }
+
+      // Fallback to browser's Web Speech API
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Try to find Polish voice, fallback to default
+        const voices = window.speechSynthesis.getVoices();
+        const polishVoice = voices.find(v => v.lang.includes('pl'));
+
+        if (polishVoice) {
+          utterance.voice = polishVoice;
+          utterance.lang = 'pl-PL';
+        } else {
+          console.log('No Polish voice found, using default');
+          utterance.lang = 'en-US'; // Fallback to English if no Polish
+        }
+
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = (e) => {
+          console.error('Speech synthesis error:', e);
+          setIsSpeaking(false);
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setIsSpeaking(false);
+      }
+
+    } catch (error) {
+      console.error('Error playing speech:', error);
+      setIsSpeaking(false);
+    }
+  };
+
+  const stopSpeaking = () => {
+    // Stop HTML5 Audio (OpenAI TTS)
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+
+    // Stop Web Speech API
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+
+    setIsSpeaking(false);
+  };
+
+  const toggleRatingExpand = (messageIndex: number) => {
+    setExpandedRating(prev => prev === messageIndex ? null : messageIndex);
+  };
+
+  const toggleQuestionHelper = () => {
+    if (!showQuestionHelper) {
+      // Generate 3 random questions when opening
+      refreshHelperQuestions();
+      // Scroll to bottom to show questions
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+    setShowQuestionHelper(prev => !prev);
+  };
+
+  const refreshHelperQuestions = () => {
+    const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+    const newQuestions = shuffled.slice(0, 3);
+    setHelperQuestions(newQuestions);
+    setStreamingQuestions({});
+    
+    // Animate helper questions with streaming (use offset 100 for helper questions)
+    const maxLength = Math.max(...newQuestions.map(q => q.length));
+    for (let charIndex = 0; charIndex <= maxLength; charIndex++) {
+      setTimeout(() => {
+        setStreamingQuestions(prev => {
+          const updated = { ...prev };
+          newQuestions.forEach((question, qIndex) => {
+            if (charIndex <= question.length) {
+              updated[100 + qIndex] = question.substring(0, charIndex);
+            }
+          });
+          return updated;
+        });
+      }, charIndex * 30);
+    }
+  };
+
+  const selectHelperQuestion = async (question: string) => {
+    setShowQuestionHelper(false);
+    setShowSuggestions(false);
+
+    // Add user message immediately
+    const userMessage: Message = { role: 'user', content: question };
+    setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      // Create empty assistant message and get its index
+      let assistantMessageIndex = -1;
+      setMessages(prev => {
+        assistantMessageIndex = prev.length;
+        return [...prev, { role: 'assistant', content: '' }];
+      });
+      setIsLoading(false);
+      setIsStreaming(true);
+
+      let accumulatedContent = '';
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          setIsStreaming(false);
+          // Speak the completed message if voice is enabled
+          if (accumulatedContent) {
+            speakText(accumulatedContent);
+          }
+          break;
+        }
+
+        // Decode the chunk
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        // Split by newlines and process complete lines
+        const lines = buffer.split('\n');
+
+        // Keep the last incomplete line in the buffer
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+
+          if (!trimmedLine) continue;
+
+          const message = trimmedLine.replace(/^data: /, '');
+
+          if (message === '[DONE]') {
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(message);
+            const content = parsed.content;
+
+            if (content) {
+              accumulatedContent += content;
+
+              // Update the last message with accumulated content
+              setMessages(prev => {
+                const newMessages = [...prev];
+                if (assistantMessageIndex >= 0 && assistantMessageIndex < newMessages.length) {
+                  newMessages[assistantMessageIndex] = {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  };
+                }
+                return newMessages;
+              });
+            }
+          } catch (e) {
+            // Skip invalid JSON
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setMessages(prev => [
+        ...prev.filter((_, i) => i !== prev.length - 1 || prev[prev.length - 1].content !== ''),
+        {
+          role: 'assistant',
+          content: 'Przepraszam, wystąpił błąd. Skontaktuj się z nami bezpośrednio: 787 041 328',
+        },
+      ]);
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+  };
+
+  const rateMessage = (messageIndex: number, rating: 'positive' | 'neutral' | 'negative') => {
+    setMessages(prev => {
+      const newMessages = [...prev];
+      if (newMessages[messageIndex] && newMessages[messageIndex].role === 'assistant') {
+        // Toggle rating - if same rating clicked, remove it
+        if (newMessages[messageIndex].rating === rating) {
+          newMessages[messageIndex] = { ...newMessages[messageIndex], rating: undefined };
+        } else {
+          newMessages[messageIndex] = { ...newMessages[messageIndex], rating };
+        }
+      }
+      return newMessages;
+    });
+    // Close expanded view after rating
+    setExpandedRating(null);
   };
 
   const startRecording = async () => {
@@ -470,6 +1071,10 @@ export default function PriceEstimatorChat() {
 
         if (done) {
           setIsStreaming(false);
+          // Speak the completed message if voice is enabled
+          if (accumulatedContent) {
+            speakText(accumulatedContent);
+          }
           break;
         }
 
@@ -553,7 +1158,7 @@ export default function PriceEstimatorChat() {
               </div>
 
               <div>
-                <div className="text-white font-bold text-sm">Wirtualna Wycena AI</div>
+                <div className="text-white font-bold text-sm">Wirtualny Doradca</div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
                   <div className="text-gray-400 text-xs">Online • Odpowiem w 5s</div>
@@ -561,6 +1166,24 @@ export default function PriceEstimatorChat() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {/* Voice toggle button */}
+              <button
+                onClick={isSpeaking ? stopSpeaking : toggleVoice}
+                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  isSpeaking
+                    ? 'bg-red-600 text-white hover:bg-red-700'
+                    : voiceEnabled
+                      ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30'
+                      : 'text-gray-400 hover:bg-gray-800'
+                } hover:scale-110`}
+                aria-label={isSpeaking ? "Zatrzymaj czytanie" : (voiceEnabled ? "Wyłącz głos" : "Włącz głos")}
+                title={isSpeaking ? "Zatrzymaj czytanie" : (voiceEnabled ? "Wyłącz głos" : "Włącz głos")}
+              >
+                <FontAwesomeIcon
+                  icon={isSpeaking ? faStop : (voiceEnabled ? faVolumeHigh : faVolumeXmark)}
+                  className="w-3.5 h-3.5"
+                />
+              </button>
               <button
                 onClick={clearChat}
                 className="w-7 h-7 hover:bg-red-900/50 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-red-400 hover:scale-110"
@@ -586,10 +1209,10 @@ export default function PriceEstimatorChat() {
                 key={index}
                 className={`px-4 py-3.5 animate-in slide-in-from-bottom-2 fade-in duration-300 ${
                   message.role === 'assistant' ? 'bg-gray-800' : 'bg-black'
-                }`}
+                } group/message`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="max-w-full flex gap-3">
+                <div className="max-w-full flex gap-3 relative">
                   {/* Avatar with animation */}
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 relative transition-transform hover:scale-110 ${
                     message.role === 'assistant'
@@ -607,18 +1230,175 @@ export default function PriceEstimatorChat() {
                   </div>
 
                   {/* Message content with animation */}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm text-gray-200 whitespace-pre-wrap break-words leading-relaxed">
+                  <div className="flex-1 min-w-0 relative">
+                    <div className="text-sm text-gray-200 whitespace-pre-wrap break-words leading-relaxed pr-8">
                       {message.content}
                       {/* Show blinking cursor if this is the last message and streaming */}
                       {isStreaming && index === messages.length - 1 && message.role === 'assistant' && (
                         <span className="inline-block w-1.5 h-4 bg-blue-500 ml-0.5 animate-pulse"></span>
                       )}
                     </div>
+
+                    {/* Messenger-style rating - bottom right corner */}
+                    {message.role === 'assistant' && message.content && !(isStreaming && index === messages.length - 1) && (
+                      <div
+                        data-rating-container
+                        className="absolute top-0 right-0 flex items-center gap-1"
+                      >
+                        {/* Expanded emoji buttons - slide in from right */}
+                        <div className={`overflow-hidden transition-all duration-300 ${
+                          expandedRating === index ? 'max-w-[120px] opacity-100' : 'max-w-0 opacity-0'
+                        }`}>
+                          <div className="flex items-center gap-1 bg-gray-700/60 backdrop-blur-sm rounded-full px-1.5 py-0.5">
+                          <button
+                            onClick={() => rateMessage(index, 'positive')}
+                            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                              message.rating === 'positive' ? 'bg-green-600/30' : 'hover:bg-gray-600/50'
+                            }`}
+                            title="Świetna odpowiedź"
+                          >
+                            <span className="text-xs">😊</span>
+                          </button>
+                          <button
+                            onClick={() => rateMessage(index, 'neutral')}
+                            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                              message.rating === 'neutral' ? 'bg-yellow-600/30' : 'hover:bg-gray-600/50'
+                            }`}
+                            title="Okej"
+                          >
+                            <span className="text-xs">😐</span>
+                          </button>
+                          <button
+                            onClick={() => rateMessage(index, 'negative')}
+                            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                              message.rating === 'negative' ? 'bg-red-600/30' : 'hover:bg-gray-600/50'
+                            }`}
+                            title="Słaba odpowiedź"
+                          >
+                            <span className="text-xs">☹️</span>
+                          </button>
+                          </div>
+                        </div>
+
+                        {/* Toggle button - always visible */}
+                        <button
+                          onClick={() => toggleRatingExpand(index)}
+                          className="w-5 h-5 bg-gray-700/60 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 hover:bg-gray-600/80 hover:scale-110"
+                          aria-label={expandedRating === index ? "Zwiń" : "Oceń wiadomość"}
+                        >
+                          {message.rating ? (
+                            <span className="text-xs">
+                              {message.rating === 'positive' && '😊'}
+                              {message.rating === 'neutral' && '😐'}
+                              {message.rating === 'negative' && '☹️'}
+                            </span>
+                          ) : (
+                            <span className="text-[10px]">➕</span>
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
+
+            {/* Suggested Questions - shown after initial message, before user's first interaction */}
+            {showSuggestions && hasInitialized && messages.length === 1 && !isLoading && !showInitialTyping && randomQuestions.length > 0 && (
+              <div className="px-4 py-2 bg-gray-900 animate-in slide-in-from-bottom-2 fade-in duration-300">
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <div className="text-xs text-gray-400 font-semibold">Przykładowe pytania:</div>
+                    <button
+                      onClick={() => {
+                        const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+                        const newQuestions = shuffled.slice(0, 3);
+                        setRandomQuestions(newQuestions);
+                        setStreamingQuestions({});
+                        
+                        // Animate all questions simultaneously  
+                        const maxLength = Math.max(...newQuestions.map(q => q.length));
+                        for (let charIndex = 0; charIndex <= maxLength; charIndex++) {
+                          setTimeout(() => {
+                            setStreamingQuestions(prev => {
+                              const updated = { ...prev };
+                              newQuestions.forEach((question, qIndex) => {
+                                if (charIndex <= question.length) {
+                                  updated[qIndex] = question.substring(0, charIndex);
+                                }
+                              });
+                              return updated;
+                            });
+                          }, charIndex * 30);
+                        }
+                      }}
+                      className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      title="Odśwież pytania"
+                    >
+                      <FontAwesomeIcon icon={faRefresh} className="w-3 h-3" />
+                    </button>
+                  </div>
+                  {randomQuestions.map((question: string, index: number) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestionClick(question)}
+                      className="group relative text-left bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl px-3 py-2 text-xs transition-all duration-200 border border-gray-700 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10"
+                    >
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur transition-opacity opacity-0 group-hover:opacity-10"></div>
+                      <div className="relative flex items-center justify-between gap-2">
+                        <span>
+                          {streamingQuestions[index] !== undefined ? streamingQuestions[index] : question}
+                          {streamingQuestions[index] !== undefined && streamingQuestions[index].length < question.length && (
+                            <span className="inline-block w-1.5 h-3 bg-blue-500 ml-0.5 animate-pulse"></span>
+                          )}
+                        </span>
+                        <svg className="w-3 h-3 text-gray-500 group-hover:text-blue-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Question Helper - fullscreen in chat area */}
+            {showQuestionHelper && helperQuestions.length > 0 && (
+              <div className="px-4 py-3.5 bg-gray-900 animate-in slide-in-from-bottom-2 fade-in duration-300">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="text-xs text-gray-400 font-semibold">Przykładowe pytania:</div>
+                    <button
+                      onClick={refreshHelperQuestions}
+                      className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      title="Odśwież pytania"
+                    >
+                      <FontAwesomeIcon icon={faRefresh} className="w-3 h-3" />
+                    </button>
+                  </div>
+                  {helperQuestions.map((question, index) => (
+                    <button
+                      key={index}
+                      onClick={() => selectHelperQuestion(question)}
+                      className="group relative text-left bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl px-3 py-2 text-xs transition-all duration-200 border border-gray-700 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10"
+                    >
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur transition-opacity opacity-0 group-hover:opacity-10"></div>
+                      <div className="relative flex items-center justify-between gap-2">
+                        <span>
+                          {streamingQuestions[100 + index] !== undefined ? streamingQuestions[100 + index] : question}
+                          {streamingQuestions[100 + index] !== undefined && streamingQuestions[100 + index].length < question.length && (
+                            <span className="inline-block w-1.5 h-3 bg-blue-500 ml-0.5 animate-pulse"></span>
+                          )}
+                        </span>
+                        <svg className="w-3 h-3 text-gray-500 group-hover:text-blue-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {(isLoading || showInitialTyping) && (
               <div className="px-4 py-3.5 bg-gray-800 animate-in fade-in duration-300">
@@ -693,9 +1473,24 @@ export default function PriceEstimatorChat() {
                 onKeyPress={handleKeyPress}
                 placeholder={isLoading || showInitialTyping ? "Bot pisze..." : isRecording ? "Nagrywanie..." : "Napisz lub nagraj wiadomość..."}
                 disabled={isLoading || showInitialTyping || isRecording}
-                className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 pr-20 text-base border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500 transition-all duration-200"
+                className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 pr-28 text-base border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500 transition-all duration-200"
                 style={{ fontSize: '16px' }}
               />
+
+              {/* Question helper button - disabled on initial message, enabled after first user message */}
+              <button
+                onClick={toggleQuestionHelper}
+                disabled={isLoading || showInitialTyping || isRecording || !hasInitialized || messages.length <= 1}
+                className={`absolute right-20 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  showQuestionHelper
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-400 hover:bg-blue-600/20 hover:text-blue-400 hover:scale-110'
+                } ${(isLoading || showInitialTyping || isRecording || !hasInitialized || messages.length <= 1) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                aria-label="Przykładowe pytania"
+                title={!hasInitialized || messages.length <= 1 ? "Dostępne po pierwszym pytaniu" : "Przykładowe pytania"}
+              >
+                <FontAwesomeIcon icon={faQuestionCircle} className="w-4 h-4" />
+              </button>
 
               {/* Microphone button */}
               <button
@@ -760,8 +1555,8 @@ export default function PriceEstimatorChat() {
 
             {/* Text */}
             <div className="relative z-10">
-              <div className="text-xs md:text-sm font-bold text-white">Wirtualna Wycena AI</div>
-              <div className="text-[10px] md:text-xs text-gray-400">Bezpłatna konsultacja</div>
+              <div className="text-xs md:text-sm font-bold text-white">Wirtualny Doradca</div>
+              <div className="text-[10px] md:text-xs text-white/90">Bezpłatna konsultacja</div>
             </div>
           </button>
         </div>

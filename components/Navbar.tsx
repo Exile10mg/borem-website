@@ -266,10 +266,11 @@ const Navbar = memo(function Navbar() {
             <div className="hidden lg:flex items-center gap-3 relative z-[100]">
               <Link
                 href="/kontakt?konsultacja=true"
-                className="relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-xl hover:shadow-blue-500/50 hover:scale-105 transition-all flex items-center gap-2"
+                className="group relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 hover:shadow-2xl hover:shadow-blue-500/50 hover:scale-105 transition-all flex items-center gap-2"
               >
-                <span>Bezpłatna konsultacja</span>
-                <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full blur opacity-0 group-hover:opacity-75 transition-opacity"></div>
+                <span className="relative">Bezpłatna konsultacja</span>
+                <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4 relative" />
               </Link>
             </div>
 
