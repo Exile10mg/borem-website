@@ -128,12 +128,12 @@ export default function CookieConsent() {
     <>
       {/* Backdrop - pokazuje się zawsze gdy banner jest otwarty */}
       {showBanner && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9997] transition-opacity duration-300" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300" />
       )}
 
       {/* Cookie Banner */}
       {showBanner && (
-        <div className="fixed bottom-0 left-0 right-0 z-[9998] mx-auto max-w-7xl p-2 sm:p-4 md:p-6 transition-all duration-500">
+        <div className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-7xl p-2 sm:p-4 md:p-6 transition-all duration-500">
         <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
           {/* Background gradient effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-pink-500/10" />
