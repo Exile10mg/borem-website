@@ -542,37 +542,69 @@ export default function PriceEstimatorChat() {
 
     try {
       console.log('[iOS Audio] Attempting to unlock audio...');
-      
-      // For iOS - we need to play actual audio, not just create audio element
-      const silentAudio = new Audio();
-      silentAudio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T/fMZKAAAAAAD/+xDEAAP8ABEBAAAAgAAA//tQxAMABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE//sQxAkABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE';
-      silentAudio.volume = 0.01; // Very low volume
-      
-      const playPromise = silentAudio.play();
-      if (playPromise !== undefined) {
-        await playPromise
-          .then(() => {
-            console.log('[iOS Audio] Silent audio played successfully');
-            silentAudio.pause();
-            silentAudio.currentTime = 0;
+
+      // Detect iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+      if (isIOS) {
+        // For iOS: Use Web Speech API initialization (works better than audio element)
+        if (window.speechSynthesis) {
+          console.log('[iOS Audio] Initializing Web Speech API...');
+
+          // Prime the speech synthesis by speaking and immediately cancelling
+          const utterance = new SpeechSynthesisUtterance(' ');
+          utterance.volume = 0.01;
+          utterance.rate = 10; // Very fast so it's instant
+
+          utterance.onstart = () => {
+            console.log('[iOS Audio] Web Speech API initialized successfully');
+            // Cancel immediately after it starts
+            window.speechSynthesis.cancel();
             setAudioUnlocked(true);
-          })
-          .catch((error) => {
-            console.log('[iOS Audio] Silent audio failed:', error);
-            // Fallback - try speech synthesis immediately
-            if (window.speechSynthesis) {
-              console.log('[iOS Audio] Trying Web Speech API...');
-              const utterance = new SpeechSynthesisUtterance(' ');
-              utterance.volume = 0.01;
-              window.speechSynthesis.speak(utterance);
-              window.speechSynthesis.cancel();
+          };
+
+          utterance.onerror = () => {
+            console.log('[iOS Audio] Web Speech API initialization failed, but marking as unlocked');
+            setAudioUnlocked(true);
+          };
+
+          // Also set timeout in case onstart doesn't fire
+          setTimeout(() => {
+            if (!audioUnlocked) {
+              console.log('[iOS Audio] Timeout - marking as unlocked anyway');
               setAudioUnlocked(true);
-              console.log('[iOS Audio] Web Speech API unlocked');
             }
-          });
+          }, 100);
+
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.log('[iOS Audio] Web Speech API not available');
+          setAudioUnlocked(true);
+        }
+      } else {
+        // For non-iOS: Try silent audio playback
+        const silentAudio = new Audio();
+        silentAudio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T/fMZKAAAAAAD/+xDEAAP8ABEBAAAAgAAA//tQxAMABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE//sQxAkABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE';
+        silentAudio.volume = 0.01;
+
+        const playPromise = silentAudio.play();
+        if (playPromise !== undefined) {
+          await playPromise
+            .then(() => {
+              console.log('[Audio] Silent audio played successfully');
+              silentAudio.pause();
+              silentAudio.currentTime = 0;
+              setAudioUnlocked(true);
+            })
+            .catch((error) => {
+              console.log('[Audio] Silent audio failed:', error);
+              setAudioUnlocked(true);
+            });
+        }
       }
     } catch (error) {
-      console.log('[iOS Audio] Unlock failed:', error);
+      console.log('[Audio] Unlock failed:', error);
+      setAudioUnlocked(true);
     }
   };
 
@@ -607,97 +639,161 @@ export default function PriceEstimatorChat() {
 
       setIsSpeaking(true);
 
-      // Try OpenAI TTS first
-      try {
-        const response = await fetch('/api/tts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ text }),
-        });
+      // Detect iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      console.log('[TTS] Speaking on iOS:', isIOS);
 
-        console.log('TTS API response:', response.status, response.headers.get('content-type'));
+      // iOS: Use Web Speech API as primary (works better with autoplay restrictions)
+      // Other platforms: Try OpenAI TTS first, fallback to Web Speech
+      if (isIOS) {
+        console.log('[TTS] Using Web Speech API for iOS');
 
-        if (response.ok) {
-          // Create audio element and play
-          const audioBlob = await response.blob();
+        // Use browser's Web Speech API (works better on iOS)
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
 
-          // Check if blob is valid
-          if (audioBlob.size === 0) {
-            throw new Error('Empty audio blob received');
+          const utterance = new SpeechSynthesisUtterance(text);
+
+          // Try to find Polish voice, fallback to default
+          const voices = window.speechSynthesis.getVoices();
+          const polishVoice = voices.find(v => v.lang.includes('pl'));
+
+          if (polishVoice) {
+            utterance.voice = polishVoice;
+            utterance.lang = 'pl-PL';
+            console.log('[TTS] Using Polish voice:', polishVoice.name);
+          } else {
+            console.log('[TTS] No Polish voice found, using default');
+            utterance.lang = 'pl-PL';
           }
 
-          // Create blob with explicit type
-          const typedBlob = new Blob([audioBlob], { type: 'audio/mpeg' });
-          const audioUrl = URL.createObjectURL(typedBlob);
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          utterance.volume = 1.0;
 
-          const audio = new Audio();
-          audio.src = audioUrl;
-          audioRef.current = audio;
-
-          audio.onended = () => {
+          utterance.onstart = () => {
+            console.log('[TTS] Speech started');
+            setIsSpeaking(true);
+          };
+          utterance.onend = () => {
+            console.log('[TTS] Speech ended');
             setIsSpeaking(false);
-            URL.revokeObjectURL(audioUrl);
+          };
+          utterance.onerror = (e) => {
+            console.error('[TTS] Speech synthesis error:', e);
+            setIsSpeaking(false);
           };
 
-          audio.onerror = (e) => {
-            console.error('Audio playback error:', e);
-            setIsSpeaking(false);
-            URL.revokeObjectURL(audioUrl);
-          };
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.log('[TTS] Web Speech API not available');
+          setIsSpeaking(false);
+        }
+      } else {
+        // Non-iOS: Try OpenAI TTS first
+        console.log('[TTS] Trying OpenAI TTS for non-iOS');
 
-          // Play with user gesture handling
-          const playPromise = audio.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(err => {
-              console.error('Play error:', err);
+        try {
+          const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text }),
+          });
+
+          console.log('[TTS] OpenAI TTS API response:', response.status);
+
+          if (response.ok) {
+            // Create audio element and play
+            const audioBlob = await response.blob();
+
+            // Check if blob is valid
+            if (audioBlob.size === 0) {
+              throw new Error('Empty audio blob received');
+            }
+
+            // Create blob with explicit type
+            const typedBlob = new Blob([audioBlob], { type: 'audio/mpeg' });
+            const audioUrl = URL.createObjectURL(typedBlob);
+
+            const audio = new Audio();
+            audio.src = audioUrl;
+            audioRef.current = audio;
+
+            audio.onended = () => {
               setIsSpeaking(false);
               URL.revokeObjectURL(audioUrl);
-            });
+            };
+
+            audio.onerror = (e) => {
+              console.error('[TTS] Audio playback error:', e);
+              setIsSpeaking(false);
+              URL.revokeObjectURL(audioUrl);
+              // Fallback to Web Speech API
+              useBrowserSpeech(text);
+            };
+
+            // Play with user gesture handling
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(err => {
+                console.error('[TTS] Play error:', err);
+                setIsSpeaking(false);
+                URL.revokeObjectURL(audioUrl);
+                // Fallback to Web Speech API
+                useBrowserSpeech(text);
+              });
+            }
+            return; // Success, exit
+          } else {
+            // API failed, use browser speech
+            useBrowserSpeech(text);
           }
-          return; // Success, exit
+        } catch (apiError) {
+          console.log('[TTS] OpenAI TTS not available, using browser speech:', apiError);
+          useBrowserSpeech(text);
         }
-      } catch (apiError) {
-        console.log('OpenAI TTS not available, using browser speech:', apiError);
-      }
-
-      // Fallback to browser's Web Speech API
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(text);
-
-        // Try to find Polish voice, fallback to default
-        const voices = window.speechSynthesis.getVoices();
-        const polishVoice = voices.find(v => v.lang.includes('pl'));
-
-        if (polishVoice) {
-          utterance.voice = polishVoice;
-          utterance.lang = 'pl-PL';
-        } else {
-          console.log('No Polish voice found, using default');
-          utterance.lang = 'en-US'; // Fallback to English if no Polish
-        }
-
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onend = () => setIsSpeaking(false);
-        utterance.onerror = (e) => {
-          console.error('Speech synthesis error:', e);
-          setIsSpeaking(false);
-        };
-
-        window.speechSynthesis.speak(utterance);
-      } else {
-        setIsSpeaking(false);
       }
 
     } catch (error) {
-      console.error('Error playing speech:', error);
+      console.error('[TTS] Error playing speech:', error);
+      setIsSpeaking(false);
+    }
+  };
+
+  // Helper function for browser speech synthesis
+  const useBrowserSpeech = (text: string) => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Try to find Polish voice, fallback to default
+      const voices = window.speechSynthesis.getVoices();
+      const polishVoice = voices.find(v => v.lang.includes('pl'));
+
+      if (polishVoice) {
+        utterance.voice = polishVoice;
+        utterance.lang = 'pl-PL';
+      } else {
+        console.log('[TTS] No Polish voice found, using default');
+        utterance.lang = 'pl-PL';
+      }
+
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = (e) => {
+        console.error('[TTS] Speech synthesis error:', e);
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } else {
       setIsSpeaking(false);
     }
   };
