@@ -541,29 +541,38 @@ export default function PriceEstimatorChat() {
     if (audioUnlocked) return;
 
     try {
-      // Create a silent audio to unlock
+      console.log('[iOS Audio] Attempting to unlock audio...');
+      
+      // For iOS - we need to play actual audio, not just create audio element
       const silentAudio = new Audio();
       silentAudio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T/fMZKAAAAAAD/+xDEAAP8ABEBAAAAgAAA//tQxAMABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE//sQxAkABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE';
+      silentAudio.volume = 0.01; // Very low volume
       
       const playPromise = silentAudio.play();
       if (playPromise !== undefined) {
-        await playPromise.then(() => {
-          silentAudio.pause();
-          silentAudio.currentTime = 0;
-          setAudioUnlocked(true);
-          console.log('Audio unlocked for mobile');
-        }).catch(() => {
-          // Fallback - try speech synthesis
-          if (window.speechSynthesis) {
-            const utterance = new SpeechSynthesisUtterance('');
-            window.speechSynthesis.speak(utterance);
-            window.speechSynthesis.cancel();
+        await playPromise
+          .then(() => {
+            console.log('[iOS Audio] Silent audio played successfully');
+            silentAudio.pause();
+            silentAudio.currentTime = 0;
             setAudioUnlocked(true);
-          }
-        });
+          })
+          .catch((error) => {
+            console.log('[iOS Audio] Silent audio failed:', error);
+            // Fallback - try speech synthesis immediately
+            if (window.speechSynthesis) {
+              console.log('[iOS Audio] Trying Web Speech API...');
+              const utterance = new SpeechSynthesisUtterance(' ');
+              utterance.volume = 0.01;
+              window.speechSynthesis.speak(utterance);
+              window.speechSynthesis.cancel();
+              setAudioUnlocked(true);
+              console.log('[iOS Audio] Web Speech API unlocked');
+            }
+          });
       }
     } catch (error) {
-      console.log('Audio unlock failed, will retry on next interaction');
+      console.log('[iOS Audio] Unlock failed:', error);
     }
   };
 
