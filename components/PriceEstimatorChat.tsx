@@ -35,6 +35,7 @@ export default function PriceEstimatorChat() {
   const [showQuestionHelper, setShowQuestionHelper] = useState(false);
   const [helperQuestions, setHelperQuestions] = useState<string[]>([]);
   const [streamingQuestions, setStreamingQuestions] = useState<{ [key: number]: string }>({});
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -270,6 +271,11 @@ export default function PriceEstimatorChat() {
   }, [isOpen, hasInitialized]);
 
   const handleSuggestionClick = async (question: string) => {
+    // Unlock audio on first interaction (mobile fix)
+    if (!audioUnlocked && voiceEnabled) {
+      unlockAudio();
+    }
+    
     setShowSuggestions(false);
 
     // Add user message immediately
@@ -385,6 +391,11 @@ export default function PriceEstimatorChat() {
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
+
+    // Unlock audio on first interaction (mobile fix)
+    if (!audioUnlocked && voiceEnabled) {
+      unlockAudio();
+    }
 
     // Hide suggestions after first user message
     setShowSuggestions(false);
@@ -525,9 +536,45 @@ export default function PriceEstimatorChat() {
     localStorage.removeItem('borem-chat');
   };
 
+  // Unlock audio for mobile browsers (must be called on user interaction)
+  const unlockAudio = async () => {
+    if (audioUnlocked) return;
+
+    try {
+      // Create a silent audio to unlock
+      const silentAudio = new Audio();
+      silentAudio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T/fMZKAAAAAAD/+xDEAAP8ABEBAAAAgAAA//tQxAMABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE//sQxAkABAQGwFBAAAAgAAASiAAAAACEQghEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE';
+      
+      const playPromise = silentAudio.play();
+      if (playPromise !== undefined) {
+        await playPromise.then(() => {
+          silentAudio.pause();
+          silentAudio.currentTime = 0;
+          setAudioUnlocked(true);
+          console.log('Audio unlocked for mobile');
+        }).catch(() => {
+          // Fallback - try speech synthesis
+          if (window.speechSynthesis) {
+            const utterance = new SpeechSynthesisUtterance('');
+            window.speechSynthesis.speak(utterance);
+            window.speechSynthesis.cancel();
+            setAudioUnlocked(true);
+          }
+        });
+      }
+    } catch (error) {
+      console.log('Audio unlock failed, will retry on next interaction');
+    }
+  };
+
   const toggleVoice = () => {
     const newState = !voiceEnabled;
     setVoiceEnabled(newState);
+
+    // Unlock audio on first enable
+    if (newState && !audioUnlocked) {
+      unlockAudio();
+    }
 
     // Save to localStorage
     try {
@@ -704,6 +751,11 @@ export default function PriceEstimatorChat() {
   };
 
   const selectHelperQuestion = async (question: string) => {
+    // Unlock audio on first interaction (mobile fix)
+    if (!audioUnlocked && voiceEnabled) {
+      unlockAudio();
+    }
+    
     setShowQuestionHelper(false);
     setShowSuggestions(false);
 
