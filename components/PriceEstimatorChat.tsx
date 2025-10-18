@@ -44,67 +44,96 @@ export default function PriceEstimatorChat() {
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastMessageCountRef = useRef<number>(0);
 
-  // Pool of 50 frequently asked questions
-  const questionPool = [
-    "Ile kosztuje strona internetowa?",
-    "Wycena sklepu online?",
-    "Cennik aplikacji mobilnej?",
-    "Jak długo trwa realizacja projektu?",
-    "Czy oferujecie hosting i domenę?",
-    "Ile kosztuje pozycjonowanie SEO?",
-    "Czy robicie sklepy na WooCommerce?",
-    "Jakie technologie używacie?",
-    "Czy są dodatkowe koszty?",
-    "Czy macie portfolio projektów?",
-    "Ile kosztuje responsywna strona?",
-    "Wycena landing page?",
-    "Czy robicie aplikacje na iOS i Android?",
-    "Ile kosztuje redesign strony?",
-    "Czy oferujecie wsparcie techniczne?",
-    "Ile trwa stworzenie sklepu internetowego?",
-    "Czy robicie integracje z systemami?",
-    "Ile kosztuje blog firmowy?",
-    "Czy oferujecie content marketing?",
-    "Ile kosztuje strona wizytówka?",
-    "Czy robicie strony w WordPress?",
-    "Ile kosztuje kampania Google Ads?",
-    "Czy oferujecie copywriting?",
-    "Ile kosztuje audyt SEO?",
-    "Czy robicie animacje i grafiki?",
-    "Ile trwa pozycjonowanie strony?",
-    "Czy oferujecie szkolenia?",
-    "Ile kosztuje portal internetowy?",
-    "Czy robicie strony na Shopify?",
-    "Ile kosztuje system rezerwacji?",
-    "Czy oferujecie maintenance?",
-    "Ile kosztuje integracja z Facebook?",
-    "Czy robicie chatboty?",
-    "Ile kosztuje panel administracyjny?",
-    "Czy oferujecie migrację strony?",
-    "Ile trwa uruchomienie kampanii?",
-    "Czy robicie newslettery?",
-    "Ile kosztuje strona wielojęzyczna?",
-    "Czy oferujecie analitykę?",
-    "Ile kosztuje optymalizacja?",
-    "Czy robicie e-learning?",
-    "Ile kosztuje system CRM?",
-    "Czy oferujecie branding?",
-    "Ile trwa projekt UX/UI?",
-    "Czy robicie PWA?",
-    "Ile kosztuje API?",
-    "Czy oferujecie testy A/B?",
-    "Ile kosztuje marketplace?",
-    "Czy robicie integracje płatności?",
-    "Jakie są formy płatności?",
-  ];
+  // Function to generate questions dynamically using GPT
+  const generateQuestions = async (messagesHistory: Message[] = []) => {
+    try {
+      const response = await fetch('/api/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: messagesHistory,
+        }),
+      });
 
-  // Select 3 random questions on component mount
+      if (!response.ok) {
+        throw new Error('Failed to generate questions');
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      const questions: string[] = [];
+      let buffer = '';
+      let currentQuestion = '';
+      let questionIndex = 0;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          if (!trimmedLine) continue;
+
+          const message = trimmedLine.replace(/^data: /, '');
+          if (message === '[DONE]') continue;
+
+          try {
+            const parsed = JSON.parse(message);
+            
+            if (parsed.type === 'question_start') {
+              currentQuestion = '';
+              questionIndex = parsed.index;
+            } else if (parsed.type === 'question_char') {
+              currentQuestion += parsed.char;
+              
+              // Update streaming state for animation
+              setStreamingQuestions(prev => ({
+                ...prev,
+                [questionIndex]: currentQuestion
+              }));
+            } else if (parsed.type === 'question_end') {
+              questions.push(currentQuestion);
+            }
+          } catch (e) {
+            // Skip invalid JSON
+          }
+        }
+      }
+
+      return questions;
+    } catch (error) {
+      console.error('Error generating questions:', error);
+      // Fallback questions if API fails
+      return [
+        "Ile kosztuje strona internetowa?",
+        "Jak długo trwa realizacja projektu?",
+        "Czy oferujecie wsparcie techniczne?"
+      ];
+    }
+  };
+
+  // Generate initial questions on component mount
   useEffect(() => {
-    const getRandomQuestions = () => {
-      const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
-      return shuffled.slice(0, 3);
+    const loadInitialQuestions = async () => {
+      const questions = await generateQuestions([]);
+      setRandomQuestions(questions);
     };
-    setRandomQuestions(getRandomQuestions());
+    
+    loadInitialQuestions();
   }, []);
 
   // Animate questions when they become visible (after hasInitialized)
@@ -510,7 +539,7 @@ export default function PriceEstimatorChat() {
     }
   };
 
-  const clearChat = () => {
+  const clearChat = async () => {
     setMessages([]);
     setHasInitialized(false);
     setMicrophoneError(false);
@@ -518,9 +547,9 @@ export default function PriceEstimatorChat() {
     setShowQuestionHelper(false);
     // Stop any ongoing speech
     stopSpeaking();
-    // Generate new random questions
-    const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
-    setRandomQuestions(shuffled.slice(0, 3));
+    // Generate new questions dynamically
+    const questions = await generateQuestions([]);
+    setRandomQuestions(questions);
     setHelperQuestions([]);
     localStorage.removeItem('borem-chat');
   };
@@ -678,27 +707,12 @@ export default function PriceEstimatorChat() {
     setShowQuestionHelper(prev => !prev);
   };
 
-  const refreshHelperQuestions = () => {
-    const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
-    const newQuestions = shuffled.slice(0, 3);
-    setHelperQuestions(newQuestions);
+  const refreshHelperQuestions = async () => {
     setStreamingQuestions({});
     
-    // Animate helper questions with streaming (use offset 100 for helper questions)
-    const maxLength = Math.max(...newQuestions.map(q => q.length));
-    for (let charIndex = 0; charIndex <= maxLength; charIndex++) {
-      setTimeout(() => {
-        setStreamingQuestions(prev => {
-          const updated = { ...prev };
-          newQuestions.forEach((question, qIndex) => {
-            if (charIndex <= question.length) {
-              updated[100 + qIndex] = question.substring(0, charIndex);
-            }
-          });
-          return updated;
-        });
-      }, charIndex * 30);
-    }
+    // Generate questions dynamically based on current chat history
+    const newQuestions = await generateQuestions(messages);
+    setHelperQuestions(newQuestions);
   };
 
   const selectHelperQuestion = async (question: string) => {
@@ -1310,27 +1324,11 @@ export default function PriceEstimatorChat() {
                   <div className="flex items-center justify-between mb-0.5">
                     <div className="text-xs text-gray-400 font-semibold">Przykładowe pytania:</div>
                     <button
-                      onClick={() => {
-                        const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
-                        const newQuestions = shuffled.slice(0, 3);
-                        setRandomQuestions(newQuestions);
+                      onClick={async () => {
                         setStreamingQuestions({});
-                        
-                        // Animate all questions simultaneously  
-                        const maxLength = Math.max(...newQuestions.map(q => q.length));
-                        for (let charIndex = 0; charIndex <= maxLength; charIndex++) {
-                          setTimeout(() => {
-                            setStreamingQuestions(prev => {
-                              const updated = { ...prev };
-                              newQuestions.forEach((question, qIndex) => {
-                                if (charIndex <= question.length) {
-                                  updated[qIndex] = question.substring(0, charIndex);
-                                }
-                              });
-                              return updated;
-                            });
-                          }, charIndex * 30);
-                        }
+                        // Generate new questions based on current messages
+                        const newQuestions = await generateQuestions(messages);
+                        setRandomQuestions(newQuestions);
                       }}
                       className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
                       title="Odśwież pytania"
