@@ -99,35 +99,43 @@ export default function PriceEstimatorChat() {
     "Jakie są formy płatności?",
   ];
 
-  // Block body scroll when chat is open (prevent page scroll behind modal)
+  // Block body scroll when chat is open on mobile only (prevent page scroll behind fullscreen modal)
   useEffect(() => {
-    if (isOpen) {
+    // Check if we're on mobile (chat is fullscreen)
+    const isMobile = window.innerWidth < 768; // md breakpoint
+
+    if (isOpen && isMobile) {
       // Save current scroll position
       const scrollY = window.scrollY;
 
-      // Block scrolling on body
+      // Block scrolling on body (mobile only)
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
-    } else {
-      // Restore scrolling
+    } else if (!isOpen) {
+      // Restore scrolling when chat closes (only if it was blocked)
       const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
 
-      // Restore scroll position
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      if (scrollY) {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+
+        // Restore scroll position
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
 
     // Cleanup on unmount
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
+      if (window.innerWidth < 768) {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+      }
     };
   }, [isOpen]);
 

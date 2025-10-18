@@ -20,7 +20,8 @@
       "Bash(find:*)",
       "Bash(git rm:*)",
       "Bash(test:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(Remove-Item \"C:\\Users\\boryn\\Desktop\\strona\\app\\analiza\\metadata.ts\" -ErrorAction SilentlyContinue)"
     ],
     "deny": [],
     "ask": []
