@@ -913,40 +913,10 @@ export default function PriceEstimatorChat() {
         return;
       }
 
-      // Check permissions proactively (if API is available)
-      if (navigator.permissions && navigator.permissions.query) {
-        try {
-          const permissionStatus = await navigator.permissions.query({ name: 'microphone' as PermissionName });
-          console.log('[Recording] Permission status:', permissionStatus.state);
-
-          if (permissionStatus.state === 'denied') {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const message = isIOS
-              ? '🎤 Dostęp do mikrofonu zablokowany.\n\n' +
-                '📱 Aby włączyć:\n' +
-                '1️⃣ Ustawienia → Safari (lub Chrome/Firefox)\n' +
-                '2️⃣ Mikrofon → Zezwól\n' +
-                '3️⃣ Odśwież stronę'
-              : '🎤 Dostęp do mikrofonu zablokowany.\n\n' +
-                'Kliknij ikonę 🔒 w pasku adresu i włącz mikrofon.';
-
-            setMicrophoneError(true);
-            setMessages(prev => [
-              ...prev,
-              {
-                role: 'assistant',
-                content: message,
-              },
-            ]);
-            return;
-          }
-        } catch (permError) {
-          // Permissions API not supported or failed, continue with getUserMedia
-          console.log('[Recording] Permissions API not available:', permError);
-        }
-      }
+      console.log('[Recording] Requesting microphone access...');
 
       // Request microphone permission - this will show browser's native permission dialog if needed
+      // Don't check permissions proactively as it can block the native dialog on some browsers
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -1168,6 +1138,8 @@ export default function PriceEstimatorChat() {
       const data = await response.json();
       const transcribedText = data.text;
 
+      console.log('[Transcription] Result:', transcribedText);
+
       if (transcribedText && transcribedText.trim()) {
         // Set as input and send
         setInput(transcribedText);
@@ -1179,9 +1151,20 @@ export default function PriceEstimatorChat() {
           setInput('');
           sendMessageWithText([...messages, userMessage]);
         }, 100);
+      } else {
+        // Empty transcription - user didn't say anything or audio was unclear
+        console.log('[Transcription] Empty result');
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: '🎤 Przepraszam, nie zrozumiałem. Spróbuj ponownie lub napisz wiadomość.\n\n💡 Upewnij się, że:\n• Mówisz wyraźnie i głośno\n• Jesteś w cichym miejscu\n• Mikrofon nie jest zasłonięty',
+          },
+        ]);
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error('Error transcribing audio:', error);
+      console.error('[Transcription] Error:', error);
       setMessages(prev => [
         ...prev,
         {
