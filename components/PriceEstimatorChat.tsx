@@ -1195,7 +1195,7 @@ export default function PriceEstimatorChat() {
     <>
       {/* Chat Modal - Full screen on mobile, bottom-left on desktop */}
       {isOpen && (
-        <div className="fixed inset-0 md:inset-auto md:bottom-6 md:left-6 md:w-[450px] md:h-[65vh] md:max-h-[600px] w-full h-dvh md:h-auto z-[9999] bg-gray-900 md:bg-gray-900/95 md:backdrop-blur-xl md:rounded-3xl shadow-2xl shadow-purple-500/20 flex flex-col overflow-hidden border-0 md:border border-gray-800 animate-in slide-in-from-bottom-4 fade-in duration-300">
+        <div className="fixed inset-0 md:inset-auto md:bottom-6 md:left-6 md:w-[450px] md:h-[65vh] md:max-h-[600px] w-full h-full z-[9999] bg-gray-900 md:bg-gray-900/95 md:backdrop-blur-xl md:rounded-3xl shadow-2xl shadow-purple-500/20 flex flex-col overflow-hidden border-0 md:border border-gray-800 animate-in slide-in-from-bottom-4 fade-in duration-300">
 
           {/* Header - Site style */}
           <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700 p-3.5 flex items-center justify-between">
