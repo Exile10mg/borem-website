@@ -114,18 +114,23 @@ export async function POST(req: NextRequest) {
 
             try {
               const questionsArray = JSON.parse(questionsContent);
-              if (Array.isArray(questionsArray)) {
-                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ marker: 'QUESTIONS_START' })}\n\n`));
-
-                for (const question of questionsArray) {
+              if (Array.isArray(questionsArray) && questionsArray.length > 0) {
+                // Stream each question with proper markers
+                for (let i = 0; i < questionsArray.length; i++) {
+                  const question = questionsArray[i];
+                  
+                  // Send question start marker
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'question_start', index: i })}\n\n`));
+                  
+                  // Stream each character
                   for (const char of question) {
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ question_char: char })}\n\n`));
-                    await new Promise(resolve => setTimeout(resolve, 15));
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'question_char', char, index: i })}\n\n`));
+                    await new Promise(resolve => setTimeout(resolve, 30));
                   }
-                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ question_sep: true })}\n\n`));
+                  
+                  // Send question end marker
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'question_end', index: i })}\n\n`));
                 }
-
-                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ marker: 'QUESTIONS_END' })}\n\n`));
               }
             } catch (parseError) {
               console.error('Error parsing questions JSON:', parseError);
