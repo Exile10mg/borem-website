@@ -657,7 +657,7 @@ export default function CennikPage() {
       </section>
 
       {/* Category Tabs - STATIC */}
-      <section className="relative py-8 bg-gradient-to-b from-black via-gray-900/50 to-gray-900 sticky top-20 z-40 backdrop-blur-xl">
+      <section className="relative py-8 bg-gradient-to-b from-black via-gray-900/50 to-gray-900 sticky top-20 z-20 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-3">
             {categories.map((category) => (
