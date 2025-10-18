@@ -1452,14 +1452,26 @@ export default function PriceEstimatorChat() {
             <div className="flex items-center gap-2">
               {/* Voice toggle button */}
               <button
-                onClick={isSpeaking ? stopSpeaking : toggleVoice}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                onClick={(e) => {
+                  if (isSpeaking) {
+                    stopSpeaking();
+                  } else {
+                    toggleVoice();
+                  }
+                  // Remove focus after click (prevents stuck highlight on mobile)
+                  e.currentTarget.blur();
+                }}
+                onTouchEnd={(e) => {
+                  // Prevent stuck active state on mobile
+                  e.currentTarget.blur();
+                }}
+                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation ${
                   isSpeaking
-                    ? 'bg-red-600 text-white hover:bg-red-700'
+                    ? 'bg-red-600 text-white active:bg-red-700'
                     : voiceEnabled
-                      ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30'
-                      : 'text-gray-400 hover:bg-gray-800'
-                } hover:scale-110`}
+                      ? 'bg-green-600/20 text-green-400 active:bg-green-600/30'
+                      : 'text-gray-400 active:bg-gray-800'
+                } hover:scale-110 focus:outline-none`}
                 aria-label={isSpeaking ? "Zatrzymaj czytanie" : (voiceEnabled ? "Wyłącz głos" : "Włącz głos")}
                 title={isSpeaking ? "Zatrzymaj czytanie" : (voiceEnabled ? "Wyłącz głos" : "Włącz głos")}
               >
@@ -1469,16 +1481,28 @@ export default function PriceEstimatorChat() {
                 />
               </button>
               <button
-                onClick={clearChat}
-                className="w-7 h-7 hover:bg-red-900/50 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-red-400 hover:scale-110"
+                onClick={(e) => {
+                  clearChat();
+                  e.currentTarget.blur();
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.blur();
+                }}
+                className="w-7 h-7 hover:bg-red-900/50 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-red-400 hover:scale-110 touch-manipulation focus:outline-none active:bg-red-900/50"
                 aria-label="Wyczyść czat"
                 title="Wyczyść czat"
               >
                 <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
               </button>
               <button
-                onClick={() => setIsOpen(false)}
-                className="w-7 h-7 hover:bg-gray-800 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-white hover:scale-110"
+                onClick={(e) => {
+                  setIsOpen(false);
+                  e.currentTarget.blur();
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.blur();
+                }}
+                className="w-7 h-7 hover:bg-gray-800 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-white hover:scale-110 touch-manipulation focus:outline-none active:bg-gray-800"
                 aria-label="Zamknij"
               >
                 <FontAwesomeIcon icon={faTimes} className="w-3.5 h-3.5" />
@@ -1594,14 +1618,14 @@ export default function PriceEstimatorChat() {
                   <div className="flex items-center justify-between mb-0.5">
                     <div className="text-xs text-gray-400 font-semibold">Przykładowe pytania:</div>
                     <button
-                      onClick={() => {
+                      onClick={(e) => {
                         setStreamingQuestions({});
                         // Generate new random questions
                         const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
                         const newQuestions = shuffled.slice(0, 3);
                         setRandomQuestions(newQuestions);
-                        
-                        // Animate all questions simultaneously  
+
+                        // Animate all questions simultaneously
                         const maxLength = Math.max(...newQuestions.map(q => q.length));
                         for (let charIndex = 0; charIndex <= maxLength; charIndex++) {
                           setTimeout(() => {
@@ -1616,8 +1640,12 @@ export default function PriceEstimatorChat() {
                             });
                           }, charIndex * 30);
                         }
+                        e.currentTarget.blur();
                       }}
-                      className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      onTouchEnd={(e) => {
+                        e.currentTarget.blur();
+                      }}
+                      className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110 touch-manipulation focus:outline-none active:bg-gray-600"
                       title="Odśwież pytania"
                     >
                       <FontAwesomeIcon icon={faRefresh} className="w-3 h-3" />
@@ -1626,8 +1654,14 @@ export default function PriceEstimatorChat() {
                   {randomQuestions.map((question: string, index: number) => (
                     <button
                       key={index}
-                      onClick={() => handleSuggestionClick(question)}
-                      className="group relative text-left bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl px-3 py-2 text-xs transition-all duration-200 border border-gray-700 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10"
+                      onClick={(e) => {
+                        handleSuggestionClick(question);
+                        e.currentTarget.blur();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.currentTarget.blur();
+                      }}
+                      className="group relative text-left bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl px-3 py-2 text-xs transition-all duration-200 border border-gray-700 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 touch-manipulation focus:outline-none active:bg-gray-700"
                     >
                       <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur transition-opacity opacity-0 group-hover:opacity-10"></div>
                       <div className="relative flex items-center justify-between gap-2">
@@ -1654,8 +1688,14 @@ export default function PriceEstimatorChat() {
                   <div className="flex items-center justify-between mb-1">
                     <div className="text-xs text-gray-400 font-semibold">Przykładowe pytania:</div>
                     <button
-                      onClick={refreshHelperQuestions}
-                      className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      onClick={(e) => {
+                        refreshHelperQuestions();
+                        e.currentTarget.blur();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.currentTarget.blur();
+                      }}
+                      className="w-6 h-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110 touch-manipulation focus:outline-none active:bg-gray-600"
                       title="Odśwież pytania"
                     >
                       <FontAwesomeIcon icon={faRefresh} className="w-3 h-3" />
@@ -1664,8 +1704,14 @@ export default function PriceEstimatorChat() {
                   {helperQuestions.map((question, index) => (
                     <button
                       key={index}
-                      onClick={() => selectHelperQuestion(question)}
-                      className="group relative text-left bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl px-3 py-2 text-xs transition-all duration-200 border border-gray-700 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10"
+                      onClick={(e) => {
+                        selectHelperQuestion(question);
+                        e.currentTarget.blur();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.currentTarget.blur();
+                      }}
+                      className="group relative text-left bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl px-3 py-2 text-xs transition-all duration-200 border border-gray-700 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 touch-manipulation focus:outline-none active:bg-gray-700"
                     >
                       <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur transition-opacity opacity-0 group-hover:opacity-10"></div>
                       <div className="relative flex items-center justify-between gap-2">
@@ -1764,12 +1810,18 @@ export default function PriceEstimatorChat() {
 
               {/* Question helper button - disabled on initial message, enabled after first user message */}
               <button
-                onClick={toggleQuestionHelper}
+                onClick={(e) => {
+                  toggleQuestionHelper();
+                  e.currentTarget.blur();
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.blur();
+                }}
                 disabled={isLoading || showInitialTyping || isRecording || !hasInitialized || messages.length <= 1}
-                className={`absolute right-20 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                className={`absolute right-20 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation focus:outline-none ${
                   showQuestionHelper
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-700 text-gray-400 hover:bg-blue-600/20 hover:text-blue-400 hover:scale-110'
+                    ? 'bg-blue-600 text-white active:bg-blue-700'
+                    : 'bg-gray-700 text-gray-400 hover:bg-blue-600/20 hover:text-blue-400 hover:scale-110 active:bg-blue-600/20'
                 } ${(isLoading || showInitialTyping || isRecording || !hasInitialized || messages.length <= 1) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 aria-label="Przykładowe pytania"
                 title={!hasInitialized || messages.length <= 1 ? "Dostępne po pierwszym pytaniu" : "Przykładowe pytania"}
@@ -1779,12 +1831,22 @@ export default function PriceEstimatorChat() {
 
               {/* Microphone button */}
               <button
-                onClick={isRecording ? stopRecording : startRecording}
+                onClick={(e) => {
+                  if (isRecording) {
+                    stopRecording();
+                  } else {
+                    startRecording();
+                  }
+                  e.currentTarget.blur();
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.blur();
+                }}
                 disabled={isLoading || showInitialTyping}
-                className={`absolute right-11 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                className={`absolute right-11 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation focus:outline-none ${
                   isRecording
-                    ? 'bg-red-600 text-white hover:bg-red-700 animate-pulse'
-                    : 'bg-gray-700 text-gray-400 hover:bg-gradient-to-r hover:from-red-600 hover:to-pink-600 hover:text-white hover:scale-110'
+                    ? 'bg-red-600 text-white hover:bg-red-700 animate-pulse active:bg-red-700'
+                    : 'bg-gray-700 text-gray-400 hover:bg-gradient-to-r hover:from-red-600 hover:to-pink-600 hover:text-white hover:scale-110 active:bg-red-600'
                 } ${(isLoading || showInitialTyping) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 aria-label={isRecording ? "Zatrzymaj nagrywanie" : "Nagraj wiadomość głosową"}
                 title={isRecording ? "Zatrzymaj nagrywanie" : "Nagraj wiadomość głosową"}
@@ -1794,11 +1856,17 @@ export default function PriceEstimatorChat() {
 
               {/* Send button */}
               <button
-                onClick={sendMessage}
+                onClick={(e) => {
+                  sendMessage();
+                  e.currentTarget.blur();
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.blur();
+                }}
                 disabled={!input.trim() || isLoading || isRecording}
-                className={`absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                className={`absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation focus:outline-none ${
                   input.trim() && !isLoading && !isRecording
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:scale-110 shadow-lg shadow-blue-500/50'
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:scale-110 shadow-lg shadow-blue-500/50 active:from-blue-700 active:to-purple-700'
                     : 'bg-gray-700 text-gray-500 cursor-not-allowed'
                 }`}
                 aria-label="Wyślij"
