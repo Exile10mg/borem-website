@@ -72,10 +72,20 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await audioFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    // Detect audio type from the file
+    const audioType = audioFile.type || 'audio/webm';
+    const extension = audioType.includes('mp4') ? 'audio.mp4'
+                    : audioType.includes('aac') ? 'audio.aac'
+                    : audioType.includes('wav') ? 'audio.wav'
+                    : audioType.includes('mpeg') ? 'audio.mp3'
+                    : 'audio.webm';
+
+    console.log('[Transcribe API] Audio type:', audioType, 'Extension:', extension, 'Size:', buffer.length);
+
     // Create form data for OpenAI
     const whisperFormData = new FormData();
-    const blob = new Blob([buffer], { type: 'audio/webm' });
-    whisperFormData.append('file', blob, 'audio.webm');
+    const blob = new Blob([buffer], { type: audioType });
+    whisperFormData.append('file', blob, extension);
     whisperFormData.append('model', 'whisper-1');
     whisperFormData.append('language', 'pl'); // Polish language
     whisperFormData.append('response_format', 'json');
@@ -99,8 +109,37 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
+    let transcribedText = data.text || '';
 
-    return NextResponse.json({ text: data.text });
+    console.log('[Transcribe API] Raw result:', transcribedText);
+
+    // Filter out common Whisper hallucinations and spam
+    const spamPhrases = [
+      'napisy stworzone przez społeczność amara.org',
+      'napisy stworzone przez spolecznosc amara.org',
+      'subtitles by the amara.org community',
+      'dziękuję za uwagę',
+      'dziekuje za uwage',
+      'thank you for watching',
+      'thanks for watching',
+      'przyłącz się do nas',
+      'subscribe',
+      'subskrybuj',
+    ];
+
+    // Check if transcription is just spam/hallucination
+    const lowerText = transcribedText.toLowerCase().trim();
+    const isSpam = spamPhrases.some(phrase => lowerText.includes(phrase.toLowerCase()));
+
+    // Also check if it's too short (less than 2 characters) or empty
+    const isTooShort = transcribedText.trim().length < 2;
+
+    if (isSpam || isTooShort) {
+      console.log('[Transcribe API] Filtering out spam/empty result');
+      transcribedText = ''; // Return empty string for spam
+    }
+
+    return NextResponse.json({ text: transcribedText });
 
   } catch (error) {
     console.error('Transcription error:', error);

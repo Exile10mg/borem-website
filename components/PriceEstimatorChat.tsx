@@ -898,6 +898,11 @@ export default function PriceEstimatorChat() {
 
   const startRecording = async () => {
     try {
+      // Detect iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      console.log('[Recording] Device detected - iOS:', isIOS);
+      console.log('[Recording] User agent:', navigator.userAgent);
+
       // Check if browser supports getUserMedia
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         if (!microphoneError) {
@@ -914,6 +919,8 @@ export default function PriceEstimatorChat() {
       }
 
       console.log('[Recording] Requesting microphone access...');
+      console.log('[Recording] navigator.mediaDevices available:', !!navigator.mediaDevices);
+      console.log('[Recording] getUserMedia available:', !!navigator.mediaDevices?.getUserMedia);
 
       // Request microphone permission - this will show browser's native permission dialog if needed
       // Don't check permissions proactively as it can block the native dialog on some browsers
@@ -925,11 +932,12 @@ export default function PriceEstimatorChat() {
         }
       });
 
+      console.log('[Recording] Stream obtained successfully');
+
       // If we got here, permission was granted - reset error flag
       setMicrophoneError(false);
 
-      // Detect iOS/Safari and use appropriate MIME type
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      // Detect Safari (isIOS already defined above)
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
       let mimeType = 'audio/webm';
