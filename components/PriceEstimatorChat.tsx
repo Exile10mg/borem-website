@@ -925,8 +925,35 @@ export default function PriceEstimatorChat() {
       // If we got here, permission was granted - reset error flag
       setMicrophoneError(false);
 
-      // Setup MediaRecorder
-      const mediaRecorder = new MediaRecorder(stream);
+      // Detect iOS/Safari and use appropriate MIME type
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+      let mimeType = 'audio/webm';
+      let options: MediaRecorderOptions = {};
+
+      // iOS Safari specific configuration
+      if (isIOS || isSafari) {
+        // Try different MIME types that Safari supports
+        if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          mimeType = 'audio/mp4';
+        } else if (MediaRecorder.isTypeSupported('audio/aac')) {
+          mimeType = 'audio/aac';
+        } else if (MediaRecorder.isTypeSupported('audio/wav')) {
+          mimeType = 'audio/wav';
+        } else if (MediaRecorder.isTypeSupported('audio/mpeg')) {
+          mimeType = 'audio/mpeg';
+        }
+        options = { mimeType };
+      } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        mimeType = 'audio/webm;codecs=opus';
+        options = { mimeType };
+      }
+
+      console.log('[Recording] Using MIME type:', mimeType);
+
+      // Setup MediaRecorder with appropriate options
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -960,12 +987,15 @@ export default function PriceEstimatorChat() {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        // Use the same MIME type that was used for recording
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
         stream.getTracks().forEach(track => track.stop());
 
         if (audioContextRef.current) {
           audioContextRef.current.close();
         }
+
+        console.log('[Recording] Stopped. Blob size:', audioBlob.size, 'Type:', audioBlob.type);
 
         // Send to Whisper API
         await transcribeAudio(audioBlob);
@@ -987,7 +1017,9 @@ export default function PriceEstimatorChat() {
       }, 1000);
 
     } catch (error: any) {
-      console.error('Error accessing microphone:', error);
+      console.error('[Recording] Error accessing microphone:', error);
+      console.error('[Recording] Error name:', error.name);
+      console.error('[Recording] Error message:', error.message);
 
       // Only show error message once
       if (microphoneError) {
@@ -996,13 +1028,20 @@ export default function PriceEstimatorChat() {
 
       setMicrophoneError(true);
 
+      // Detect if user is on iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
       // Handle specific error cases
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        const iOSMessage = isIOS
+          ? '🎤 Aby nagrywać wiadomości głosowe, musisz zezwolić na dostęp do mikrofonu.\n\niOS: Ustawienia → Safari → Mikrofon → Zezwól\n\nNastępnie odśwież stronę.'
+          : '🎤 Aby nagrywać wiadomości głosowe, zezwól na dostęp do mikrofonu w przeglądarce.\n\nKliknij ikonę 🔒 obok adresu strony i włącz mikrofon.';
+
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Aby nagrywać wiadomości głosowe, zezwól na dostęp do mikrofonu w przeglądarce.\n\nKliknij ikonę 🔒 obok adresu strony i włącz mikrofon.',
+            content: iOSMessage,
           },
         ]);
       } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
@@ -1014,11 +1053,23 @@ export default function PriceEstimatorChat() {
           },
         ]);
       } else if (error.name === 'NotReadableError') {
+        const iOSMessage = isIOS
+          ? '🎤 Mikrofon jest zajęty przez inną aplikację.\n\nZamknij inne aplikacje używające mikrofonu (np. Siri, nagrywanie ekranu) i spróbuj ponownie.'
+          : '🎤 Mikrofon jest zajęty. Zamknij inne aplikacje używające mikrofonu.';
+
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Mikrofon jest zajęty. Zamknij inne aplikacje używające mikrofonu.',
+            content: iOSMessage,
+          },
+        ]);
+      } else if (error.name === 'NotSupportedError' || error.message?.includes('MIME')) {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: '🎤 Twoja przeglądarka nie obsługuje nagrywania audio. Zaktualizuj Safari lub spróbuj użyć Chrome.',
           },
         ]);
       } else {
@@ -1026,7 +1077,7 @@ export default function PriceEstimatorChat() {
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Nie udało się uruchomić mikrofonu. Spróbuj ponownie.',
+            content: `🎤 Nie udało się uruchomić mikrofonu. ${isIOS ? 'Sprawdź uprawnienia w Ustawieniach iOS.' : 'Spróbuj ponownie.'}`,
           },
         ]);
       }
