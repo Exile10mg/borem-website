@@ -913,6 +913,39 @@ export default function PriceEstimatorChat() {
         return;
       }
 
+      // Check permissions proactively (if API is available)
+      if (navigator.permissions && navigator.permissions.query) {
+        try {
+          const permissionStatus = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+          console.log('[Recording] Permission status:', permissionStatus.state);
+
+          if (permissionStatus.state === 'denied') {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const message = isIOS
+              ? '🎤 Dostęp do mikrofonu zablokowany.\n\n' +
+                '📱 Aby włączyć:\n' +
+                '1️⃣ Ustawienia → Safari (lub Chrome/Firefox)\n' +
+                '2️⃣ Mikrofon → Zezwól\n' +
+                '3️⃣ Odśwież stronę'
+              : '🎤 Dostęp do mikrofonu zablokowany.\n\n' +
+                'Kliknij ikonę 🔒 w pasku adresu i włącz mikrofon.';
+
+            setMicrophoneError(true);
+            setMessages(prev => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: message,
+              },
+            ]);
+            return;
+          }
+        } catch (permError) {
+          // Permissions API not supported or failed, continue with getUserMedia
+          console.log('[Recording] Permissions API not available:', permError);
+        }
+      }
+
       // Request microphone permission - this will show browser's native permission dialog if needed
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
@@ -1033,15 +1066,26 @@ export default function PriceEstimatorChat() {
 
       // Handle specific error cases
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-        const iOSMessage = isIOS
-          ? '🎤 Aby nagrywać wiadomości głosowe, musisz zezwolić na dostęp do mikrofonu.\n\niOS: Ustawienia → Safari → Mikrofon → Zezwól\n\nNastępnie odśwież stronę.'
-          : '🎤 Aby nagrywać wiadomości głosowe, zezwól na dostęp do mikrofonu w przeglądarce.\n\nKliknij ikonę 🔒 obok adresu strony i włącz mikrofon.';
+        let message = '';
+
+        if (isIOS) {
+          // iOS - all browsers use WebKit, need system-level permissions
+          message = '🎤 Brak dostępu do mikrofonu.\n\n' +
+                   '📱 INSTRUKCJA DLA iOS:\n\n' +
+                   '1️⃣ Ustawienia → Safari → Mikrofon → Zezwól\n' +
+                   '2️⃣ Jeśli używasz Chrome/Firefox: Ustawienia → Chrome (lub Firefox) → Mikrofon → Zezwól\n' +
+                   '3️⃣ Odśwież stronę i spróbuj ponownie\n\n' +
+                   '💡 Możesz też kliknąć ikonę AA w pasku adresu i włączyć mikrofon.';
+        } else {
+          message = '🎤 Aby nagrywać wiadomości głosowe, zezwól na dostęp do mikrofonu w przeglądarce.\n\n' +
+                   'Kliknij ikonę 🔒 obok adresu strony i włącz mikrofon.';
+        }
 
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: iOSMessage,
+            content: message,
           },
         ]);
       } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
@@ -1053,15 +1097,16 @@ export default function PriceEstimatorChat() {
           },
         ]);
       } else if (error.name === 'NotReadableError') {
-        const iOSMessage = isIOS
-          ? '🎤 Mikrofon jest zajęty przez inną aplikację.\n\nZamknij inne aplikacje używające mikrofonu (np. Siri, nagrywanie ekranu) i spróbuj ponownie.'
+        const message = isIOS
+          ? '🎤 Mikrofon jest zajęty przez inną aplikację.\n\n' +
+            'Zamknij inne aplikacje używające mikrofonu (np. Siri, nagrywanie ekranu, FaceTime) i spróbuj ponownie.'
           : '🎤 Mikrofon jest zajęty. Zamknij inne aplikacje używające mikrofonu.';
 
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: iOSMessage,
+            content: message,
           },
         ]);
       } else if (error.name === 'NotSupportedError' || error.message?.includes('MIME')) {
@@ -1069,15 +1114,21 @@ export default function PriceEstimatorChat() {
           ...prev,
           {
             role: 'assistant',
-            content: '🎤 Twoja przeglądarka nie obsługuje nagrywania audio. Zaktualizuj Safari lub spróbuj użyć Chrome.',
+            content: '🎤 Twoja przeglądarka nie obsługuje nagrywania audio. Zaktualizuj przeglądarkę do najnowszej wersji.',
           },
         ]);
       } else {
+        const message = isIOS
+          ? '🎤 Nie udało się uruchomić mikrofonu.\n\n' +
+            'Sprawdź uprawnienia w Ustawieniach iOS:\n' +
+            'Ustawienia → [nazwa przeglądarki] → Mikrofon → Zezwól'
+          : '🎤 Nie udało się uruchomić mikrofonu. Spróbuj ponownie.';
+
         setMessages(prev => [
           ...prev,
           {
             role: 'assistant',
-            content: `🎤 Nie udało się uruchomić mikrofonu. ${isIOS ? 'Sprawdź uprawnienia w Ustawieniach iOS.' : 'Spróbuj ponownie.'}`,
+            content: message,
           },
         ]);
       }
