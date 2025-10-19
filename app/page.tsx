@@ -1,6 +1,6 @@
 'use client';
 
-import React , { useEffect } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -20,10 +20,6 @@ const DlaczegoMy = dynamic(() => import('@/components/sections/DlaczegoMy'), { s
 const Kontakt = dynamic(() => import('@/components/sections/Kontakt'), { ssr: false });
 
 export default function Home() {
-  useEffect(() => {
-    document.title = 'Strona Główna | Borem.pl - Agencja Marketingowa';
-  }, []);
-
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faChevronRight, faShieldAlt, faLock, faUserShield, faDatabase, faEnvelope, faCookie, faGavel, faClock, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
@@ -418,10 +417,6 @@ const sections = [
 ];
 
 export default function PolitykaPrywatnosciPage() {
-  useEffect(() => {
-    document.title = 'Polityka Prywatności | Borem.pl - Agencja Marketingowa';
-  }, []);
-
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />

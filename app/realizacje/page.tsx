@@ -66,10 +66,6 @@ const campaignResults = [
 
 
 export default function RealizacjePage() {
-  useEffect(() => {
-    document.title = 'Realizacje | Borem.pl - Agencja Marketingowa';
-  }, []);
-
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('Wszystkie');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 

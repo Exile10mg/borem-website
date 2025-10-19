@@ -578,10 +578,6 @@ const faqItems = [
 ];
 
 export default function CennikPage() {
-  useEffect(() => {
-    document.title = 'Cennik | Borem.pl - Agencja Marketingowa';
-  }, []);
-
   const [activeCategory, setActiveCategory] = useState<keyof typeof allServices>('strony-www');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 

@@ -20,19 +20,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useParams } from 'next/navigation';
 import { getPostBySlugOrId } from '@/data/blog-posts';
-import { useEffect } from 'react';
 
 export default function BlogPostPage() {
   const params = useParams();
   const slugOrId = params.id as string;
   const post = getPostBySlugOrId(slugOrId);
-
-  useEffect(() => {
-    if (post && typeof window !== 'undefined') {
-      // Set document title only
-      document.title = (post as any).metaTitle || `${post.title} | Borem.pl`;
-    }
-  }, [post]);
 
   if (!post) {
     return (

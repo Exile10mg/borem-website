@@ -53,10 +53,6 @@ export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    document.title = 'Blog | Borem.pl - Agencja Marketingowa';
-  }, []);
-
   const filteredPosts = blogPosts.filter((post) => {
     const matchesCategory = activeCategory === 'Wszystkie' || post.category === activeCategory;
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

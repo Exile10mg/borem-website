@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
@@ -179,10 +177,6 @@ const whyUs = [
 ];
 
 export default function ONasPage() {
-  useEffect(() => {
-    document.title = 'O Nas | Borem.pl - Agencja Marketingowa';
-  }, []);
-
   return (
     <main className="min-h-screen bg-black text-white relative overflow-x-hidden">
       <Navbar />
