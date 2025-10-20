@@ -54,44 +54,61 @@ const features = [
 
 const websiteTypes = [
   {
-    title: 'Strony firmowe',
-    description: 'Profesjonalna wizytówka Twojej firmy w internecie',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
-    price: 'od 2500 zł',
+    title: 'Landing Page',
+    description: 'Szybka strona sprzedażowa',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+    price: 'od 1,299 zł',
+    timeframe: '5-7 dni',
     features: [
+      '1 strona (one-page)',
       'Responsywny design',
-      'Panel administracyjny',
       'Formularz kontaktowy',
-      'Google Maps',
-      'Optymalizacja SEO',
+      'Podstawowe SEO',
+      'Hosting i domena (1 rok)',
+      'SSL (certyfikat)',
+      'Google Analytics',
+      'Szybkie ładowanie',
+      'Wsparcie 30 dni',
     ],
+    highlight: false,
   },
   {
-    title: 'Landing pages',
-    description: 'Strony sprzedażowe z wysoką konwersją',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-    price: 'od 1800 zł',
+    title: 'Strona Firmowa',
+    description: 'Profesjonalna obecność w sieci',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    price: 'od 2,999 zł',
+    timeframe: '2-3 tygodnie',
     features: [
-      'Skupienie na konwersji',
-      'A/B testing ready',
-      'Integracja z CRM',
-      'Analytics i tracking',
-      'Fast loading',
+      'Do 10 podstron',
+      'Responsywny design',
+      'Panel CMS (edycja treści)',
+      'Formularz kontaktowy',
+      'Zaawansowane SEO',
+      'Hosting i domena (1 rok)',
+      'Google Maps integracja',
+      'Wsparcie 60 dni',
+      'Blog + Google Analytics',
     ],
     highlight: true,
   },
   {
-    title: 'Portfólia & CV',
-    description: 'Wyróżnij się na rynku pracy lub pokaż swoje projekty',
+    title: 'Strona Advanced',
+    description: 'Rozbudowana strona biznesowa',
     image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&q=80',
-    price: 'od 1200 zł',
+    price: 'od 5,999 zł',
+    timeframe: '4-6 tygodni',
     features: [
-      'Minimalistyczny design',
-      'Galeria projektów',
-      'Blog (opcjonalnie)',
-      'Formularze kontaktowe',
-      'Social media',
+      'Nielimitowane podstrony',
+      'Responsywny design Premium',
+      'Zaawansowany panel CMS',
+      'Wielojęzyczność',
+      'Premium SEO + konsultacje',
+      'Hosting i domena (1 rok)',
+      'Zaawansowane formularze',
+      'Wsparcie 90 dni',
+      'Blog + Portfolio + Newsletter + API',
     ],
+    highlight: false,
   },
 ];
 
@@ -177,12 +194,12 @@ export default function StronyWWW() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 lg:items-center">
           {websiteTypes.map((type) => (
             <div
               key={type.title}
               className={`relative rounded-2xl overflow-hidden hover:-translate-y-2 transition-transform duration-300 ${
-                type.highlight ? 'lg:scale-105 lg:-mt-4 lg:mb-4' : ''
+                type.highlight ? 'lg:scale-110' : ''
               }`}
             >
               {/* Highlight ring */}
@@ -217,7 +234,7 @@ export default function StronyWWW() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 lg:p-8">
+                  <div className="p-6 lg:p-8 flex flex-col h-full">
                     <h3 className="text-2xl font-bold mb-2 text-white">{type.title}</h3>
                     <p className="text-sm mb-4 text-gray-400">
                       {type.description}
@@ -227,9 +244,12 @@ export default function StronyWWW() {
                       <span className="text-3xl font-black bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
                         {type.price}
                       </span>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Czas realizacji: {type.timeframe}
+                      </p>
                     </div>
 
-                    <ul className="space-y-3 mb-8">
+                    <ul className="space-y-3 mb-8 flex-grow">
                       {type.features.map((feature) => (
                         <li key={feature} className="flex items-start gap-2">
                           <FontAwesomeIcon
@@ -245,7 +265,7 @@ export default function StronyWWW() {
 
                     <a
                       href="#kontakt"
-                      className={`block w-full text-center px-6 py-3 rounded-xl font-bold transition-all hover:scale-105 ${
+                      className={`block w-full text-center px-6 py-3 rounded-xl font-bold transition-all hover:scale-105 mt-auto ${
                         type.highlight
                           ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:shadow-xl hover:shadow-purple-500/50'
                           : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
