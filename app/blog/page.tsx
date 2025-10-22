@@ -12,7 +12,7 @@ import {
   faSearch,
   faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -52,6 +52,8 @@ export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState('Wszystkie');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const blogListRef = useRef<HTMLDivElement>(null);
+  const isInitialMount = useRef(true);
 
   const filteredPosts = blogPosts.filter((post) => {
     const matchesCategory = activeCategory === 'Wszystkie' || post.category === activeCategory;
@@ -69,6 +71,14 @@ export default function BlogPage() {
   useEffect(() => {
     setCurrentPage(1);
   }, [activeCategory, searchQuery]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else if (blogListRef.current) {
+      blogListRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage]);
 
   return (
     <>
@@ -132,7 +142,7 @@ export default function BlogPage() {
           </div>
         </section>
 
-        <section className="relative py-20 bg-gradient-to-b from-black via-gray-900 to-black">
+        <section ref={blogListRef} className="relative py-20 bg-gradient-to-b from-black via-gray-900 to-black">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {filteredPosts.length === 0 ? (
               <div className="text-center py-20">
