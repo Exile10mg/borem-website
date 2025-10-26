@@ -6,6 +6,7 @@ import { post5 } from './post-5';
 import { post6 } from './post-6';
 import { post7 } from './post-7';
 import { post8 } from './post-8';
+import { post9 } from './post-9';
 
 // Eksportuj wszystkie posty jako obiekt (backward compatibility - by ID)
 export const blogPostsData: { [key: string]: any } = {
@@ -17,13 +18,14 @@ export const blogPostsData: { [key: string]: any } = {
   '6': post6,
   '7': post7,
   '8': post8,
+  '9': post9,
 };
 
 // Eksportuj również jako array dla łatwiejszego iterowania
 export const blogPostsArray = Object.values(blogPostsData);
 
 // Typ dla wpisu z slug
-type BlogPost = typeof post1 | typeof post2 | typeof post3 | typeof post4 | typeof post5 | typeof post6 | typeof post7 | typeof post8;
+type BlogPost = typeof post1 | typeof post2 | typeof post3 | typeof post4 | typeof post5 | typeof post6 | typeof post7 | typeof post8 | typeof post9;
 
 // Eksportuj obiekt z slug jako klucz (dla SEO-friendly URLs)
 export const blogPostsBySlug: { [key: string]: BlogPost } = {
@@ -35,6 +37,7 @@ export const blogPostsBySlug: { [key: string]: BlogPost } = {
   'aplikacje-webowe-vs-natywne-pwa-2025': post6,
   'automatyzacja-procesow-biznesowych-ai-2025': post7,
   'jak-stworzyc-strone-internetowa-2025-przewodnik': post8,
+  'marketing-social-media-2025-strategia-przewodnik': post9,
 };
 
 // Helper function to get post by slug or id
