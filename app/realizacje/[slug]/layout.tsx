@@ -33,6 +33,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: metaDescription,
     keywords: keywords,
     authors: [{ name: 'Borem.pl' }],
+    robots: {
+      index: false,
+      follow: true,
+    },
     openGraph: {
       title: metaTitle,
       description: metaDescription,

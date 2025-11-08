@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     'wyniki pozycjonowania seo',
     'skuteczność kampanii reklamowych',
   ],
+  robots: {
+    index: false,
+    follow: true,
+  },
   openGraph: {
     title: 'Realizacje - Portfolio Stron Internetowych i Sklepów E-commerce | Borem.pl',
     description: '🎯 Zobacz nasze realizacje ✓ 150+ ukończonych projektów ✓ Strony internetowe ✓ Sklepy e-commerce ✓ Sprawdź wyniki kampanii',
