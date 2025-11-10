@@ -47,7 +47,11 @@
       "Bash(curl -s http://localhost:3003/realizacje/serwis-bmw-dakro)",
       "Bash(curl -s http://localhost:3003/realizacje/dakro-multidealer)",
       "Bash(curl -s https://borem.pl)",
-      "Bash(timeout 120 npm run build)"
+      "Bash(timeout 120 npm run build)",
+      "Bash(timeout 30 bash -c 'while ! curl -s http://localhost:3000 > /dev/null 2>&1; do sleep 1; done; echo \"\"Server ready\"\"')",
+      "Bash(timeout 30 npm run dev:*)",
+      "Bash(timeout 10 bash -c 'sleep 3 && curl -s http://localhost:3002/blog | grep -o \"\"<title>.*</title>\"\" | head -1')",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

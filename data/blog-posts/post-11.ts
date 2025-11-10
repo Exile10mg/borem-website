@@ -158,12 +158,11 @@ Idealne dla: usług, e-commerce, lead generation
 **Przykład dla prawnika w Lublinie:**
 
 **Keyword:** "prawnik rozwodowy lublin"
+
 **Reklama:**
-```
-Prawnik Rozwodowy w Lublinie | Bezpłatna Konsultacja
-Doświadczony prawnik rodzinny. 15 lat praktyki.
-Kancelaria w centrum Lublina. Umów się już dziś!
-```
+> Prawnik Rozwodowy w Lublinie | Bezpłatna Konsultacja
+> Doświadczony prawnik rodzinny. 15 lat praktyki.
+> Kancelaria w centrum Lublina. Umów się już dziś!
 
 **Landing page:** Dedykowana strona o rozwodach z formularzem kontaktowym
 
@@ -362,20 +361,17 @@ Name, Address, Phone - **identyczne** wszędzie (strona, GMB, social media)
 **Podstawy local SEO:**
 
 **Title tags z lokalizacją:**
-```
+
 Dobry: "Salon Fryzjerski Lublin - Strzyżenie, Koloryzacja | [Nazwa]"
 Zły: "Najlepszy salon fryzjerski - promocje"
-```
 
 **Meta descriptions:**
-```
+
 "Profesjonalny salon fryzjerski w centrum Lublina. Strzyżenie damskie i męskie, koloryzacja, baleyage. 10 lat doświadczenia. Umów wizytę online!"
-```
 
 **H1 z lokalizacją:**
-```
+
 <h1>Salon Fryzjerski w Lublinie - [Nazwa]</h1>
-```
 
 **Treść z naturalnymi wzmiankami:**
 - "Nasz salon znajduje się w sercu Lublina, przy ul. [nazwa]"
