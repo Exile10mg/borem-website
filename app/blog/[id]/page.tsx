@@ -18,6 +18,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import BlogPostSchema from '@/components/BlogPostSchema';
+import FAQSchema from '@/components/FAQSchema';
 import { useParams } from 'next/navigation';
 import { getPostBySlugOrId } from '@/data/blog-posts';
 
@@ -25,6 +27,61 @@ export default function BlogPostPage() {
   const params = useParams();
   const slugOrId = params.id as string;
   const post = getPostBySlugOrId(slugOrId);
+
+  // Extract FAQ from content (if exists)
+  const extractFAQs = (content: string) => {
+    const faqs: { question: string; answer: string }[] = [];
+    const lines = content.split('\n');
+
+    let currentQuestion = '';
+    let currentAnswer = '';
+    let inFAQSection = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      // Detect FAQ section
+      if (line.includes('## ') && line.toLowerCase().includes('faq')) {
+        inFAQSection = true;
+        continue;
+      }
+
+      // Stop at next main section
+      if (inFAQSection && line.startsWith('## ') && !line.toLowerCase().includes('faq')) {
+        break;
+      }
+
+      // FAQ question (starts with ###)
+      if (inFAQSection && line.startsWith('### ')) {
+        if (currentQuestion && currentAnswer) {
+          faqs.push({
+            question: currentQuestion.trim(),
+            answer: currentAnswer.trim().replace(/\*\*/g, '').substring(0, 500), // Clean markdown, limit length
+          });
+        }
+        currentQuestion = line.substring(4).trim();
+        currentAnswer = '';
+        continue;
+      }
+
+      // Collect answer lines
+      if (inFAQSection && currentQuestion && line.trim()) {
+        currentAnswer += line + ' ';
+      }
+    }
+
+    // Add last FAQ
+    if (currentQuestion && currentAnswer) {
+      faqs.push({
+        question: currentQuestion.trim(),
+        answer: currentAnswer.trim().replace(/\*\*/g, '').substring(0, 500),
+      });
+    }
+
+    return faqs;
+  };
+
+  const faqs = extractFAQs(post.content);
 
   if (!post) {
     return (
@@ -77,6 +134,10 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
+      <BlogPostSchema post={post} />
+      {faqs.length > 0 && (
+        <FAQSchema faqs={faqs} pageUrl={`https://borem.pl/blog/${post.slug}`} />
+      )}
       
 
       {/* Breadcrumbs - Above Hero Image */}

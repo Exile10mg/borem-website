@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
- 
+import { blogPostsArray } from '@/data/blog-posts'
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://borem.pl'
   const currentDate = new Date()
@@ -95,29 +96,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly' as const,
   }))
   
-  // TODO: Dodaj dynamiczne posty z bloga gdy będą
-  // const blogPosts = await getBlogPosts()
-  // const blogUrls = blogPosts.map(post => ({
-  //   url: `${baseUrl}/blog/${post.id}`,
-  //   lastModified: new Date(post.date),
-  //   changeFrequency: 'monthly' as const,
-  //   priority: 0.6,
-  // }))
-  
-  // TODO: Dodaj dynamiczne realizacje gdy będą
-  // const realizacje = await getRealizacje()
-  // const realizacjeUrls = realizacje.map(projekt => ({
-  //   url: `${baseUrl}/realizacje/${projekt.slug}`,
-  //   lastModified: new Date(projekt.date),
-  //   changeFrequency: 'monthly' as const,
-  //   priority: 0.7,
-  // }))
-  
+  // Blog posts - WYSOKI PRIORYTET dla AI Search!
+  const blogUrls = blogPostsArray.map(post => {
+    // Convert Polish date to ISO
+    const convertDate = (polishDate: string) => {
+      const months: { [key: string]: number } = {
+        'Stycznia': 0, 'Lutego': 1, 'Marca': 2, 'Kwietnia': 3,
+        'Maja': 4, 'Czerwca': 5, 'Lipca': 6, 'Sierpnia': 7,
+        'Września': 8, 'Października': 9, 'Listopada': 10, 'Grudnia': 11
+      }
+      const [day, month, year] = polishDate.split(' ')
+      return new Date(parseInt(year), months[month], parseInt(day))
+    }
+
+    return {
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: convertDate(post.date),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9, // WYSOKIE! Blog = główne źródło organicznego ruchu
+    }
+  })
+
+  // Realizacje pages
+  const realizacjePages = [
+    'dakro',
+    'dakro-ev',
+    'serwis-bmw-dakro',
+    'dakro-multidealer',
+    'dakro-warsztat',
+    'dakro-parts',
+    'dakro-truck',
+    'dakro-classic',
+    'dakro-service',
+    'dakro-rental',
+    'dakro-insurance',
+    'dakro-financing',
+    'dakro-auctions',
+    'dakro-accessories',
+  ].map(slug => ({
+    url: `${baseUrl}/realizacje/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
   return [
     ...staticPages,
+    ...blogUrls, // Blog posty - GŁÓWNY CONTENT!
+    ...realizacjePages,
     ...legalPages,
     ...adPages,
-    // ...blogUrls, // Odkomentuj gdy będą dynamiczne posty
-    // ...realizacjeUrls, // Odkomentuj gdy będą dynamiczne realizacje
   ]
 }
