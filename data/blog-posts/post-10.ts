@@ -1222,17 +1222,8 @@ Lokalne SEO w 2025 to **absolutny must-have** dla każdej firmy lokalnej. To nie
 
 **Przez SMS (follow-up):**
 
-```
-Cześć [Imię]!
-
-Dziękujemy że byłeś u nas wczoraj 😊
-
-Jeśli byłeś zadowolony z [usługa], będzie nam niezmiernie miło jeśli zostawisz krótką opinię na Google - to dla nas ogromna pomoc!
-
-[Link do Google review]
-
-Zespół [Nazwa Firmy]
-```
+**Przykład SMS:**
+"Cześć [Imię]! Dziękujemy że byłeś u nas wczoraj 😊 Jeśli byłeś zadowolony z [usługa], będzie nam niezmiernie miło jeśli zostawisz krótką opinię na Google - to dla nas ogromna pomoc! [Link do Google review] Zespół [Nazwa Firmy]"
 
 **Pro tip:** Dodaj emoji (🙏 ⭐ 😊) - zwiększa response rate o ~15%!
 
@@ -1242,24 +1233,8 @@ Zespół [Nazwa Firmy]
 
 **Temat:** "Jak oceniasz [usługa/produkt]? 🌟"
 
-```
-Cześć [Imię],
-
-Mam nadzieję że jesteś zadowolony z [konkret: fryzury/naprawy auta/zakupu]!
-
-Opinie naszych klientów są dla nas niezwykle ważne - pomagają innym podjąć decyzję i nam się rozwijać.
-
-Jeśli masz 60 sekund, będziemy wdzięczni za krótką recenzję na Google:
-
-[Duży przycisk: ZOSTAW OPINIĘ NA GOOGLE]
-
-Dziękujemy za zaufanie! 🙏
-
-[Twoje Imię]
-[Nazwa Firmy]
-
-P.S. Masz jakieś sugestie? Odpowiedz na tego maila - czytam osobiście!
-```
+**Treść emaila:**
+Cześć [Imię], mam nadzieję że jesteś zadowolony z [konkret: fryzury/naprawy auta/zakupu]! Opinie naszych klientów są dla nas niezwykle ważne - pomagają innym podjąć decyzję i nam się rozwijać. Jeśli masz 60 sekund, będziemy wdzięczni za krótką recenzję na Google: [Duży przycisk: ZOSTAW OPINIĘ NA GOOGLE]. Dziękujemy za zaufanie! 🙏 [Twoje Imię] [Nazwa Firmy]. P.S. Masz jakieś sugestie? Odpowiedz na tego maila - czytam osobiście!
 
 **Dlaczego to działa:**
 - Personalizowane (używa imienia + specific service)
@@ -1277,13 +1252,13 @@ P.S. Masz jakieś sugestie? Odpowiedz na tego maila - czytam osobiście!
 1. Wejdź na **Google Moja Firma**
 2. Kliknij "Poproś o recenzje"
 3. Skopiuj link (długi, brzydki)
-4. Skróć przez **Bitly** lub **TinyURL**: `bit.ly/nazwaFirmyOpinia`
+4. Skróć przez **Bitly** lub **TinyURL**: "bit.ly/nazwaFirmyOpinia"
 5. Możesz też QR code (wydrukować na stole, receipt)
 
 **Przykład:**
-❌ ZŁE: `https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4`
+❌ ZŁE: "https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4"
 
-✅ DOBRE: `bit.ly/pizzabellaopinia` lub `pizzabella.pl/opinia` (redirect)
+✅ DOBRE: "bit.ly/pizzabellaopinia" lub "pizzabella.pl/opinia" (redirect)
 
 **QR Code:**
 - Wygeneruj na **qr-code-generator.com**
@@ -1326,26 +1301,10 @@ P.S. Masz jakieś sugestie? Odpowiedz na tego maila - czytam osobiście!
 **5. ODPOWIADAJ na WSZYSTKIE recenzje (kluczowe!)**
 
 **Na pozytywne (5-star):**
-```
-Dziękujemy [Imię] za super opinię! 🌟
-Cieszymy się że byłeś zadowolony z [konkret: pizza margherita / fryzura].
-Do zobaczenia wkrótce!
-- Zespół [Nazwa]
-```
+"Dziękujemy [Imię] za super opinię! 🌟 Cieszymy się że byłeś zadowolony z [konkret: pizza margherita / fryzura]. Do zobaczenia wkrótce! - Zespół [Nazwa]"
 
 **Na negatywne (1-3 star) - BARDZO WAŻNE:**
-```
-Cześć [Imię],
-
-Przykro nam że Twoje doświadczenie nie było idealne.
-
-Chcielibyśmy to naprawić - proszę skontaktuj się z nami bezpośrednio [email/telefon], abyśmy mogli rozwiązać problem.
-
-Twój feedback pomaga nam się rozwijać.
-
-[Twoje Imię], właściciel/manager
-[Nazwa Firmy]
-```
+"Cześć [Imię], przykro nam że Twoje doświadczenie nie było idealne. Chcielibyśmy to naprawić - proszę skontaktuj się z nami bezpośrednio [email/telefon], abyśmy mogli rozwiązać problem. Twój feedback pomaga nam się rozwijać. [Twoje Imię], właściciel/manager [Nazwa Firmy]"
 
 **Dlaczego odpowiadać na negatywne:**
 - 89% ludzi czyta ODPOWIEDZI właściciela
@@ -1409,18 +1368,7 @@ Twój feedback pomaga nam się rozwijać.
 
 **Przykład profesjonalnej odpowiedzi:**
 
-```
-Cześć [Imię],
-
-Bardzo nam przykro że Twoje doświadczenie nie było na poziomie. To nie jest standard którym się kierujemy.
-
-Chcielibyśmy to naprawić - proszę zadzwoń do mnie osobiście pod [numer] lub napisz [email].
-
-Twój feedback jest cenny i pomoże nam poprawić nasze usługi.
-
-Z poważaniem,
-[Twoje Imię & stanowisko]
-```
+"Cześć [Imię], bardzo nam przykro że Twoje doświadczenie nie było na poziomie. To nie jest standard którym się kierujemy. Chcielibyśmy to naprawić - proszę zadzwoń do mnie osobiście pod [numer] lub napisz [email]. Twój feedback jest cenny i pomoże nam poprawić nasze usługi. Z poważaniem, [Twoje Imię & stanowisko]"
 
 ---
 
@@ -1457,7 +1405,7 @@ Z poważaniem,
    - Claim & verify (free, 30 min)
    - Kompletny profil - 100% fill (2-3h)
    - 10-20 zdjęć (use smartphone!) (2h)
-   - Guide: `support.google.com/business`
+   - Guide: support.google.com/business
 
 2. **NAP Consistency:**
    - Audit Twojej strony (czy adres/telefon wszędzie taki sam) (1h)
