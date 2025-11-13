@@ -9,6 +9,7 @@ import { post8 } from './post-8';
 import { post9 } from './post-9';
 import { post10 } from './post-10';
 import { post11 } from './post-11';
+import { post12 } from './post-12';
 
 // Eksportuj wszystkie posty jako obiekt (backward compatibility - by ID)
 export const blogPostsData: { [key: string]: any } = {
@@ -23,13 +24,14 @@ export const blogPostsData: { [key: string]: any } = {
   '9': post9,
   '10': post10,
   '11': post11,
+  '12': post12,
 };
 
 // Eksportuj również jako array dla łatwiejszego iterowania
 export const blogPostsArray = Object.values(blogPostsData);
 
 // Typ dla wpisu z slug
-type BlogPost = typeof post1 | typeof post2 | typeof post3 | typeof post4 | typeof post5 | typeof post6 | typeof post7 | typeof post8 | typeof post9 | typeof post10 | typeof post11;
+type BlogPost = typeof post1 | typeof post2 | typeof post3 | typeof post4 | typeof post5 | typeof post6 | typeof post7 | typeof post8 | typeof post9 | typeof post10 | typeof post11 | typeof post12;
 
 // Eksportuj obiekt z slug jako klucz (dla SEO-friendly URLs)
 export const blogPostsBySlug: { [key: string]: BlogPost } = {
@@ -44,6 +46,7 @@ export const blogPostsBySlug: { [key: string]: BlogPost } = {
   'marketing-social-media-2025-strategia-przewodnik': post9,
   'lokalne-seo-2025-przewodnik-google-maps-wyniki-lokalne': post10,
   'marketing-cyfrowy-dla-firm-w-lublinie-2025': post11,
+  'branding-dla-lokalnych-firm-lublin-identyfikacja-wizualna-2025': post12,
 };
 
 // Helper function to get post by slug or id
