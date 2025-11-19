@@ -10,6 +10,7 @@ import { post9 } from './post-9';
 import { post10 } from './post-10';
 import { post11 } from './post-11';
 import { post12 } from './post-12';
+import { post13 } from './post-13';
 
 // Eksportuj wszystkie posty jako obiekt (backward compatibility - by ID)
 export const blogPostsData: { [key: string]: any } = {
@@ -25,13 +26,14 @@ export const blogPostsData: { [key: string]: any } = {
   '10': post10,
   '11': post11,
   '12': post12,
+  '13': post13,
 };
 
 // Eksportuj również jako array dla łatwiejszego iterowania
 export const blogPostsArray = Object.values(blogPostsData);
 
 // Typ dla wpisu z slug
-type BlogPost = typeof post1 | typeof post2 | typeof post3 | typeof post4 | typeof post5 | typeof post6 | typeof post7 | typeof post8 | typeof post9 | typeof post10 | typeof post11 | typeof post12;
+type BlogPost = typeof post1 | typeof post2 | typeof post3 | typeof post4 | typeof post5 | typeof post6 | typeof post7 | typeof post8 | typeof post9 | typeof post10 | typeof post11 | typeof post12 | typeof post13;
 
 // Eksportuj obiekt z slug jako klucz (dla SEO-friendly URLs)
 export const blogPostsBySlug: { [key: string]: BlogPost } = {
@@ -47,6 +49,7 @@ export const blogPostsBySlug: { [key: string]: BlogPost } = {
   'lokalne-seo-2025-przewodnik-google-maps-wyniki-lokalne': post10,
   'marketing-cyfrowy-dla-firm-w-lublinie-2025': post11,
   'branding-dla-lokalnych-firm-lublin-identyfikacja-wizualna-2025': post12,
+  'strona-internetowa-dla-firmy-lublin-przewodnik-2025': post13,
 };
 
 // Helper function to get post by slug or id

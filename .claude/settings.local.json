@@ -52,7 +52,13 @@
       "Bash(timeout 30 npm run dev:*)",
       "Bash(timeout 10 bash -c 'sleep 3 && curl -s http://localhost:3002/blog | grep -o \"\"<title>.*</title>\"\" | head -1')",
       "Bash(curl:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node:*)",
+      "Bash(timeout 20 npm run dev:*)",
+      "Bash(Get-Process -Name node -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object -First 3)",
+      "Bash(timeout 15 npm run dev)"
     ],
     "deny": [],
     "ask": []
