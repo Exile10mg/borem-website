@@ -65,6 +65,12 @@ export default function Kontakt() {
 
       if (response.ok) {
         setIsSuccess(true);
+
+        // Report conversion to Google Ads
+        if (typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
+          (window as any).gtag_report_conversion();
+        }
+
         toast.success('Wiadomość wysłana pomyślnie! Odpowiemy w ciągu 24h.', {
           duration: 5000,
           position: 'top-center',

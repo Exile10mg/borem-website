@@ -97,6 +97,20 @@ export default function GoogleAnalytics() {
               cookie_flags: 'SameSite=None;Secure',
               send_page_view: true
             });
+
+            // Google Ads Conversion tracking function
+            window.gtag_report_conversion = function(url) {
+              var callback = function () {
+                if (typeof(url) != 'undefined') {
+                  window.location = url;
+                }
+              };
+              gtag('event', 'conversion', {
+                'send_to': 'AW-16494963719/jTOjCMf_5sMbEIfYtLk9',
+                'event_callback': callback
+              });
+              return false;
+            };
           `,
         }}
       />
