@@ -67,8 +67,18 @@ export default function Kontakt() {
         setIsSuccess(true);
 
         // Report conversion to Google Ads
-        if (typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
-          (window as any).gtag_report_conversion();
+        if (typeof window !== 'undefined') {
+          if ((window as any).gtag_report_conversion) {
+            console.log('Reporting Google Ads conversion...');
+            (window as any).gtag_report_conversion();
+          } else {
+            console.warn('gtag_report_conversion not found, attempting direct gtag call');
+            if ((window as any).gtag) {
+              (window as any).gtag('event', 'conversion', {
+                'send_to': 'AW-16494963719/qyZ9CNye4MMbEIfYtLk9'
+              });
+            }
+          }
         }
 
         toast.success('Wiadomość wysłana pomyślnie! Odpowiemy w ciągu 24h.', {

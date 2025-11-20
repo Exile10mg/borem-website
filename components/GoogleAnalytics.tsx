@@ -24,6 +24,7 @@ import Script from 'next/script';
 export default function GoogleAnalytics() {
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
+  const GOOGLE_ADS_ID = 'AW-16494963719'; // Google Ads conversion ID
 
   useEffect(() => {
     // Update consent when user makes a choice
@@ -82,21 +83,30 @@ export default function GoogleAnalytics() {
           `,
         }}
       />
+      {/* Load gtag.js for both GA and Google Ads */}
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
       />
       <Script
-        id="google-analytics"
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+      />
+      <Script
+        id="google-analytics-config"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
+            // Configure Google Analytics
             gtag('config', '${GA_MEASUREMENT_ID}', {
               page_path: window.location.pathname,
               anonymize_ip: true,
               cookie_flags: 'SameSite=None;Secure',
               send_page_view: true
             });
+
+            // Configure Google Ads
+            gtag('config', '${GOOGLE_ADS_ID}');
 
             // Google Ads Conversion tracking function - Formularz kontaktowy Borem.pl
             window.gtag_report_conversion = function(url) {
@@ -106,7 +116,7 @@ export default function GoogleAnalytics() {
                 }
               };
               gtag('event', 'conversion', {
-                'send_to': 'AW-16494963719/qyZ9CNye4MMbEIfYtLk9',
+                'send_to': '${GOOGLE_ADS_ID}/qyZ9CNye4MMbEIfYtLk9',
                 'event_callback': callback
               });
               return false;
