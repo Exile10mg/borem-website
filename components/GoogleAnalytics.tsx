@@ -98,7 +98,7 @@ export default function GoogleAnalytics() {
               send_page_view: true
             });
 
-            // Google Ads Conversion tracking function
+            // Google Ads Conversion tracking function - Formularz kontaktowy Borem.pl
             window.gtag_report_conversion = function(url) {
               var callback = function () {
                 if (typeof(url) != 'undefined') {
@@ -106,7 +106,7 @@ export default function GoogleAnalytics() {
                 }
               };
               gtag('event', 'conversion', {
-                'send_to': 'AW-16494963719/jTOjCMf_5sMbEIfYtLk9',
+                'send_to': 'AW-16494963719/qyZ9CNye4MMbEIfYtLk9',
                 'event_callback': callback
               });
               return false;
