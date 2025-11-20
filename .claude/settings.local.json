@@ -58,7 +58,10 @@
       "Bash(timeout 20 npm run dev:*)",
       "Bash(Get-Process -Name node -ErrorAction SilentlyContinue)",
       "Bash(Select-Object -First 3)",
-      "Bash(timeout 15 npm run dev)"
+      "Bash(timeout 15 npm run dev)",
+      "Bash(Stop-Process -Force)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
