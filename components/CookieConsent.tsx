@@ -61,14 +61,22 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(allAccepted));
-    
+
+    // Update Google Analytics & Google Ads consent
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
-        analytics_storage: 'granted',
-        ad_storage: 'granted',
+        'analytics_storage': 'granted',
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
       });
     }
-    
+
+    // Update Facebook Pixel consent
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('consent', 'grant');
+    }
+
     // Give React time to process before hiding
     setTimeout(() => {
       setShowBanner(false);
@@ -87,13 +95,21 @@ export default function CookieConsent() {
     };
     localStorage.setItem('cookieConsent', JSON.stringify(necessaryOnly));
 
+    // Update Google Analytics & Google Ads consent
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
-        analytics_storage: 'denied',
-        ad_storage: 'denied',
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
       });
     }
-    
+
+    // Update Facebook Pixel consent
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('consent', 'revoke');
+    }
+
     // Give React time to process before hiding
     setTimeout(() => {
       setShowBanner(false);
@@ -109,13 +125,25 @@ export default function CookieConsent() {
     };
     localStorage.setItem('cookieConsent', JSON.stringify(savedPreferences));
 
+    // Update Google Analytics & Google Ads consent
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
-        analytics_storage: preferences.analytics ? 'granted' : 'denied',
-        ad_storage: preferences.marketing ? 'granted' : 'denied',
+        'analytics_storage': preferences.analytics ? 'granted' : 'denied',
+        'ad_storage': preferences.marketing ? 'granted' : 'denied',
+        'ad_user_data': preferences.marketing ? 'granted' : 'denied',
+        'ad_personalization': preferences.marketing ? 'granted' : 'denied',
       });
     }
-    
+
+    // Update Facebook Pixel consent
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      if (preferences.marketing) {
+        (window as any).fbq('consent', 'grant');
+      } else {
+        (window as any).fbq('consent', 'revoke');
+      }
+    }
+
     // Give React time to process before hiding
     setTimeout(() => {
       setShowBanner(false);

@@ -33,16 +33,22 @@ export default function GoogleAnalytics() {
       if (savedConsent && typeof window !== 'undefined' && (window as any).gtag) {
         try {
           const parsed = JSON.parse(savedConsent);
+
+          // Update Google Analytics & Google Ads consent
           (window as any).gtag('consent', 'update', {
             'analytics_storage': parsed.analytics ? 'granted' : 'denied',
             'ad_storage': parsed.marketing ? 'granted' : 'denied',
+            'ad_user_data': parsed.marketing ? 'granted' : 'denied',
+            'ad_personalization': parsed.marketing ? 'granted' : 'denied',
           });
 
           // Update Facebook Pixel consent
-          if (parsed.marketing && (window as any).fbq) {
-            (window as any).fbq('consent', 'grant');
-          } else if ((window as any).fbq) {
-            (window as any).fbq('consent', 'revoke');
+          if ((window as any).fbq) {
+            if (parsed.marketing) {
+              (window as any).fbq('consent', 'grant');
+            } else {
+              (window as any).fbq('consent', 'revoke');
+            }
           }
         } catch (e) {
           console.error('Error parsing consent:', e);
