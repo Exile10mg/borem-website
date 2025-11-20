@@ -244,8 +244,7 @@ export default function PriceEstimatorChat() {
 
       // Some browsers need this event
       window.speechSynthesis.onvoiceschanged = () => {
-        const voices = window.speechSynthesis.getVoices();
-        console.log('Available voices:', voices.length);
+        window.speechSynthesis.getVoices();
       };
     }
   }, []);
